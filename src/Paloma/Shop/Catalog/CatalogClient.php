@@ -2,24 +2,13 @@
 
 namespace Paloma\Shop\Catalog;
 
-use GuzzleHttp\Client;
+use Paloma\Shop\BaseClient;
 
-class CatalogClient implements CatalogClientInterface
+class CatalogClient extends BaseClient implements CatalogClientInterface
 {
-    /**
-     * @var Client
-     */
-    private $http;
-
     public function __construct($baseUrl, $apiKey)
     {
-        $this->http = new Client([
-            'base_uri' => $baseUrl,
-            'headers' => [
-                'x-api-key' => $apiKey,
-                'content-type' => 'application/json'
-            ]
-        ]);
+       parent::__construct($baseUrl, $apiKey);
     }
 
     public function categories($country, $language)
@@ -62,23 +51,4 @@ class CatalogClient implements CatalogClientInterface
         return $this->get($country . '/' . $language . '/search/suggestions', ['query' => $partial]);
     }
 
-    private function get($path, $query = null)
-    {
-        return $this->req('GET', $path);
-    }
-
-    private function post($path, $query = null, $body = null)
-    {
-        return $this->req('POST', $path, $query, $body);
-    }
-
-    private function req($method, $path, $query = null, $body = null)
-    {
-        $res = $this->http->request($method, $path, [
-            'query' => $query,
-            'body' => $body ? json_encode($body) : null,
-        ]);
-
-        return json_decode($res->getBody(), true);
-    }
 }
