@@ -13,29 +13,23 @@ abstract class BaseClient
 {
     private $http;
 
-    private $apiKey;
-
-    private $handlerStack;
-
-    private $debug;
-
     public function __construct($baseUrl, $apiKey, $debug, LoggerInterface $logger = null)
     {
-        $this->http = new Client([
-            'base_uri' => $baseUrl
-        ]);
-        $this->apiKey = $apiKey;
+        $handlerStack = HandlerStack::create();
+        $handlerStack->push(
+            Middleware::log(
+                $logger ? $logger : new Logger('Paloma'),
+                 new MessageFormatter($debug ? MessageFormatter::DEBUG : MessageFormatter::SHORT)
+            )
+        );
 
-        $this->debug = $debug;
-        if ($debug) {
-            $this->handlerStack = HandlerStack::create();
-            $this->handlerStack->push(
-                Middleware::log(
-                    $logger ? $logger : new Logger('Logger'),
-                    new MessageFormatter(MessageFormatter::DEBUG)
-                )
-            );
-        }
+        $this->http = new Client([
+            'base_uri' => $baseUrl,
+            'headers' => [
+                'x-api-key' => $apiKey
+            ],
+            'handler' => $handlerStack
+        ]);
     }
 
     protected function get($path, $query = null)
@@ -70,19 +64,17 @@ abstract class BaseClient
 
     private function req($method, $path, $query = null, $body = null, $formEncoding = false)
     {
-        $options = [
-            'headers' => [
-                'x-api-key' => $this->apiKey,
-                'content-type' => $formEncoding ? 'application/x-www-form-urlencoded' : 'application/json'
-            ],
-            'query' => $query,
-            'form_params' => $body && $formEncoding ? $body : null,
-            'json' => $body && !$formEncoding ? $body : null
-        ];
-        if ($this->debug) {
-            $options['handler'] = $this->handlerStack;
-        }
-        $res = $this->http->request($method, $path, $options);
+        $res = $this->http->request(
+            $method,
+            $path,
+            [
+                'headers' => [
+                    'content-type' => $formEncoding ? 'application/x-www-form-urlencoded' : 'application/json'
+                ],
+                'query' => $query,
+                'form_params' => $body && $formEncoding ? $body : null,
+                'json' => $body && !$formEncoding ? $body : null
+            ]);
         return json_decode($res->getBody(), true);
     }
 
