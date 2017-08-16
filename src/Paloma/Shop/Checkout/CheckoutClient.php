@@ -23,9 +23,9 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
         return $this->delete(self::ORDERS_PATH . '/' . $id);
     }
 
-    function getOrder($id, $languageCode)
+    function getOrder($id, $languageCode = null)
     {
-        return $this->get(self::ORDERS_PATH . '/' . $id, ['language' => $languageCode]);
+        return $this->get(self::ORDERS_PATH . '/' . $id, $languageCode ? ['language' => $languageCode] : null);
     }
 
     function setAddresses($orderId, $addresses)

@@ -91,9 +91,19 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         return $this->get($country . '/' . $language . '/orders/' . $orderNr . '/status');
     }
 
-    function getOrders($country, $language, $userId, $pageNr, $pageSize, $sortOrder)
+    function getOrders($country, $language, $userId, $pageNr = null, $pageSize = null, $sortOrder = null)
     {
-        return $this->get($country . '/' . $language . '/users/' . $userId . '/orders', ['page' => $pageNr, 'size' => $pageSize, 'order' => $sortOrder]);
+        $query = [];
+        if ($pageNr) {
+            $query['pageNr'] = $pageNr;
+        }
+        if ($pageSize) {
+            $query['pageSize'] = $pageSize;
+        }
+        if ($sortOrder) {
+            $query['sortOrder'] = $sortOrder;
+        }
+        return $this->get($country . '/' . $language . '/users/' . $userId . '/orders', count($query) > 0 ? $query : null);
     }
 
     function getOrder($country, $language, $userId, $orderNr)

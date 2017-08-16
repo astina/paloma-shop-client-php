@@ -11,14 +11,21 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
        parent::__construct($baseUrl, $apiKey, $debug);
     }
 
-    public function categories($country, $language, $depth)
+    public function categories($country, $language, $depth = null)
     {
-        return $this->get($country . '/' . $language . '/categories', ['depth' => $depth]);
+        return $this->get($country . '/' . $language . '/categories', $depth ? ['depth' => $depth] : null);
     }
 
-    public function category($country, $language, $code, $depth, $filterAggregates)
+    public function category($country, $language, $code, $depth = null, $filterAggregates = null)
     {
-        return $this->get($country . '/' . $language . '/categories/' . $code, ['depth' => $depth, 'filter-aggregates' => $filterAggregates]);
+        $query = [];
+        if ($depth) {
+            $query['depth'] = $depth;
+        }
+        if ($filterAggregates) {
+            $query['filter-aggregates'] = $filterAggregates;
+        }
+        return $this->get($country . '/' . $language . '/categories/' . $code, count($query) > 0 ? $query : null);
     }
 
     public function categoryFilters($country, $language, $code)
@@ -51,8 +58,8 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         return $this->get($country . '/' . $language . '/search/suggestions', ['query' => $partial]);
     }
 
-    function recommendations($country, $language, $order, $size)
+    function recommendations($country, $language, $order, $size = null)
     {
-        return $this->post($country . '/' . $language . '/recommendations', ['size' => $size], $order);
+        return $this->post($country . '/' . $language . '/recommendations', $size ? ['size' => $size] : null, $order);
     }
 }
