@@ -7,6 +7,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\MessageFormatter;
 use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 abstract class BaseClient
 {
@@ -18,7 +19,7 @@ abstract class BaseClient
 
     private $debug;
 
-    public function __construct($baseUrl, $apiKey, $debug)
+    public function __construct($baseUrl, $apiKey, $debug, LoggerInterface $logger = null)
     {
         $this->http = new Client([
             'base_uri' => $baseUrl
@@ -30,7 +31,7 @@ abstract class BaseClient
             $this->handlerStack = HandlerStack::create();
             $this->handlerStack->push(
                 Middleware::log(
-                    new Logger('Logger'),
+                    $logger ? $logger : new Logger('Logger'),
                     new MessageFormatter(MessageFormatter::DEBUG)
                 )
             );
@@ -69,17 +70,19 @@ abstract class BaseClient
 
     private function req($method, $path, $query = null, $body = null, $formEncoding = false)
     {
-        $res = $this->http->request($method, $path, [
+        $options = [
             'headers' => [
                 'x-api-key' => $this->apiKey,
                 'content-type' => $formEncoding ? 'application/x-www-form-urlencoded' : 'application/json'
             ],
             'query' => $query,
             'form_params' => $body && $formEncoding ? $body : null,
-            'json' => $body && !$formEncoding ? $body : null,
-            'handler' => $this->debug ? $this->handlerStack : null
-        ]);
-
+            'json' => $body && !$formEncoding ? $body : null
+        ];
+        if ($this->debug) {
+            $options['handler'] = $this->handlerStack;
+        }
+        $res = $this->http->request($method, $path, $options);
         return json_decode($res->getBody(), true);
     }
 
