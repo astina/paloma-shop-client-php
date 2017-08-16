@@ -6,19 +6,19 @@ use Paloma\Shop\BaseClient;
 
 class CatalogClient extends BaseClient implements CatalogClientInterface
 {
-    public function __construct($baseUrl, $apiKey)
+    public function __construct($baseUrl, $apiKey, $debug = false)
     {
-       parent::__construct($baseUrl, $apiKey);
+       parent::__construct($baseUrl, $apiKey, $debug);
     }
 
-    public function categories($country, $language)
+    public function categories($country, $language, $depth)
     {
-        return $this->get($country . '/' . $language . '/categories');
+        return $this->get($country . '/' . $language . '/categories', ['depth' => $depth]);
     }
 
-    public function category($country, $language, $code)
+    public function category($country, $language, $code, $depth, $filterAggregates)
     {
-        return $this->get($country . '/' . $language . '/categories/' . $code);
+        return $this->get($country . '/' . $language . '/categories/' . $code, ['depth' => $depth, 'filter-aggregates' => $filterAggregates]);
     }
 
     public function categoryFilters($country, $language, $code)
@@ -51,4 +51,8 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         return $this->get($country . '/' . $language . '/search/suggestions', ['query' => $partial]);
     }
 
+    function recommendations($country, $language, $order, $size)
+    {
+        return $this->post($country . '/' . $language . '/recommendations', ['size' => $size], $order);
+    }
 }

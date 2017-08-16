@@ -4,9 +4,9 @@ namespace Paloma\Shop\Catalog;
 
 interface CatalogClientInterface
 {
-    function categories($country, $language);
+    function categories($country, $language, $depth);
 
-    function category($country, $language, $code);
+    function category($country, $language, $code, $depth, $filterAggregates);
 
     function categoryFilters($country, $language, $code);
 
@@ -15,6 +15,8 @@ interface CatalogClientInterface
     function recommendedProducts($country, $language, $itemNumber);
 
     function similarProducts($country, $language, $itemNumber);
+
+    function recommendations($country, $language, $order, $size);
 
     function search($country, $language, $searchRequest);
 
