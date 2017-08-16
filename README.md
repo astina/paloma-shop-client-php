@@ -19,4 +19,13 @@ Call API, e.g. fetch catalog
 $categories = $paloma->catalog()->categories('ch', 'de');
 ```
 
+## Configuration
+Enable debug mode (detailed logging of requests/responses)
+```php
+$catalogClient = new CatalogClient('https://demo-shop.paloma.one:8187/api', 'yourAPIKey', true)
+```
+Use dedicated `LoggerInterface` instance
+```php
+$catalogClient = new CatalogClient('https://demo-shop.paloma.one:8187/api', 'yourAPIKey', true, $myLogger);
+```
 
