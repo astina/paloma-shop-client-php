@@ -1,5 +1,5 @@
 {
-  "name": "paloma/shop",
+  "name": "paloma/shop-client",
   "description": "Paloma Shop client library",
   "type": "library",
   "require": {
