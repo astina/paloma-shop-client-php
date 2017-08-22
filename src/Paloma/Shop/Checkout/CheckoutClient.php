@@ -118,7 +118,7 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
     {
         $cartId = $session->get('cartId');
         if (!$cartId) {
-            $cart = createOrder(['country' => 'ch', 'language' => 'de']);
+            $cart = $this->createOrder(['country' => 'ch', 'language' => 'de']);
             $session->set('cartId', $cart['id']);
             $cartId = $cart['id'];
         }
