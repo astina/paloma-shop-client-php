@@ -36,7 +36,7 @@ interface CustomersClientInterface
 
     function getOrderStatus($country, $language, $orderNr);
 
-    function getOrders($country, $language, $userId, $pageNr, $pageSize, $sortOrder);
+    function getOrders($country, $language, $userId, $pageNr = null, $pageSize = null, $sortOrder = null);
 
     function getOrder($country, $language, $userId, $orderNr);
 

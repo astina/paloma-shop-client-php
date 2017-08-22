@@ -84,6 +84,21 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
         return $this->put(self::ORDERS_PATH . '/' . $orderId . '/items/' . $itemId, null, $item);
     }
 
+    function orderItemQuantity($orderId, $languageCode = null)
+    {
+        if ($orderId) {
+            $order = $this->getOrder($orderId, $languageCode);
+            if ($order && $order['items']) {
+                $count = 0;
+                for ($i = 0; $i < count($order['items']); $i++) {
+                    $count += $order['items'][$i]['quantity'];
+                }
+                return $count;
+            }
+        }
+        return 0;
+    }
+
     function getPaymentMethods($orderId)
     {
         return $this->get('payment-methods', ['order-id' => $orderId]);
@@ -97,5 +112,16 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
     function getShippingMethods($orderId)
     {
         return $this->get('shipping-methods', ['order-id' => $orderId]);
+    }
+
+    function getCartId($session)
+    {
+        $cartId = $session->get('cartId');
+        if (!$cartId) {
+            $cart = createOrder(['country' => 'ch', 'language' => 'de']);
+            $session->set('cartId', $cart['id']);
+            $cartId = $cart['id'];
+        }
+        return $cartId;
     }
 }

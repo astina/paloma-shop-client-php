@@ -8,7 +8,7 @@ interface CheckoutClientInterface
 
     function deleteOrder($id);
 
-    function getOrder($id, $languageCode);
+    function getOrder($id, $languageCode = null);
 
     function setAddresses($orderId, $addresses);
 
@@ -32,9 +32,13 @@ interface CheckoutClientInterface
 
     function updateOrderItem($orderId, $itemId, $item);
 
+    function orderItemQuantity($orderId, $languageCode = null);
+
     function getPaymentMethods($orderId);
 
     function initializePayment($payment);
 
     function getShippingMethods($orderId);
+
+    function getCartId($session);
 }

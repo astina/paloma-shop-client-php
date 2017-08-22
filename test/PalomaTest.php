@@ -64,6 +64,8 @@ class PalomaTest extends TestCase
 //
 //        $updateOrderItem = $paloma->checkout()->updateOrderItem('123', '321', ['quantity' => 2]);
 //
+//        $numOfOrderItems = $paloma->checkout()->orderItemQuantity('123');
+//
 //        $getPaymentMethods = $paloma->checkout()->getPaymentMethods('123');
 //
 //        $initializePayment = $paloma->checkout()->initializePayment(['order' => '123']);
