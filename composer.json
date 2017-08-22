@@ -1,5 +1,5 @@
 {
-  "name": "paloma/shop",
+  "name": "paloma/shop-client",
   "description": "Paloma Shop client library",
   "type": "library",
   "require": {
@@ -7,7 +7,7 @@
     "monolog/monolog": "^1.23"
   },
   "require-dev": {
-    "phpunit/phpunit": "^5.7",
+    "phpunit/phpunit": "^5.7"
   },
   "license": "MIT",
   "authors": [
