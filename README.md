@@ -10,22 +10,21 @@ PHP client library for the Paloma Shop. Facilitates the access to the following 
 ## Usage
 Create Paloma Client
 ```php
-$paloma = new Paloma(new CatalogClient('https://demo-shop.paloma.one:8187/api', 'yourAPIKey'),
-                     new CheckoutClient('https://demo-shop.paloma.one:8188/api', 'yourAPIKey'),
-                     new CustomersClient('https://demo-shop.paloma.one:8189/api', 'yourAPIKey'));
+$paloma = new Paloma(new CatalogClient('https://demo.paloma.one/api/catalog/', 'yourAPIKey'),
+                     new CheckoutClient('https://demo.paloma.one/api/checkout/', 'yourAPIKey'),
+                     new CustomersClient('https://demo.paloma.one/api/customers/', 'yourAPIKey'));
 ```
-Call API, e.g. fetch catalog
+Call API, e.g. fetch catalog categories
 ```php
 $categories = $paloma->catalog()->categories('ch', 'de');
 ```
-
 ## Configuration
 Enable debug mode (detailed logging of requests/responses)
 ```php
-$catalogClient = new CatalogClient('https://demo-shop.paloma.one:8187/api', 'yourAPIKey', true)
+$catalogClient = new CatalogClient('https://demo.paloma.one/api/catalog/', 'yourAPIKey', true)
 ```
 Use dedicated `LoggerInterface` instance
 ```php
-$catalogClient = new CatalogClient('https://demo-shop.paloma.one:8187/api', 'yourAPIKey', true, $myLogger);
+$catalogClient = new CatalogClient('https://demo.paloma.one/api/catalog/', 'yourAPIKey', true, $myLogger);
 ```
 
