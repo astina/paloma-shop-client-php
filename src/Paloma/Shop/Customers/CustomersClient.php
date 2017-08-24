@@ -3,13 +3,14 @@
 namespace Paloma\Shop\Customers;
 
 use Paloma\Shop\BaseClient;
+use Paloma\Shop\PalomaProfiler;
 use Psr\Log\LoggerInterface;
 
 class CustomersClient extends BaseClient implements CustomersClientInterface
 {
-    public function __construct($baseUrl, $apiKey, $debug = false, LoggerInterface $logger = null)
+    public function __construct($baseUrl, $apiKey, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
-       parent::__construct($baseUrl, $apiKey, $debug, $logger);
+       parent::__construct($baseUrl, $apiKey, $logger, $profiler);
     }
 
     function createAdvertisingPrefs($country, $advertisingPrefs)

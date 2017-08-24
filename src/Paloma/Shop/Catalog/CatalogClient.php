@@ -3,13 +3,14 @@
 namespace Paloma\Shop\Catalog;
 
 use Paloma\Shop\BaseClient;
+use Paloma\Shop\PalomaProfiler;
 use Psr\Log\LoggerInterface;
 
 class CatalogClient extends BaseClient implements CatalogClientInterface
 {
-    public function __construct($baseUrl, $apiKey, $debug = false, LoggerInterface $logger = null)
+    public function __construct($baseUrl, $apiKey, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
-       parent::__construct($baseUrl, $apiKey, $debug, $logger);
+       parent::__construct($baseUrl, $apiKey, $logger, $profiler);
     }
 
     public function categories($country, $language, $depth = null)

@@ -4,8 +4,8 @@ namespace Paloma\Shop;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
 use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
@@ -13,15 +13,27 @@ abstract class BaseClient
 {
     private $http;
 
-    public function __construct($baseUrl, $apiKey, $debug, LoggerInterface $logger = null)
+    public function __construct($baseUrl, $apiKey, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
         $handlerStack = HandlerStack::create();
         $handlerStack->push(
             Middleware::log(
                 $logger ? $logger : new Logger('Paloma'),
-                 new MessageFormatter($debug ? MessageFormatter::DEBUG : MessageFormatter::SHORT)
+                new MessageFormatter(($logger instanceof Logger && $logger->isHandling(Logger::DEBUG)) ? MessageFormatter::DEBUG : MessageFormatter::SHORT)
             )
         );
+
+        if ($profiler) {
+            $handlerStack->push(
+                Middleware::tap(function() use ($profiler) {
+                    $profiler->startRequest();
+                }, function($request, $options, $response) use ($profiler) {
+                    $response->then(function($value) use ($profiler, $request) {
+                        $profiler->endRequest($request, $value);
+                    });
+                })
+            );
+        }
 
         $this->http = new Client([
             'base_uri' => $baseUrl,
@@ -75,6 +87,7 @@ abstract class BaseClient
                 'form_params' => $body && $formEncoding ? $body : null,
                 'json' => $body && !$formEncoding ? $body : null
             ]);
+
         return json_decode($res->getBody(), true);
     }
 

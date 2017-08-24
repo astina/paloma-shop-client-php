@@ -1,0 +1,84 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+
+    {% set icon %}
+        <span class="icon">
+            <svg viewBox="0 0 326 591" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <path d="M66.3,369.1 L205.4,346.3 L228.3,192.9 L257.2,0 L66.3,369.1 Z" fill="#AAAAAA"></path>
+                <path d="M325.7,113.4 L205.4,346.3 L228.3,192.9" fill="#AAAAAA"></path>
+                <path d="M205.4,346.3 L66.3,369.1 L216.4,467.8 L306.1,534.7 L205.4,346.3 Z" fill="#AAAAAA"></path>
+                <path d="M267.4,505.8 L267.4,590.6 L306.1,534.7 L267.4,505.8 Z" fill="#AAAAAA"></path>
+                <path d="M19.2,275.4 L0,346.3 L43.7,324.1 L19.2,275.4 Z" fill="#AAAAAA"></path>
+                <path d="M19.2,275.4 L66.3,369.1 L104.8,294.7 L19.2,275.4 Z" fill="#AAAAAA"></path>
+            </svg>
+        </span>
+        <span class="sf-toolbar-value">{{ collector.totalTime }}</span>
+        <span class="sf-toolbar-label">ms</span>
+    {% endset %}
+
+    {% set text %}
+        <div class="sf-toolbar-info-piece">
+            <b>Requests</b>
+            <span>{{ collector.exchanges|length }}</span>
+        </div>
+        <div class="sf-toolbar-info-piece">
+            <b>Total time</b>
+            <span>{{ collector.totalTime }} ms</span>
+        </div>
+    {% endset %}
+
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: true }) }}
+
+{% endblock %}
+
+{% block menu %}
+    <span class="label">
+        <span class="icon">
+            <svg viewBox="0 0 326 591" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <path d="M66.3,369.1 L205.4,346.3 L228.3,192.9 L257.2,0 L66.3,369.1 Z"></path>
+                <path d="M325.7,113.4 L205.4,346.3 L228.3,192.9"></path>
+                <path d="M205.4,346.3 L66.3,369.1 L216.4,467.8 L306.1,534.7 L205.4,346.3 Z"></path>
+                <path d="M267.4,505.8 L267.4,590.6 L306.1,534.7 L267.4,505.8 Z"></path>
+                <path d="M19.2,275.4 L0,346.3 L43.7,324.1 L19.2,275.4 Z"></path>
+                <path d="M19.2,275.4 L66.3,369.1 L104.8,294.7 L19.2,275.4 Z"></path>
+            </svg>
+        </span>
+        <strong>Paloma</strong>
+    </span>
+{% endblock %}
+
+{% block panel %}
+
+    <h2>Paloma</h2>
+
+    {% for exchange in collector.exchanges %}
+        <table style="width: 100%">
+            <thead>
+            <tr>
+                <th style="width: 15%">{{ exchange.request.method }}</th>
+                <th><code>{{ exchange.request.url }}</code></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if exchange.request.body %}
+                <tr>
+                    <th>Request body</th>
+                    <td><pre style="max-height: 200px; overflow-y: auto; white-space: pre-wrap;">{{ exchange.request.body }}</pre></td>
+                </tr>
+            {% endif %}
+            <tr>
+                <th>Response</th>
+                <td><code>{{ exchange.response.status }}</code> <small>&ndash; {{ exchange.duration }} ms</small></td>
+            </tr>
+            {% if exchange.response.body %}
+                <tr>
+                    <th>Response body</th>
+                    <td><pre style="max-height: 200px; overflow-y: auto; white-space: pre-wrap;">{{ exchange.response.body }}</pre></td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    {% endfor %}
+
+{% endblock %}

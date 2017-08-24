@@ -3,15 +3,16 @@
 namespace Paloma\Shop\Checkout;
 
 use Paloma\Shop\BaseClient;
+use Paloma\Shop\PalomaProfiler;
 use Psr\Log\LoggerInterface;
 
 class CheckoutClient extends BaseClient implements CheckoutClientInterface
 {
     const ORDERS_PATH = 'orders';
 
-    public function __construct($baseUrl, $apiKey, $debug = false, LoggerInterface $logger = null)
+    public function __construct($baseUrl, $apiKey, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
-       parent::__construct($baseUrl, $apiKey, $debug, $logger);
+       parent::__construct($baseUrl, $apiKey, $logger, $profiler);
     }
 
     function createOrder($order)
