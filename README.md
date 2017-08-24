@@ -19,12 +19,12 @@ Call API, e.g. fetch catalog categories
 $categories = $paloma->catalog()->categories('ch', 'de');
 ```
 ## Configuration
-Enable debug mode (detailed logging of requests/responses)
-```php
-$catalogClient = new CatalogClient('https://demo.paloma.one/api/catalog/', 'yourAPIKey', true)
-```
 Use dedicated `LoggerInterface` instance
 ```php
-$catalogClient = new CatalogClient('https://demo.paloma.one/api/catalog/', 'yourAPIKey', true, $myLogger);
+$catalogClient = new CatalogClient('https://demo.paloma.one/api/catalog/', 'yourAPIKey', $myLogger);
 ```
 
+Use profiler to collect data for Symfony Profiler.
+```php
+$catalogClient = new CatalogClient('https://demo.paloma.one/api/catalog/', 'yourAPIKey', $myLogger, $myProfiler);
+```
