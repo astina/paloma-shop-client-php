@@ -4,6 +4,13 @@ namespace Paloma\Shop\Checkout;
 
 interface CheckoutClientInterface
 {
+    /**
+     * @param $country
+     * @param $language
+     * @return Cart
+     */
+    function cart($country, $language);
+
     function createOrder($order);
 
     function deleteOrder($id);
@@ -32,13 +39,9 @@ interface CheckoutClientInterface
 
     function updateOrderItem($orderId, $itemId, $item);
 
-    function orderItemQuantity($orderId, $languageCode = null);
-
     function getPaymentMethods($orderId);
 
-    function initializePayment($payment);
+    function initPayment($payment);
 
     function getShippingMethods($orderId);
-
-    function getCartId($session);
 }

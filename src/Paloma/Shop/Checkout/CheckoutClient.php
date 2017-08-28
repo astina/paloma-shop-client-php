@@ -5,14 +5,37 @@ namespace Paloma\Shop\Checkout;
 use Paloma\Shop\BaseClient;
 use Paloma\Shop\PalomaProfiler;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class CheckoutClient extends BaseClient implements CheckoutClientInterface
 {
+    /**
+     * @var SessionInterface
+     */
+    private $session;
+
     const ORDERS_PATH = 'orders';
 
-    public function __construct($baseUrl, $apiKey, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    public function __construct($baseUrl, $apiKey, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
-       parent::__construct($baseUrl, $apiKey, $logger, $profiler);
+        parent::__construct($baseUrl, $apiKey, $logger, $profiler);
+
+        if ($session == null) {
+            $session = new Session();
+        }
+
+        $this->session = $session;
+    }
+
+    /**
+     * @param $country
+     * @param $language
+     * @return Cart
+     */
+    function cart($country, $language)
+    {
+        return new Cart($country, $language, $this, $this->session);
     }
 
     function createOrder($order)
@@ -85,27 +108,12 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
         return $this->put(self::ORDERS_PATH . '/' . $orderId . '/items/' . $itemId, null, $item);
     }
 
-    function orderItemQuantity($orderId, $languageCode = null)
-    {
-        if ($orderId) {
-            $order = $this->getOrder($orderId, $languageCode);
-            if ($order && $order['items']) {
-                $count = 0;
-                for ($i = 0; $i < count($order['items']); $i++) {
-                    $count += $order['items'][$i]['quantity'];
-                }
-                return $count;
-            }
-        }
-        return 0;
-    }
-
     function getPaymentMethods($orderId)
     {
         return $this->get('payment-methods', ['order-id' => $orderId]);
     }
 
-    function initializePayment($payment)
+    function initPayment($payment)
     {
         return $this->post('payments', null, $payment);
     }
@@ -113,16 +121,5 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
     function getShippingMethods($orderId)
     {
         return $this->get('shipping-methods', ['order-id' => $orderId]);
-    }
-
-    function getCartId($session)
-    {
-        $cartId = $session->get('cartId');
-        if (!$cartId) {
-            $cart = $this->createOrder(['country' => 'ch', 'language' => 'de']);
-            $session->set('cartId', $cart['id']);
-            $cartId = $cart['id'];
-        }
-        return $cartId;
     }
 }

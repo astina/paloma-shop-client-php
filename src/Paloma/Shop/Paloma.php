@@ -2,9 +2,14 @@
 
 namespace Paloma\Shop;
 
+use Paloma\Shop\Catalog\CatalogClient;
 use Paloma\Shop\Catalog\CatalogClientInterface;
+use Paloma\Shop\Checkout\CheckoutClient;
 use Paloma\Shop\Checkout\CheckoutClientInterface;
+use Paloma\Shop\Customers\CustomersClient;
 use Paloma\Shop\Customers\CustomersClientInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Paloma
 {
@@ -22,6 +27,19 @@ class Paloma
      * @var CustomersClientInterface
      */
     private $customers;
+
+    public static function create($baseUrl, $apiKey, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    {
+        if (!preg_match('/\/$/', $baseUrl)) {
+            $baseUrl = $baseUrl . '/';
+        }
+
+        return new Paloma(
+            new CatalogClient($baseUrl . 'catalog/', $apiKey, $logger, $profiler),
+            new CheckoutClient($baseUrl . 'checkout/', $apiKey, $session, $logger, $profiler),
+            new CustomersClient($baseUrl . 'customers/', $apiKey, $logger, $profiler)
+        );
+    }
 
     public function __construct(CatalogClientInterface $catalog, CheckoutClientInterface $checkout, CustomersClientInterface $customers)
     {

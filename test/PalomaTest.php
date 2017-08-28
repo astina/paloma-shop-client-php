@@ -2,22 +2,18 @@
 
 namespace Paloma\Shop;
 
-use Paloma\Shop\Catalog\CatalogClient;
-use Paloma\Shop\Checkout\CheckoutClient;
-use Paloma\Shop\Customers\CustomersClient;
-
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage;
 
 class PalomaTest extends TestCase
 {
     public function testInit()
     {
-        $paloma = new Paloma(new CatalogClient('http://localhost:8187/api/', 'test', true),
-                             new CheckoutClient('http://localhost:8188/api/', 'test', true),
-                             new CustomersClient('http://localhost:8189/api/', 'test', true));
+        $paloma = Paloma::create('https://demo.paloma.one/api/', '', new Session(new MockFileSessionStorage()));
 
-        $categories = $paloma->catalog()->categories('ch', 'de', 10);
-        $this->assertNotNull($categories);
+//        $categories = $paloma->catalog()->categories('ch', 'de', 10);
+//        $this->assertNotNull($categories);
 //
 //        $category = $paloma->catalog()->category('ch', 'de', 1, 10, true);
 //
