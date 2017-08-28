@@ -41,9 +41,9 @@ class Cart
         return $this->checkoutClient->getOrder($this->getCartId(), $this->language);
     }
 
-    public function addItem($item)
+    public function addItem($sku, $quantity = 1)
     {
-        return $this->checkoutClient->addOrderItem($this->getCartId(), $item);
+        return $this->checkoutClient->addOrderItem($this->getCartId(), ['sku' => $sku, 'quantity' => $quantity]);
     }
 
     public function updateQuantity($itemId, $quantity)

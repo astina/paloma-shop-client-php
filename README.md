@@ -46,7 +46,7 @@ $order = $paloma->checkout()->cart('ch', 'de')->get();
 
 Add product to cart:
 ```php
-$order = $paloma->checkout()->cart('ch', 'de')->addItem(['sku' => '12345', 'quantity' => 1]);
+$order = $paloma->checkout()->cart('ch', 'de')->addItem('12345', 1]);
 ```
 
 Update cart item quantity:
