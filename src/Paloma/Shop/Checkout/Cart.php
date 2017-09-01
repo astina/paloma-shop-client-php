@@ -61,7 +61,13 @@ class Cart
      */
     public function itemsCount()
     {
-        $order = $this->checkoutClient->getOrder($this->getCartId());
+        $cartId = $this->getCartId(false);
+
+        if (!$cartId) {
+            return 0;
+        }
+
+        $order = $this->checkoutClient->getOrder($cartId);
 
         return count($order['items']);
     }
@@ -71,7 +77,13 @@ class Cart
      */
     public function unitsCount()
     {
-        $order = $this->checkoutClient->getOrder($this->getCartId());
+        $cartId = $this->getCartId(false);
+
+        if (!$cartId) {
+            return 0;
+        }
+
+        $order = $this->checkoutClient->getOrder($cartId);
 
         $count = 0;
         foreach ($order['items'] as $item) {
@@ -129,7 +141,7 @@ class Cart
         return $order;
     }
 
-    private function getCartId()
+    private function getCartId($createOrder = true)
     {
         if (!$this->session->isStarted()) {
             $this->session->start();
@@ -139,10 +151,11 @@ class Cart
 
         if (!isset($cartIds[$this->country])) {
 
-            $cart = $this->checkoutClient->createOrder([
-                'country' => $this->country,
-                'language' => $this->language,
-            ]);
+            if (!$createOrder) {
+                return 0;
+            }
+
+            $cart = $this->createCartOrder();
 
             $cartIds = $cartIds ?: [];
             $cartIds[$this->country] = $cart['id'];
@@ -151,6 +164,14 @@ class Cart
         }
 
         return $cartIds[$this->country];
+    }
+
+    private function createCartOrder()
+    {
+        return $this->checkoutClient->createOrder([
+            'country' => $this->country,
+            'language' => $this->language,
+        ]);
     }
 
     private function clearCartId()
