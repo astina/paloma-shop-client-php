@@ -13,9 +13,14 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
        parent::__construct($baseUrl, $apiKey, $logger, $profiler);
     }
 
-    public function categories($country, $language, $depth = null)
+    public function categories($country, $language, $depth = null, $products = true)
     {
-        return $this->get($country . '/' . $language . '/categories', $depth ? ['depth' => $depth] : null);
+        $query = ['products' => ($products ? 'true' : 'false')];
+        if ($depth) {
+            $query['depth'] = $depth;
+        }
+
+        return $this->get($country . '/' . $language . '/categories', $query);
     }
 
     public function category($country, $language, $code, $depth = null, $filterAggregates = null)
