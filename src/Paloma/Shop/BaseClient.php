@@ -85,7 +85,7 @@ abstract class BaseClient
                 ],
                 'query' => $query,
                 'form_params' => $body && $formEncoding ? $body : null,
-                'json' => $body && !$formEncoding ? $body : null
+                'body' => $body && !$formEncoding ? json_encode($body,JSON_UNESCAPED_SLASHES) : null
             ]);
 
         return json_decode($res->getBody(), true);
