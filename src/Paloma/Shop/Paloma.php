@@ -37,7 +37,7 @@ class Paloma
         return new Paloma(
             new CatalogClient($baseUrl . 'catalog/', $apiKey, $logger, $profiler),
             new CheckoutClient($baseUrl . 'checkout/', $apiKey, $session, $logger, $profiler),
-            new CustomersClient($baseUrl . 'customers/', $apiKey, $logger, $profiler)
+            new CustomersClient($baseUrl . 'customers/', $apiKey, $session, $logger, $profiler)
         );
     }
 

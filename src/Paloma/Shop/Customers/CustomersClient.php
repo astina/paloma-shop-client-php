@@ -5,12 +5,34 @@ namespace Paloma\Shop\Customers;
 use Paloma\Shop\BaseClient;
 use Paloma\Shop\PalomaProfiler;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class CustomersClient extends BaseClient implements CustomersClientInterface
 {
-    public function __construct($baseUrl, $apiKey, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    /**
+     * @var SessionInterface
+     */
+    private $session;
+
+    public function __construct($baseUrl, $apiKey, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
        parent::__construct($baseUrl, $apiKey, $logger, $profiler);
+
+        if ($session == null) {
+            $session = new Session();
+        }
+
+        $this->session = $session;
+    }
+
+    /**
+     * @param $country
+     * @return User
+     */
+    function user($country)
+    {
+        return new User($country, $this, $this->session);
     }
 
     function createAdvertisingPrefs($country, $advertisingPrefs)
@@ -55,6 +77,8 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
 
     function register($country, $user)
     {
+        //TODO av: can't be done with id as it might not yet be available (comes from demo-data)
+        $this->user($country)->setUserIdInSession($user['emailAddress']);
         return $this->post($country . '/users', null, $user);
     }
 
