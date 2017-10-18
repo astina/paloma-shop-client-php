@@ -41,4 +41,7 @@ interface CustomersClientInterface
     function getOrder($country, $language, $userId, $orderNr);
 
     function getOrderReceipt($country, $language, $userId, $orderNr);
+
+    function confirmEmail($country, $token);
+
 }

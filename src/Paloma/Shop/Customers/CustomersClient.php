@@ -82,6 +82,15 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         return $this->post($country . '/users', null, $user);
     }
 
+    function confirmEmail($country, $token) {
+        $confirmToken = $this->getPasswordResetToken($country, $token);
+        if (isset($confirmToken) && $confirmToken['type'] == 'EMAIL') {
+            return $this->updateUserPartially($country, $confirmToken['emailAddress'], ['confirmationToken' => $token]);
+        } else {
+            return false;
+        }
+    }
+
     function getUser($country, $id)
     {
         return $this->get($country . '/users/' . $id);
