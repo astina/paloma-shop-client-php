@@ -17,7 +17,7 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
 
     public function __construct($baseUrl, $apiKey, $channel, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
-       parent::__construct($baseUrl, $apiKey, $channel, $logger, $profiler);
+        parent::__construct($baseUrl, $apiKey, $channel, $logger, $profiler);
 
         if ($session == null) {
             $session = new Session();
