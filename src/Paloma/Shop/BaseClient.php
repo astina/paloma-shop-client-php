@@ -13,7 +13,9 @@ abstract class BaseClient
 {
     private $http;
 
-    public function __construct($baseUrl, $apiKey, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    protected $channel;
+
+    public function __construct($baseUrl, $apiKey, $channel, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
         $handlerStack = HandlerStack::create();
         $handlerStack->push(
@@ -42,6 +44,8 @@ abstract class BaseClient
             ],
             'handler' => $handlerStack
         ]);
+
+        $this->$channel = $channel;
     }
 
     protected function get($path, $query = null)

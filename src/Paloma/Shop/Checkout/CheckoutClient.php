@@ -17,9 +17,9 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
 
     const ORDERS_PATH = 'orders';
 
-    public function __construct($baseUrl, $apiKey, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    public function __construct($baseUrl, $apiKey, $channel, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
-        parent::__construct($baseUrl, $apiKey, $logger, $profiler);
+        parent::__construct($baseUrl, $apiKey, $channel, $logger, $profiler);
 
         if ($session == null) {
             $session = new Session();
@@ -29,97 +29,97 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
     }
 
     /**
-     * @param $country
+     * @param $locale
      * @param $language
      * @return Cart
      */
-    function cart($country, $language)
+    function cart($locale, $language)
     {
-        return new Cart($country, $language, $this, $this->session);
+        return new Cart($locale, $language, $this, $this->session);
     }
 
     function createOrder($order)
     {
-        return $this->post(self::ORDERS_PATH, null, $order);
+        return $this->post($this->channel . '/' . self::ORDERS_PATH, null, $order);
     }
 
     function deleteOrder($id)
     {
-        return $this->delete(self::ORDERS_PATH . '/' . $id);
+        return $this->delete($this->channel . '/' . self::ORDERS_PATH . '/' . $id);
     }
 
-    function getOrder($id, $languageCode = null)
+    function getOrder($id, $locale = null)
     {
-        return $this->get(self::ORDERS_PATH . '/' . $id, $languageCode ? ['language' => $languageCode] : null);
+        return $this->get($this->channel . '/' . self::ORDERS_PATH . '/' . $id, $locale ? ['locale' => $locale] : null);
     }
 
     function setAddresses($orderId, $addresses)
     {
-        return $this->put(self::ORDERS_PATH . '/' . $orderId . '/addresses', null, $addresses);
+        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/addresses', null, $addresses);
     }
 
     function addCoupon($orderId, $coupon)
     {
-        return $this->post(self::ORDERS_PATH . '/' . $orderId . '/coupons', null, $coupon);
+        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/coupons', null, $coupon);
     }
 
     function deleteCoupon($orderId, $code)
     {
-        return $this->delete(self::ORDERS_PATH . '/' . $orderId . '/coupons/' . $code);
+        return $this->delete($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/coupons/' . $code);
     }
 
     function finalizeOrder($id)
     {
-        return $this->post(self::ORDERS_PATH . '/' . $id . '/finalize');
+        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $id . '/finalize');
     }
 
     function addOrderItem($orderId, $item)
     {
-        return $this->post(self::ORDERS_PATH . '/' . $orderId . '/items', null, $item);
+        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/items', null, $item);
     }
 
     function setPaymentMethod($orderId, $method)
     {
-        return $this->put(self::ORDERS_PATH . '/' . $orderId . '/payment-method', null, $method);
+        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/payment-method', null, $method);
     }
 
     function purchaseOrder($id)
     {
-        return $this->post(self::ORDERS_PATH . '/' . $id . '/purchase');
+        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $id . '/purchase');
     }
 
     function setShippingMethod($orderId, $method)
     {
-        return $this->put(self::ORDERS_PATH . '/' . $orderId . '/shipping-method', null, $method);
+        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/shipping-method', null, $method);
     }
 
-    function setUser($orderId, $user)
+    function setCustomer($orderId, $customer)
     {
-        return $this->put(self::ORDERS_PATH . '/' . $orderId . '/user', null, $user);
+        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/customer', null, $customer);
     }
 
     function deleteOrderItem($orderId, $itemId)
     {
-        return $this->delete(self::ORDERS_PATH . '/' . $orderId . '/items/' . $itemId);
+        return $this->delete($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/items/' . $itemId);
     }
 
     function updateOrderItem($orderId, $itemId, $item)
     {
-        return $this->put(self::ORDERS_PATH . '/' . $orderId . '/items/' . $itemId, null, $item);
+        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/items/' . $itemId, null, $item);
     }
 
     function getPaymentMethods($orderId)
     {
-        return $this->get('payment-methods', ['order-id' => $orderId]);
+        return $this->get($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/payment-methods');
     }
 
-    function initPayment($payment)
+    function initPayment($orderId, $payment)
     {
-        return $this->post('payments', null, $payment);
+        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/payments', null, $payment);
     }
 
     function getShippingMethods($orderId)
     {
-        return $this->get('shipping-methods', ['order-id' => $orderId]);
+        return $this->get($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/shipping-methods');
     }
 }

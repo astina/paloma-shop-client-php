@@ -28,16 +28,16 @@ class Paloma
      */
     private $customers;
 
-    public static function create($baseUrl, $apiKey, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    public static function create($baseUrl, $channel, $apiKey, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
         if (!preg_match('/\/$/', $baseUrl)) {
             $baseUrl = $baseUrl . '/';
         }
 
         return new Paloma(
-            new CatalogClient($baseUrl . 'catalog/', $apiKey, $logger, $profiler),
-            new CheckoutClient($baseUrl . 'checkout/', $apiKey, $session, $logger, $profiler),
-            new CustomersClient($baseUrl . 'customers/', $apiKey, $session, $logger, $profiler)
+            new CatalogClient($baseUrl . 'catalog/v2/', $channel, $apiKey, $logger, $profiler),
+            new CheckoutClient($baseUrl . 'checkout/v2/', $channel, $apiKey, $session, $logger, $profiler),
+            new CustomersClient($baseUrl . 'customers/v2/', $channel, $apiKey, $session, $logger, $profiler)
         );
     }
 

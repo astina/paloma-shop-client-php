@@ -8,22 +8,22 @@ use Psr\Log\LoggerInterface;
 
 class CatalogClient extends BaseClient implements CatalogClientInterface
 {
-    public function __construct($baseUrl, $apiKey, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    public function __construct($baseUrl, $apiKey, $channel, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
-       parent::__construct($baseUrl, $apiKey, $logger, $profiler);
+       parent::__construct($baseUrl, $apiKey, $channel, $logger, $profiler);
     }
 
-    public function categories($country, $language, $depth = null, $products = true)
+    public function categories($locale, $depth = null, $products = true)
     {
         $query = ['products' => ($products ? 'true' : 'false')];
         if ($depth) {
             $query['depth'] = $depth;
         }
 
-        return $this->get($country . '/' . $language . '/categories', $query);
+        return $this->get($this->channel . '/' . $locale . '/categories', $query);
     }
 
-    public function category($country, $language, $code, $depth = null, $filterAggregates = null)
+    public function category($locale, $code, $depth = null, $filterAggregates = null)
     {
         $query = [];
         if ($depth) {
@@ -32,41 +32,41 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         if ($filterAggregates) {
             $query['filter-aggregates'] = $filterAggregates;
         }
-        return $this->get($country . '/' . $language . '/categories/' . $code, count($query) > 0 ? $query : null);
+        return $this->get($this->channel . '/' . $locale . '/categories/' . $code, count($query) > 0 ? $query : null);
     }
 
-    public function categoryFilters($country, $language, $code)
+    public function categoryFilters($locale, $code)
     {
-        return $this->get($country . '/' . $language . '/categories/' . $code . '/filter-aggregates');
+        return $this->get($this->channel . '/' . $locale . '/categories/' . $code . '/filter-aggregates');
     }
 
-    public function product($country, $language, $itemNumber)
+    public function product($locale, $itemNumber)
     {
-        return $this->get($country . '/' . $language . '/products/' . $itemNumber);
+        return $this->get($this->channel . '/' . $locale . '/products/' . $itemNumber);
     }
 
-    function recommendedProducts($country, $language, $itemNumber)
+    function recommendedProducts($locale, $itemNumber)
     {
-        return $this->get($country . '/' . $language . '/products/' . $itemNumber . '/recommended');
+        return $this->get($this->channel . '/' . $locale . '/products/' . $itemNumber . '/recommended');
     }
 
-    function similarProducts($country, $language, $itemNumber)
+    function similarProducts($locale, $itemNumber)
     {
-        return $this->get($country . '/' . $language . '/products/' . $itemNumber . '/similar');
+        return $this->get($this->channel . '/' . $locale . '/products/' . $itemNumber . '/similar');
     }
 
-    public function search($country, $language, $searchRequest)
+    public function search($locale, $searchRequest)
     {
-        return $this->post($country . '/' . $language . '/search', null, $searchRequest);
+        return $this->post($this->channel . '/' . $locale . '/search', null, $searchRequest);
     }
 
-    function searchSuggestions($country, $language, $partial)
+    function searchSuggestions($locale, $query)
     {
-        return $this->get($country . '/' . $language . '/search/suggestions', ['query' => $partial]);
+        return $this->get($this->channel . '/' . $locale . '/search/suggestions', ['query' => $query]);
     }
 
-    function recommendations($country, $language, $order, $size = null)
+    function recommendations($locale, $order, $size = null)
     {
-        return $this->post($country . '/' . $language . '/recommendations', $size ? ['size' => $size] : null, $order);
+        return $this->post($this->channel . '/' . $locale . '/recommendations', $size ? ['size' => $size] : null, $order);
     }
 }

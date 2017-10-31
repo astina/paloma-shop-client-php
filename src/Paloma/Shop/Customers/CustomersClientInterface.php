@@ -4,44 +4,41 @@ namespace Paloma\Shop\Customers;
 
 interface CustomersClientInterface
 {
-    function createAdvertisingPrefs($country, $advertisingPrefs);
+    //TODO av: dedicated user, adv,... client ??
+    function createAdvertisingPrefs($advertisingPrefs);
 
-    function confirmAdvertisingPrefs($country, $token);
+    function confirmAdvertisingPrefs($token);
 
-    function authenticate($country, $login);
+    function authenticateUser($credentials);
 
-    function getLoyaltyPrograms($country, $userIdOrEmail);
+    function getLoyaltyPrograms($customerId);
 
-    function updateLoyaltyPrograms($country, $userIdOrEmail, $program);
+    function updateLoyaltyPrograms($customerId, $program);
 
-    function startPasswordReset($country, $passwordReset);
+    function startUserPasswordReset($passwordReset);
 
-    function getPasswordResetToken($country, $token);
+    function getUserPasswordResetToken($token);
 
-    function updatePassword($country, $token, $password);
+    function updateUserPassword($token, $password);
 
-    function register($country, $user);
+    function register($customer);
 
-    function getUser($country, $id);
+    function getCustomer($customerId);
 
-    function updateUserPartially($country, $id, $user);
+    function updateCustomer($customerId, $customer);
 
-    function updateUser($country, $id, $user);
+    function updateAddress($customerId, $addressType, $address);
 
-    function getWishList($country, $userId);
+    function updateAdvertisingPreferences($customerId, $advertisingPrefs);
 
-    function addWishListItem($country, $userId, $item);
+    function getOrderStatus($locale, $orderNr);
 
-    function deleteWishListItem($country, $userId, $itemId);
+    function getOrders($locale, $customerId, $pageNr = null, $pageSize = null, $sortOrder = null);
 
-    function getOrderStatus($country, $language, $orderNr);
+    function getOrder($locale, $customerId, $orderNr);
 
-    function getOrders($country, $language, $userId, $pageNr = null, $pageSize = null, $sortOrder = null);
+    function getOrderReceipt($locale, $customerId, $orderNr);
 
-    function getOrder($country, $language, $userId, $orderNr);
-
-    function getOrderReceipt($country, $language, $userId, $orderNr);
-
-    function confirmEmail($country, $token);
+    function confirmEmailAddress($token);
 
 }

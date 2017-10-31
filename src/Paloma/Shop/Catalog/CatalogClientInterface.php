@@ -4,21 +4,23 @@ namespace Paloma\Shop\Catalog;
 
 interface CatalogClientInterface
 {
-    function categories($country, $language, $depth = null, $products = true);
+    function categories($locale, $depth = null, $products = true);
 
-    function category($country, $language, $code, $depth = null, $filterAggregates = null);
+    function category($locale, $code, $depth = null, $filterAggregates = null);
 
-    function categoryFilters($country, $language, $code);
+    function categoryFilters($locale, $code);
 
-    function product($country, $language, $itemNumber);
+    function product($locale, $itemNumber);
 
-    function recommendedProducts($country, $language, $itemNumber);
+    function recommendedProducts($locale, $itemNumber);
 
-    function similarProducts($country, $language, $itemNumber);
+    function similarProducts($locale, $itemNumber);
 
-    function recommendations($country, $language, $order, $size = null);
+    function recommendations($locale, $order, $size = null);
 
-    function search($country, $language, $searchRequest);
+    function search($locale, $searchRequest);
 
-    function searchSuggestions($country, $language, $partial);
+    function searchSuggestions($locale, $query);
+
+    //TODO av: brands (see swagger doc)
 }

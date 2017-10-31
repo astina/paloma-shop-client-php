@@ -15,9 +15,9 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
      */
     private $session;
 
-    public function __construct($baseUrl, $apiKey, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    public function __construct($baseUrl, $apiKey, $channel, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
-       parent::__construct($baseUrl, $apiKey, $logger, $profiler);
+       parent::__construct($baseUrl, $apiKey, $channel, $logger, $profiler);
 
         if ($session == null) {
             $session = new Session();
@@ -27,106 +27,97 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
     }
 
     /**
-     * @param $country
      * @return User
      */
-    function user($country)
+    function user()
     {
-        return new User($country, $this, $this->session);
+        return new User($this->channel, $this, $this->session);
     }
 
-    function createAdvertisingPrefs($country, $advertisingPrefs)
+    function createAdvertisingPrefs($advertisingPrefs)
     {
-        return $this->post($country . '/advertising', null, $advertisingPrefs);
+        return $this->post($this->channel . '/advertising', null, $advertisingPrefs);
     }
 
-    function confirmAdvertisingPrefs($country, $token)
+    function confirmAdvertisingPrefs($token)
     {
-        return $this->postFormData($country . '/advertising/confirm', null, ['token' => $token]);
+        return $this->postFormData($this->channel . '/advertising/confirm', null, ['token' => $token]);
     }
 
-    function authenticate($country, $login)
+    function authenticateUser($credentials)
     {
-        return $this->post($country . '/authenticate', null, $login);
+        $authenticationToken = $this->post($this->channel . '/users/authenticate', null, $credentials);
+        //TODO av: test
+        $this->user($this->channel)->setUserIdInSession($authenticationToken['user']['id']);
     }
 
-    function getLoyaltyPrograms($country, $userIdOrEmail)
+    function getLoyaltyPrograms($customerId)
     {
-        return $this->get($country . '/customers/' . $userIdOrEmail . '/loyalty-programs');
+        return $this->get($this->channel . '/customers/' . $customerId . '/loyalty-programs');
     }
 
-    function updateLoyaltyPrograms($country, $userIdOrEmail, $program)
+    function updateLoyaltyPrograms($customerId, $program)
     {
-        return $this->post($country . '/customers/' . $userIdOrEmail . '/loyalty-programs', null, $program);
+        return $this->post($this->channel . '/customers/' . $customerId . '/loyalty-programs', null, $program);
     }
 
-    function startPasswordReset($country, $passwordReset)
+    function startUserPasswordReset($passwordReset)
     {
-        return $this->post($country . '/password-reset', null, $passwordReset);
+        return $this->post($this->channel . '/users/password-reset', null, $passwordReset);
     }
 
-    function getPasswordResetToken($country, $token)
+    function getUserPasswordResetToken($token)
     {
-        return $this->get($country . '/password-reset/' . $token);
+        return $this->get($this->channel . '/users/password-reset/' . $token);
     }
 
-    function updatePassword($country, $token, $password)
+    function updateUserPassword($token, $password)
     {
-        return $this->put($country . '/password-reset/' . $token . '/password', null, $password);
+        return $this->put($this->channel . '/users/password-reset/' . $token . '/password', null, $password);
     }
 
-    function register($country, $user)
+    function register($customer)
     {
-        //TODO av: can't be done with id as it might not yet be available (comes from demo-data)
-        $this->user($country)->setUserIdInSession($user['emailAddress']);
-        return $this->post($country . '/users', null, $user);
+        $customer = $this->post($this->channel . '/customers', null, $customer);
+        $this->user($this->channel)->setUserIdInSession($customer['id']);
     }
 
-    function confirmEmail($country, $token) {
-        $confirmToken = $this->getPasswordResetToken($country, $token);
+    //TODO av: test
+    function confirmEmailAddress($token) {
+        $confirmToken = $this->getUserPasswordResetToken($token);
         if (isset($confirmToken) && $confirmToken['type'] == 'EMAIL') {
-            return $this->updateUserPartially($country, $confirmToken['emailAddress'], ['confirmationToken' => $token]);
+            return $this->post($this->channel . '/customers/' . $confirmToken['user'] . '/confirm-email-address/' . $confirmToken['token']);
         } else {
             return false;
         }
     }
 
-    function getUser($country, $id)
+    function getCustomer($customerId)
     {
-        return $this->get($country . '/users/' . $id);
+        return $this->get($this->channel . '/customers/' . $customerId);
     }
 
-    function updateUserPartially($country, $id, $user)
+    function updateCustomer($customerId, $customer)
     {
-        return $this->patch($country . '/users/' . $id, null, $user);
+        return $this->put($this->channel . '/customers/' . $customerId, null, $customer);
     }
 
-    function updateUser($country, $id, $user)
+    function updateAddress($customerId, $addressType, $address)
     {
-        return $this->put($country . '/users/' . $id, null, $user);
+        return $this->put($this->channel . '/customers/' . $customerId . '/addresses/' . $addressType, null, $address);
     }
 
-    function getWishList($country, $userId)
+    function updateAdvertisingPreferences($customerId, $advertisingPrefs)
     {
-        return $this->get($country . '/users/' . $userId . '/wish-list/items');
+        return $this->put($this->channel . '/customers/' . $customerId . '/advertising', null, $advertisingPrefs);
     }
 
-    function addWishListItem($country, $userId, $item)
+    function getOrderStatus($locale, $orderNr)
     {
-        return $this->post($country . '/users/' . $userId . '/wish-list/items', null, $item);
+        return $this->get($this->channel . '/' . $locale . '/orders/' . $orderNr . '/status');
     }
 
-    function deleteWishListItem($country, $userId, $itemId)
-    {
-        return $this->delete($country . '/users/' . $userId . '/wish-list/items/' . $itemId);
-    }
-
-    function getOrderStatus($country, $language, $orderNr)
-    {
-        return $this->get($country . '/' . $language . '/orders/' . $orderNr . '/status');
-    }
-
-    function getOrders($country, $language, $userId, $pageNr = null, $pageSize = null, $sortOrder = null)
+    function getOrders($locale, $customerId, $pageNr = null, $pageSize = null, $sortOrder = null)
     {
         $query = [];
         if ($pageNr) {
@@ -138,16 +129,16 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         if ($sortOrder) {
             $query['sortOrder'] = $sortOrder;
         }
-        return $this->get($country . '/' . $language . '/users/' . $userId . '/orders', count($query) > 0 ? $query : null);
+        return $this->get($this->channel . '/' . $locale . '/customers/' . $customerId . '/orders', count($query) > 0 ? $query : null);
     }
 
-    function getOrder($country, $language, $userId, $orderNr)
+    function getOrder($locale, $customerId, $orderNr)
     {
-        return $this->get($country . '/' . $language . '/users/' . $userId . '/orders/' . $orderNr);
+        return $this->get($this->channel . '/' . $locale . '/customers/' . $customerId . '/orders/' . $orderNr);
     }
 
-    function getOrderReceipt($country, $language, $userId, $orderNr)
+    function getOrderReceipt($locale, $customerId, $orderNr)
     {
-        return $this->get($country . '/' . $language . '/users/' . $userId . '/orders/' . $orderNr . '/receipt');
+        return $this->get($this->channel . '/' . $locale . '/customers/' . $customerId . '/orders/' . $orderNr . '/receipt');
     }
 }

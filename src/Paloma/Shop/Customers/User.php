@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class User
 {
-    private $country;
+    private $channel;
 
     /**
      * @var CustomersClientInterface
@@ -22,13 +22,13 @@ class User
     private static $USER_ID_VAR = 'paloma-shop-user-id';
 
     /**
-     * @param $country string
+     * @param $channel string
      * @param CustomersClientInterface $customersClient
      * @param SessionInterface $session
      */
-    public function __construct($country, CustomersClientInterface $customersClient, SessionInterface $session)
+    public function __construct($channel, CustomersClientInterface $customersClient, SessionInterface $session)
     {
-        $this->country = $country;
+        $this->channel = $channel;
         $this->customersClient = $customersClient;
         $this->session = $session;
     }
@@ -40,7 +40,7 @@ class User
             return null;
         }
 
-        return $this->customersClient->getUser($this->country, $userId);
+        return $this->customersClient->getUser($this->channel, $userId);
     }
 
 

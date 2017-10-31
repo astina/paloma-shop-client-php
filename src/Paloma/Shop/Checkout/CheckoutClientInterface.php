@@ -33,7 +33,7 @@ interface CheckoutClientInterface
 
     function setShippingMethod($orderId, $method);
 
-    function setUser($orderId, $user);
+    function setCustomer($orderId, $customer);
 
     function deleteOrderItem($orderId, $itemId);
 
@@ -41,7 +41,9 @@ interface CheckoutClientInterface
 
     function getPaymentMethods($orderId);
 
-    function initPayment($payment);
+    function initPayment($orderId, $payment);
 
     function getShippingMethods($orderId);
+
+    //TODO av: implement payment status?
 }
