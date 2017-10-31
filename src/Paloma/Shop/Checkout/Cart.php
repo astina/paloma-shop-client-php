@@ -6,9 +6,9 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Cart
 {
-    private $country;
+    private $channel;
 
-    private $language;
+    private $locale;
 
     /**
      * @var CheckoutClientInterface
@@ -23,22 +23,22 @@ class Cart
     private static $CART_ID_VAR = 'paloma-cart-id';
 
     /**
-     * @param $country string Each country keeps its own cart
-     * @param $language string Used to initialize the cart order
+     * @param $channel string Each channel keeps its own cart
+     * @param $locale string Used to initialize the cart order
      * @param CheckoutClientInterface $checkoutClient
      * @param SessionInterface $session
      */
-    public function __construct($country, $language, CheckoutClientInterface $checkoutClient, SessionInterface $session)
+    public function __construct($channel, $locale, CheckoutClientInterface $checkoutClient, SessionInterface $session)
     {
-        $this->country = $country;
-        $this->language = $language;
+        $this->locale = $locale;
+        $this->channel = $channel;
         $this->checkoutClient = $checkoutClient;
         $this->session = $session;
     }
 
     public function get()
     {
-        return $this->checkoutClient->getOrder($this->getCartId(), $this->language);
+        return $this->checkoutClient->getOrder($this->getCartId(), $this->locale);
     }
 
     public function addItem($sku, $quantity = 1)
@@ -95,11 +95,11 @@ class Cart
 
     public function setCustomer($customer)
     {
-        if (!isset($customer['country'])) {
-            $customer['country'] = $this->country;
+        if (!isset($customer['channel'])) {
+            $customer['channel'] = $this->channel;
         }
-        if (!isset($customer['language'])) {
-            $customer['language'] = $this->language;
+        if (!isset($customer['locale'])) {
+            $customer['locale'] = $this->locale;
         }
         if (!isset($customer['confirmed'])) {
             $customer['confirmed'] = false;
@@ -149,7 +149,7 @@ class Cart
 
         $cartIds = $this->session->get(self::$CART_ID_VAR);
 
-        if (!isset($cartIds[$this->country])) {
+        if (!isset($cartIds[$this->channel])) {
 
             if (!$createOrder) {
                 return 0;
@@ -158,19 +158,19 @@ class Cart
             $cart = $this->createCartOrder();
 
             $cartIds = $cartIds ?: [];
-            $cartIds[$this->country] = $cart['id'];
+            $cartIds[$this->channel] = $cart['id'];
 
             $this->session->set(self::$CART_ID_VAR, $cartIds);
         }
 
-        return $cartIds[$this->country];
+        return $cartIds[$this->channel];
     }
 
     private function createCartOrder()
     {
         return $this->checkoutClient->createOrder([
-            'country' => $this->country,
-            'language' => $this->language,
+            'channel' => $this->channel,
+            'locale' => $this->locale,
         ]);
     }
 
@@ -178,8 +178,8 @@ class Cart
     {
         $cartIds = $this->session->get(self::$CART_ID_VAR);
 
-        if (isset($cartIds[$this->country])) {
-            unset($cartIds[$this->country]);
+        if (isset($cartIds[$this->channel])) {
+            unset($cartIds[$this->channel]);
         }
 
         $this->session->set(self::$CART_ID_VAR, $cartIds);

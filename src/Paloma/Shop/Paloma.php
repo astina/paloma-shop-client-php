@@ -35,9 +35,9 @@ class Paloma
         }
 
         return new Paloma(
-            new CatalogClient($baseUrl . 'catalog/v2/', $channel, $apiKey, $logger, $profiler),
-            new CheckoutClient($baseUrl . 'checkout/v2/', $channel, $apiKey, $session, $logger, $profiler),
-            new CustomersClient($baseUrl . 'customers/v2/', $channel, $apiKey, $session, $logger, $profiler)
+            new CatalogClient($baseUrl . 'catalog/v2/', $apiKey, $channel, $logger, $profiler),
+            new CheckoutClient($baseUrl . 'checkout/v2/', $apiKey, $channel, $session, $logger, $profiler),
+            new CustomersClient($baseUrl . 'customers/v2/', $apiKey, $channel, $session, $logger, $profiler)
         );
     }
 

@@ -4,23 +4,6 @@ namespace Paloma\Shop\Customers;
 
 interface CustomersClientInterface
 {
-    //TODO av: dedicated user, adv,... client ??
-    function createAdvertisingPrefs($advertisingPrefs);
-
-    function confirmAdvertisingPrefs($token);
-
-    function authenticateUser($credentials);
-
-    function getLoyaltyPrograms($customerId);
-
-    function updateLoyaltyPrograms($customerId, $program);
-
-    function startUserPasswordReset($passwordReset);
-
-    function getUserPasswordResetToken($token);
-
-    function updateUserPassword($token, $password);
-
     function register($customer);
 
     function getCustomer($customerId);
@@ -29,9 +12,31 @@ interface CustomersClientInterface
 
     function updateAddress($customerId, $addressType, $address);
 
+    function confirmEmailAddress($token);
+
+
+    function authenticateUser($username, $password);
+
+    function updateUserPassword($password);
+
+    function startUserPasswordReset($emailAddress, $confirmationBaseUrl);
+
+    function getUserPasswordResetToken($token);
+
+    function setNewPassword($token, $password);
+
+
     function updateAdvertisingPreferences($customerId, $advertisingPrefs);
 
-    function getOrderStatus($locale, $orderNr);
+    function createAdvertisingPrefs($advertisingPrefs);
+
+    function confirmAdvertisingPrefs($token);
+
+
+    function getLoyaltyPrograms($customerId);
+
+    function updateLoyaltyPrograms($customerId, $program);
+
 
     function getOrders($locale, $customerId, $pageNr = null, $pageSize = null, $sortOrder = null);
 
@@ -39,6 +44,6 @@ interface CustomersClientInterface
 
     function getOrderReceipt($locale, $customerId, $orderNr);
 
-    function confirmEmailAddress($token);
+    function getOrderStatus($locale, $orderNr);
 
 }

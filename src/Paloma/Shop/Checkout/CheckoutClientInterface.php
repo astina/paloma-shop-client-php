@@ -5,19 +5,36 @@ namespace Paloma\Shop\Checkout;
 interface CheckoutClientInterface
 {
     /**
-     * @param $country
-     * @param $language
+     * @param $locale
      * @return Cart
      */
-    function cart($country, $language);
+    function cart($locale);
+
 
     function createOrder($order);
 
-    function deleteOrder($id);
-
     function getOrder($id, $languageCode = null);
 
+    function deleteOrder($id);
+
+    function addOrderItem($orderId, $item);
+
+    function updateOrderItem($orderId, $itemId, $item);
+
+    function deleteOrderItem($orderId, $itemId);
+
+
+    function setCustomer($orderId, $customer);
+
     function setAddresses($orderId, $addresses);
+
+    function getShippingMethods($orderId);
+
+    function setShippingMethod($orderId, $method);
+
+    function getPaymentMethods($orderId);
+
+    function setPaymentMethod($orderId, $method);
 
     function addCoupon($orderId, $coupon);
 
@@ -25,25 +42,9 @@ interface CheckoutClientInterface
 
     function finalizeOrder($id);
 
-    function addOrderItem($orderId, $item);
-
-    function setPaymentMethod($orderId, $method);
-
-    function purchaseOrder($id);
-
-    function setShippingMethod($orderId, $method);
-
-    function setCustomer($orderId, $customer);
-
-    function deleteOrderItem($orderId, $itemId);
-
-    function updateOrderItem($orderId, $itemId, $item);
-
-    function getPaymentMethods($orderId);
-
     function initPayment($orderId, $payment);
 
-    function getShippingMethods($orderId);
+    function purchaseOrder($id);
 
     //TODO av: implement payment status?
 }

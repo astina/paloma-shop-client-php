@@ -2,7 +2,6 @@
 
 namespace Paloma\Shop\Customers;
 
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class User
@@ -19,7 +18,7 @@ class User
      */
     private $session;
 
-    private static $USER_ID_VAR = 'paloma-shop-user-id';
+    private static $USER_ID_VAR = 'paloma-shop-user-authentication-token';
 
     /**
      * @param $channel string
@@ -33,37 +32,34 @@ class User
         $this->session = $session;
     }
 
-    public function get()
+    public function getCustomer()
     {
-        $userId = $this->getUserId();
-        if ($userId === '0') {
+        $authenticationToken = $this->getAuthenticationToken();
+        if (!isset($authenticationToken)) {
             return null;
         }
 
-        return $this->customersClient->getUser($this->channel, $userId);
+        return $this->customersClient->getCustomer($authenticationToken['customer']['id']);
     }
 
-
-    public function setUserIdInSession($userId)
+    public function setAuthenticationTokenInSession($authenticationToken)
     {
         if (!$this->session->isStarted()) {
             $this->session->start();
         }
-        $this->session->set(self::$USER_ID_VAR, $userId);
+        $this->session->set(self::$USER_ID_VAR, $authenticationToken);
     }
 
-    public function clearUserIdInSession()
+    public function logout()
     {
         $this->session->set(self::$USER_ID_VAR, null);
     }
 
-    private function getUserId()
+    private function getAuthenticationToken()
     {
         if (!$this->session->isStarted()) {
             $this->session->start();
         }
-        $userId = (string)$this->session->get(self::$USER_ID_VAR);
-
-        return strlen($userId) == 0 ? '0' : $userId;
+        return $this->session->get(self::$USER_ID_VAR);
     }
 }

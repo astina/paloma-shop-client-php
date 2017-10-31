@@ -13,6 +13,38 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
        parent::__construct($baseUrl, $apiKey, $channel, $logger, $profiler);
     }
 
+    public function search($locale, $search)
+    {
+        return $this->post($this->channel . '/' . $locale . '/search', null, $search);
+    }
+
+    function searchSuggestions($locale, $query)
+    {
+        return $this->get($this->channel . '/' . $locale . '/search/suggestions', ['query' => $query]);
+    }
+
+
+    public function product($locale, $itemNumber)
+    {
+        return $this->get($this->channel . '/' . $locale . '/products/' . $itemNumber);
+    }
+
+    function similarProducts($locale, $itemNumber)
+    {
+        return $this->get($this->channel . '/' . $locale . '/products/' . $itemNumber . '/similar');
+    }
+
+    function recommendedProducts($locale, $itemNumber)
+    {
+        return $this->get($this->channel . '/' . $locale . '/products/' . $itemNumber . '/recommended');
+    }
+
+    function recommendations($locale, $order, $size = null)
+    {
+        return $this->post($this->channel . '/' . $locale . '/recommendations', $size ? ['size' => $size] : null, $order);
+    }
+
+
     public function categories($locale, $depth = null, $products = true)
     {
         $query = ['products' => ($products ? 'true' : 'false')];
@@ -40,33 +72,7 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         return $this->get($this->channel . '/' . $locale . '/categories/' . $code . '/filter-aggregates');
     }
 
-    public function product($locale, $itemNumber)
-    {
-        return $this->get($this->channel . '/' . $locale . '/products/' . $itemNumber);
-    }
 
-    function recommendedProducts($locale, $itemNumber)
-    {
-        return $this->get($this->channel . '/' . $locale . '/products/' . $itemNumber . '/recommended');
-    }
 
-    function similarProducts($locale, $itemNumber)
-    {
-        return $this->get($this->channel . '/' . $locale . '/products/' . $itemNumber . '/similar');
-    }
 
-    public function search($locale, $searchRequest)
-    {
-        return $this->post($this->channel . '/' . $locale . '/search', null, $searchRequest);
-    }
-
-    function searchSuggestions($locale, $query)
-    {
-        return $this->get($this->channel . '/' . $locale . '/search/suggestions', ['query' => $query]);
-    }
-
-    function recommendations($locale, $order, $size = null)
-    {
-        return $this->post($this->channel . '/' . $locale . '/recommendations', $size ? ['size' => $size] : null, $order);
-    }
 }

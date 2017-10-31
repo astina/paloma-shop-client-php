@@ -45,7 +45,7 @@ abstract class BaseClient
             'handler' => $handlerStack
         ]);
 
-        $this->$channel = $channel;
+        $this->channel = $channel;
     }
 
     protected function get($path, $query = null)
