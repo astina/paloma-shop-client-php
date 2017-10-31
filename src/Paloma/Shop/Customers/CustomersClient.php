@@ -44,11 +44,18 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         return $this->postFormData($this->channel . '/advertising/confirm', null, ['token' => $token]);
     }
 
-    function authenticateUser($credentials)
+    function authenticateUser($username, $password)
     {
+        $credentials = [
+            'username' => $username,
+            'password' => $password,
+        ];
+
         $authenticationToken = $this->post($this->channel . '/users/authenticate', null, $credentials);
         //TODO av: test
         $this->user($this->channel)->setUserIdInSession($authenticationToken['user']['id']);
+
+        return $authenticationToken;
     }
 
     function getLoyaltyPrograms($customerId)

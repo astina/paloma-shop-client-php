@@ -9,7 +9,7 @@ interface CustomersClientInterface
 
     function confirmAdvertisingPrefs($token);
 
-    function authenticateUser($credentials);
+    function authenticateUser($username, $password);
 
     function getLoyaltyPrograms($customerId);
 
