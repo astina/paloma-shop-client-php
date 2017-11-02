@@ -105,7 +105,7 @@ class Cart
             $customer['confirmed'] = false;
         }
 
-        return $this->checkoutClient->setUser($this->getCartId(), $customer);
+        return $this->checkoutClient->setCustomer($this->getCartId(), $customer);
     }
 
     public function setAddresses($billingAddress, $shippingAddress)
