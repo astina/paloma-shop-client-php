@@ -10,7 +10,6 @@ interface CheckoutClientInterface
      */
     function cart($locale);
 
-
     function createOrder($order);
 
     function getOrder($id, $languageCode = null);
@@ -22,7 +21,6 @@ interface CheckoutClientInterface
     function updateOrderItem($orderId, $itemId, $item);
 
     function deleteOrderItem($orderId, $itemId);
-
 
     function setCustomer($orderId, $customer);
 
@@ -45,6 +43,4 @@ interface CheckoutClientInterface
     function initPayment($orderId, $payment);
 
     function purchaseOrder($id);
-
-    //TODO av: implement payment status?
 }

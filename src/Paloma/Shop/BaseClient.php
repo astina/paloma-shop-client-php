@@ -27,10 +27,10 @@ abstract class BaseClient
 
         if ($profiler) {
             $handlerStack->push(
-                Middleware::tap(function() use ($profiler) {
+                Middleware::tap(function () use ($profiler) {
                     $profiler->startRequest();
-                }, function($request, $options, $response) use ($profiler) {
-                    $response->then(function($value) use ($profiler, $request) {
+                }, function ($request, $options, $response) use ($profiler) {
+                    $response->then(function ($value) use ($profiler, $request) {
                         $profiler->endRequest($request, $value);
                     });
                 })
@@ -89,7 +89,7 @@ abstract class BaseClient
                 ],
                 'query' => $query,
                 'form_params' => $body && $formEncoding ? $body : null,
-                'body' => $body && !$formEncoding ? json_encode($body,JSON_UNESCAPED_SLASHES) : null
+                'body' => $body && !$formEncoding ? json_encode($body, JSON_UNESCAPED_SLASHES) : null
             ]);
 
         return json_decode($res->getBody(), true);

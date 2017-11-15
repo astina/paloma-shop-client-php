@@ -28,16 +28,10 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
         $this->session = $session;
     }
 
-    /**
-     * @param $locale
-     * @param $channel
-     * @return Cart
-     */
     function cart($locale)
     {
         return new Cart($locale, $this->channel, $this, $this->session);
     }
-
 
     function createOrder($order)
     {
@@ -68,7 +62,6 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
     {
         return $this->delete($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/items/' . $itemId);
     }
-
 
     function setCustomer($orderId, $customer)
     {

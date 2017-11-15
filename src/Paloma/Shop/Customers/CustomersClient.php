@@ -26,21 +26,9 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         $this->session = $session;
     }
 
-    /**
-     * @return User
-     */
-    function loggedInUser()
-    {
-        return new User($this->channel, $this, $this->session);
-    }
-
     function register($customer)
     {
-        $registeredCustomer = $this->post($this->channel . '/customers', null, $customer);
-
-        $this->authenticateUser($customer['user']['username'], $customer['user']['password']);
-
-        return $registeredCustomer;
+        return $this->post($this->channel . '/customers', null, $customer);
     }
 
     function getCustomer($customerId)
@@ -58,22 +46,14 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         return $this->put($this->channel . '/customers/' . $customerId . '/addresses/' . $addressType, null, $address);
     }
 
-    //TODO av: test
-    function confirmEmailAddress($token) {
-        $confirmToken = $this->getUserPasswordResetToken($token);
-        if (isset($confirmToken) && $confirmToken['type'] == 'EMAIL') {
-            return $this->post($this->channel . '/customers/email-address/confirm', null,  ['token' => $confirmToken['token']]);
-        } else {
-            return null;
-        }
+    function confirmEmailAddress($token)
+    {
+        return $this->post($this->channel . '/customers/email-address/confirm', null, ['token' => $token]);
     }
-
 
     function authenticateUser($username, $password)
     {
-        $authenticationToken = $this->post($this->channel . '/users/authenticate', null, ['username' => $username, 'password' => $password]);
-        $this->loggedInUser()->setAuthenticationTokenInSession($authenticationToken);
-        return $authenticationToken;
+        return $this->post($this->channel . '/users/authenticate', null, ['username' => $username, 'password' => $password]);
     }
 
     function updateUserPassword($password)
@@ -95,7 +75,6 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
     {
         return $this->put($this->channel . '/users/password-reset/' . $token . '/password', null, ['password' => $password]);
     }
-
 
     function updateAdvertisingPreferences($customerId, $advertisingPrefs)
     {
@@ -123,7 +102,6 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         return $this->post($this->channel . '/customers/' . $customerId . '/loyalty-programs', null, $program);
     }
 
-
     function getOrders($locale, $customerId, $pageNr = null, $pageSize = null, $sortOrder = null)
     {
         $query = [];
@@ -136,6 +114,7 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         if ($sortOrder) {
             $query['sortOrder'] = $sortOrder;
         }
+
         return $this->get($this->channel . '/' . $locale . '/customers/' . $customerId . '/orders', count($query) > 0 ? $query : null);
     }
 

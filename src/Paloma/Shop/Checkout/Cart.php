@@ -129,7 +129,7 @@ class Cart
 
         $params['order'] = $orderId;
 
-        return $this->checkoutClient->initPayment($params);
+        return $this->checkoutClient->initPayment($orderId, $params);
     }
 
     public function purchase()

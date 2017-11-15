@@ -10,7 +10,7 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
 {
     public function __construct($baseUrl, $apiKey, $channel, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
-       parent::__construct($baseUrl, $apiKey, $channel, $logger, $profiler);
+        parent::__construct($baseUrl, $apiKey, $channel, $logger, $profiler);
     }
 
     public function search($locale, $search)
@@ -22,7 +22,6 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
     {
         return $this->get($this->channel . '/' . $locale . '/search/suggestions', ['query' => $query]);
     }
-
 
     public function product($locale, $itemNumber)
     {
@@ -44,7 +43,6 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         return $this->post($this->channel . '/' . $locale . '/recommendations', $size ? ['size' => $size] : null, $order);
     }
 
-
     public function categories($locale, $depth = null, $products = true)
     {
         $query = ['products' => ($products ? 'true' : 'false')];
@@ -64,6 +62,7 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         if ($filterAggregates) {
             $query['filter-aggregates'] = $filterAggregates;
         }
+
         return $this->get($this->channel . '/' . $locale . '/categories/' . $code, count($query) > 0 ? $query : null);
     }
 
@@ -71,8 +70,4 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
     {
         return $this->get($this->channel . '/' . $locale . '/categories/' . $code . '/filter-aggregates');
     }
-
-
-
-
 }
