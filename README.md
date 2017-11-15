@@ -1,7 +1,7 @@
 Paloma Shop PHP Client
 ========
 
-PHP client library for the Paloma Shop. Facilitates the access to the following APIs (see https://swagger.astina.io/TODO for details):
+PHP client library for the Paloma Shop. Facilitates the access to the following APIs (see https://docs.paloma.one/ for details):
 
 - Catalog
 - Checkout
