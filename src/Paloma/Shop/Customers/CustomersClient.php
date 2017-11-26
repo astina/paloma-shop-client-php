@@ -15,9 +15,9 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
      */
     private $session;
 
-    public function __construct($baseUrl, $apiKey, $channel, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    public function __construct($baseUrl, $apiKey, $channel, $locale, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
-        parent::__construct($baseUrl, $apiKey, $channel, $logger, $profiler);
+        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $profiler);
 
         if ($session == null) {
             $session = new Session();
@@ -102,7 +102,7 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         return $this->post($this->channel . '/customers/' . $customerId . '/loyalty-programs', null, $program);
     }
 
-    function getOrders($locale, $customerId, $pageNr = null, $pageSize = null, $sortOrder = null)
+    function getOrders($customerId, $pageNr = null, $pageSize = null, $sortOrder = null)
     {
         $query = [];
         if ($pageNr) {
@@ -115,21 +115,21 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
             $query['sortOrder'] = $sortOrder;
         }
 
-        return $this->get($this->channel . '/' . $locale . '/customers/' . $customerId . '/orders', count($query) > 0 ? $query : null);
+        return $this->get($this->channel . '/' . $this->locale . '/customers/' . $customerId . '/orders', count($query) > 0 ? $query : null);
     }
 
-    function getOrder($locale, $customerId, $orderNr)
+    function getOrder($customerId, $orderNr)
     {
-        return $this->get($this->channel . '/' . $locale . '/customers/' . $customerId . '/orders/' . $orderNr);
+        return $this->get($this->channel . '/' . $this->locale . '/customers/' . $customerId . '/orders/' . $orderNr);
     }
 
-    function getOrderReceipt($locale, $customerId, $orderNr)
+    function getOrderReceipt($customerId, $orderNr)
     {
-        return $this->get($this->channel . '/' . $locale . '/customers/' . $customerId . '/orders/' . $orderNr . '/receipt');
+        return $this->get($this->channel . '/' . $this->locale . '/customers/' . $customerId . '/orders/' . $orderNr . '/receipt');
     }
 
-    function getOrderStatus($locale, $orderNr)
+    function getOrderStatus($orderNr)
     {
-        return $this->get($this->channel . '/' . $locale . '/orders/' . $orderNr . '/status');
+        return $this->get($this->channel . '/' . $this->locale . '/orders/' . $orderNr . '/status');
     }
 }

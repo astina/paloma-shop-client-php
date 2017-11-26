@@ -4,21 +4,21 @@ namespace Paloma\Shop\Catalog;
 
 interface CatalogClientInterface
 {
-    function search($locale, $search);
+    function search($search);
 
-    function searchSuggestions($locale, $query);
+    function searchSuggestions($query);
 
-    function product($locale, $itemNumber);
+    function product($itemNumber);
 
-    function similarProducts($locale, $itemNumber);
+    function similarProducts($itemNumber);
 
-    function recommendedProducts($locale, $itemNumber);
+    function recommendedProducts($itemNumber);
 
-    function recommendations($locale, $order, $size = null);
+    function recommendations($order, $size = null);
 
-    function categories($locale, $depth = null, $products = true);
+    function categories($depth = null, $products = true);
 
-    function category($locale, $code, $depth = null, $filterAggregates = null);
+    function category($code, $depth = null, $filterAggregates = null);
 
-    function categoryFilters($locale, $code);
+    function categoryFilters($code);
 }

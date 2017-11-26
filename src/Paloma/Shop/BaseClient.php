@@ -15,7 +15,9 @@ abstract class BaseClient
 
     protected $channel;
 
-    public function __construct($baseUrl, $apiKey, $channel, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    protected $locale;
+
+    public function __construct($baseUrl, $apiKey, $channel, $locale, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
         $handlerStack = HandlerStack::create();
         $handlerStack->push(
@@ -46,6 +48,7 @@ abstract class BaseClient
         ]);
 
         $this->channel = $channel;
+        $this->locale = $locale;
     }
 
     protected function get($path, $query = null)

@@ -8,52 +8,52 @@ use Psr\Log\LoggerInterface;
 
 class CatalogClient extends BaseClient implements CatalogClientInterface
 {
-    public function __construct($baseUrl, $apiKey, $channel, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    public function __construct($baseUrl, $apiKey, $channel, $locale, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
     {
-        parent::__construct($baseUrl, $apiKey, $channel, $logger, $profiler);
+        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $profiler);
     }
 
-    public function search($locale, $search)
+    public function search($search)
     {
-        return $this->post($this->channel . '/' . $locale . '/search', null, $search);
+        return $this->post($this->channel . '/' . $this->locale . '/search', null, $search);
     }
 
-    function searchSuggestions($locale, $query)
+    function searchSuggestions($query)
     {
-        return $this->get($this->channel . '/' . $locale . '/search/suggestions', ['query' => $query]);
+        return $this->get($this->channel . '/' . $this->locale . '/search/suggestions', ['query' => $query]);
     }
 
-    public function product($locale, $itemNumber)
+    public function product($itemNumber)
     {
-        return $this->get($this->channel . '/' . $locale . '/products/' . $itemNumber);
+        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber);
     }
 
-    function similarProducts($locale, $itemNumber)
+    function similarProducts($itemNumber)
     {
-        return $this->get($this->channel . '/' . $locale . '/products/' . $itemNumber . '/similar');
+        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/similar');
     }
 
-    function recommendedProducts($locale, $itemNumber)
+    function recommendedProducts($itemNumber)
     {
-        return $this->get($this->channel . '/' . $locale . '/products/' . $itemNumber . '/recommended');
+        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/recommended');
     }
 
-    function recommendations($locale, $order, $size = null)
+    function recommendations($order, $size = null)
     {
-        return $this->post($this->channel . '/' . $locale . '/recommendations', $size ? ['size' => $size] : null, $order);
+        return $this->post($this->channel . '/' . $this->locale . '/recommendations', $size ? ['size' => $size] : null, $order);
     }
 
-    public function categories($locale, $depth = null, $products = true)
+    public function categories($depth = null, $products = true)
     {
         $query = ['products' => ($products ? 'true' : 'false')];
         if ($depth) {
             $query['depth'] = $depth;
         }
 
-        return $this->get($this->channel . '/' . $locale . '/categories', $query);
+        return $this->get($this->channel . '/' . $this->locale . '/categories', $query);
     }
 
-    public function category($locale, $code, $depth = null, $filterAggregates = null)
+    public function category($code, $depth = null, $filterAggregates = null)
     {
         $query = [];
         if ($depth) {
@@ -63,11 +63,11 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
             $query['filter-aggregates'] = $filterAggregates;
         }
 
-        return $this->get($this->channel . '/' . $locale . '/categories/' . $code, count($query) > 0 ? $query : null);
+        return $this->get($this->channel . '/' . $this->locale . '/categories/' . $code, count($query) > 0 ? $query : null);
     }
 
-    public function categoryFilters($locale, $code)
+    public function categoryFilters($code)
     {
-        return $this->get($this->channel . '/' . $locale . '/categories/' . $code . '/filter-aggregates');
+        return $this->get($this->channel . '/' . $this->locale . '/categories/' . $code . '/filter-aggregates');
     }
 }

@@ -5,10 +5,9 @@ namespace Paloma\Shop\Checkout;
 interface CheckoutClientInterface
 {
     /**
-     * @param $locale
      * @return Cart
      */
-    function cart($locale);
+    function cart();
 
     function createOrder($order);
 

@@ -34,11 +34,11 @@ interface CustomersClientInterface
 
     function updateLoyaltyPrograms($customerId, $program);
 
-    function getOrders($locale, $customerId, $pageNr = null, $pageSize = null, $sortOrder = null);
+    function getOrders($customerId, $pageNr = null, $pageSize = null, $sortOrder = null);
 
-    function getOrder($locale, $customerId, $orderNr);
+    function getOrder($customerId, $orderNr);
 
-    function getOrderReceipt($locale, $customerId, $orderNr);
+    function getOrderReceipt($customerId, $orderNr);
 
-    function getOrderStatus($locale, $orderNr);
+    function getOrderStatus($orderNr);
 }
