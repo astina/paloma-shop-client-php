@@ -1,61 +1,21 @@
 <?php
 
-namespace Paloma\Shop;
+namespace Paloma\Shop\Paloma\Shop;
 
-use Paloma\Shop\Catalog\CatalogClient;
-use Paloma\Shop\Catalog\CatalogClientInterface;
-use Paloma\Shop\Checkout\CheckoutClient;
-use Paloma\Shop\Checkout\CheckoutClientInterface;
-use Paloma\Shop\Customers\CustomersClient;
-use Paloma\Shop\Customers\CustomersClientInterface;
+use Paloma\Shop\PalomaFactory;
+use Paloma\Shop\PalomaProfiler;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Paloma
 {
-    /**
-     * @var CatalogClientInterface
-     */
-    private $catalog;
-
-    /**
-     * @var CheckoutClientInterface
-     */
-    private $checkout;
-
-    /**
-     * @var CustomersClientInterface
-     */
-    private $customers;
-
-    public function __construct(CatalogClientInterface $catalog, CheckoutClientInterface $checkout, CustomersClientInterface $customers)
+    public static function create($baseUrl, $apiKey, $defaultChannel, $defaultLocale,
+                                  SessionInterface $session = null,
+                                  LoggerInterface $logger = null,
+                                  PalomaProfiler $profiler = null)
     {
-        $this->catalog = $catalog;
-        $this->checkout = $checkout;
-        $this->customers = $customers;
-    }
+        $factory = new PalomaFactory($baseUrl, $apiKey, $defaultChannel, $defaultLocale, $session, $logger, $profiler);
 
-    /**
-     * @return CatalogClientInterface
-     */
-    public function catalog()
-    {
-        return $this->catalog;
-    }
-
-    /**
-     * @return CheckoutClientInterface
-     */
-    public function checkout()
-    {
-        return $this->checkout;
-    }
-
-    /**
-     * @return CustomersClientInterface
-     */
-    public function customers()
-    {
-        return $this->customers;
+        return $factory->create();
     }
 }

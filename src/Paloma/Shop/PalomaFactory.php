@@ -52,10 +52,7 @@ class PalomaFactory
      * @param LoggerInterface|null $logger
      * @param PalomaProfiler|null $profiler
      */
-    public function __construct($baseUrl,
-                                $apiKey,
-                                $defaultChannel,
-                                $defaultLocale,
+    public function __construct($baseUrl, $apiKey, $defaultChannel, $defaultLocale,
                                 SessionInterface $session = null,
                                 LoggerInterface $logger = null,
                                 PalomaProfiler $profiler = null)
@@ -74,7 +71,7 @@ class PalomaFactory
     /**
      * @param string|null $channel Paloma channel; if null default channel is used
      * @param string|null $locale Locale; if null, default locale is used
-     * @return Paloma
+     * @return PalomaClient
      */
     public function create($channel = null, $locale = null)
     {
@@ -86,7 +83,7 @@ class PalomaFactory
             $baseUrl = $baseUrl . '/';
         }
 
-        return new Paloma(
+        return new PalomaClient(
             new CatalogClient($baseUrl . 'catalog/v2/', $this->apiKey, $channel, $locale, $this->logger, $this->profiler),
             new CheckoutClient($baseUrl . 'checkout/v2/', $this->apiKey, $channel, $locale, $this->session, $this->logger, $this->profiler),
             new CustomersClient($baseUrl . 'customers/v2/', $this->apiKey, $channel, $locale, $this->session, $this->logger, $this->profiler)
@@ -95,7 +92,7 @@ class PalomaFactory
 
     /**
      * @param $locale
-     * @return Paloma
+     * @return PalomaClient
      */
     public function forLocale($locale)
     {
@@ -104,7 +101,7 @@ class PalomaFactory
 
     /**
      * @param $channel
-     * @return Paloma
+     * @return PalomaClient
      */
     public function forChannel($channel)
     {
