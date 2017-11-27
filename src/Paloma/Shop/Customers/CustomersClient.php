@@ -71,7 +71,7 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         return $this->get($this->channel . '/users/password-reset/' . $token);
     }
 
-    function setNewPassword($token, $password)
+    function finishUserPasswordReset($token, $password)
     {
         return $this->put($this->channel . '/users/password-reset/' . $token . '/password', null, ['password' => $password]);
     }

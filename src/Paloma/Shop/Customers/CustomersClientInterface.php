@@ -22,7 +22,7 @@ interface CustomersClientInterface
 
     function getUserPasswordResetToken($token);
 
-    function setNewPassword($token, $password);
+    function finishUserPasswordReset($token, $password);
 
     function updateAdvertisingPreferences($customerId, $advertisingPrefs);
 
