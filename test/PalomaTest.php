@@ -10,7 +10,7 @@ class PalomaTest extends TestCase
 {
     public function testInit()
     {
-        $paloma = PalomaClient::create('https://demo.paloma.one/api/', '', new Session(new MockFileSessionStorage()));
+        $paloma = Paloma::create('https://demo.paloma.one/api/', '', 'de', new Session(new MockFileSessionStorage()));
 
 //        $categories = $paloma->catalog()->categories('ch', 'de', 10);
 //        $this->assertNotNull($categories);

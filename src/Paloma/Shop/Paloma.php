@@ -1,9 +1,7 @@
 <?php
 
-namespace Paloma\Shop\Paloma\Shop;
+namespace Paloma\Shop;
 
-use Paloma\Shop\PalomaFactory;
-use Paloma\Shop\PalomaProfiler;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
