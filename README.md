@@ -1,7 +1,7 @@
 Paloma Shop PHP Client
 ========
 
-PHP client library for the Paloma Shop. Facilitates the access to the following APIs (see https://docs.paloma.one/ for details):
+PHP client library for the Paloma Shop. Facilitates the access to the following APIs (see https://docs.paloma.one/ for details and code examples):
 
 - Catalog
 - Checkout
@@ -10,11 +10,11 @@ PHP client library for the Paloma Shop. Facilitates the access to the following 
 ## Usage
 Create Paloma Client
 ```php
-$paloma = Paloma\Shop\Paloma::create('https://demo.paloma.one/api/', 'yourAPIKey'));
+$paloma = Paloma\Shop\Paloma::create('https://demo.paloma.one/api/', 'yourAPIKey', 'yourChannel', 'yourLocale'));
 ```
 Call API, e.g. fetch catalog categories
 ```php
-$categories = $paloma->catalog()->categories('ch', 'de');
+$categories = $paloma->catalog()->categories();
 ```
 ## Configuration
 Use dedicated `LoggerInterface` instance
@@ -29,9 +29,11 @@ $catalogClient = new CatalogClient('https://demo.paloma.one/api/catalog/', 'your
 
 ## Examples
 
+_Hint_: Find more examples at https://docs.paloma.one/.
+
 Get product for a category, sorted by price:
 ```php
-$page = $paloma->catalog()->search('ch', 'de', [
+$page = $paloma->catalog()->search([
         'category' => 'animals', 
         'size' => 50,
         'sort' => 'price',
@@ -41,36 +43,36 @@ $page = $paloma->catalog()->search('ch', 'de', [
 
 Get cart (e.g. to render shopping cart view):
 ```php
-$order = $paloma->checkout()->cart('ch', 'de')->get();
+$order = $paloma->checkout()->cart()->get();
 ```
 
 Add product to cart:
 ```php
-$order = $paloma->checkout()->cart('ch', 'de')->addItem('12345', 1]);
+$order = $paloma->checkout()->cart()->addItem('12345', 1]);
 ```
 
 Update cart item quantity:
 ```php
-$paloma->checkout()->cart('ch', 'de')->updateQuantity('123' /* order item id */, 2 /* quantity */);
+$paloma->checkout()->cart()->updateQuantity('123' /* order item id */, 2 /* quantity */);
 ```
 
 Remove a cart item:
 ```php
-$paloma->checkout()->cart('ch', 'de')->removeItem('123');
+$paloma->checkout()->cart()->removeItem('123');
 ```
 
 Get cart items count:
 ```php
 // Number of order items
-$paloma->checkout()->cart('ch', 'de')->itemsCount();
+$paloma->checkout()->cart()->itemsCount();
 
 // Number of items times quantities
-$paloma->checkout()->cart('ch', 'de')->unitsCount();
+$paloma->checkout()->cart()->unitsCount();
 ```
 
 Set order customer:
 ```php
-$paloma->checkout()->cart('ch', 'de')->setCustomer([
+$paloma->checkout()->cart()->setCustomer([
     'name' => 'Hans Muster',
     'emailAddress' => 'test@astina.io',
     'gender' => 'male',
@@ -81,12 +83,12 @@ Set order addresses:
 ```php
 $billingAddress = [ /* ... */ ];
 $shippingAddress = [ /* ... */ ];
-$paloma->checkout()->cart('ch', 'de')->setAddresses($billingAddress, $shippingAddress);
+$paloma->checkout()->cart()->setAddresses($billingAddress, $shippingAddress);
 ```
 
 Initialize payment:
 ```php
-$payment = $paloma->checkout()->cart('ch', 'de')->initPayment([
+$payment = $paloma->checkout()->cart()->initPayment([
     'successUrl' => 'https://example.org/checkout/success',
     'cancelUrl' => 'https://example.org/checkout/cancel',
     'errorUrl' => 'https://example.org/checkout/error',
@@ -97,5 +99,5 @@ Use `$payment['providerRequest']['params']` to create payment URL or to render p
 
 Place the order:
 ```php
-$order = $paloma->checkout()->cart('ch', 'de')->purchase();
+$order = $paloma->checkout()->cart()->purchase();
 ```
