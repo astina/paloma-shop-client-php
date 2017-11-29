@@ -30,8 +30,8 @@ class Cart
      */
     public function __construct($channel, $locale, CheckoutClientInterface $checkoutClient, SessionInterface $session)
     {
-        $this->locale = $locale;
         $this->channel = $channel;
+        $this->locale = $locale;
         $this->checkoutClient = $checkoutClient;
         $this->session = $session;
     }

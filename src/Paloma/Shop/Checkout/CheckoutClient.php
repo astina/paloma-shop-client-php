@@ -30,7 +30,7 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
 
     function cart()
     {
-        return new Cart($this->locale, $this->channel, $this, $this->session);
+        return new Cart($this->channel, $this->locale, $this, $this->session);
     }
 
     function createOrder($order)
