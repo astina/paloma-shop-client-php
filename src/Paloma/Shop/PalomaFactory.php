@@ -39,6 +39,14 @@ class PalomaFactory
      */
     private $logger;
     /**
+     * @var string
+     */
+    private $successLogFormat;
+    /**
+     * @var string
+     */
+    private $errorLogFormat;
+    /**
      * @var PalomaProfiler
      */
     private $profiler;
@@ -50,11 +58,15 @@ class PalomaFactory
      * @param string $defaultLocale Default locale
      * @param SessionInterface|null $session
      * @param LoggerInterface|null $logger
+     * @param string $successLogFormat
+     * @param string $errorLogFormat
      * @param PalomaProfiler|null $profiler
      */
     public function __construct($baseUrl, $apiKey, $defaultChannel, $defaultLocale,
                                 SessionInterface $session = null,
                                 LoggerInterface $logger = null,
+                                $successLogFormat = null,
+                                $errorLogFormat = null,
                                 PalomaProfiler $profiler = null)
     {
         $this->baseUrl = $baseUrl;
@@ -65,6 +77,8 @@ class PalomaFactory
 
         $this->session = $session;
         $this->logger = $logger;
+        $this->successLogFormat = $successLogFormat;
+        $this->errorLogFormat = $errorLogFormat;
         $this->profiler = $profiler;
     }
 
@@ -84,9 +98,9 @@ class PalomaFactory
         }
 
         return new PalomaClient(
-            new CatalogClient($baseUrl . 'catalog/v2/', $this->apiKey, $channel, $locale, $this->logger, $this->profiler),
-            new CheckoutClient($baseUrl . 'checkout/v2/', $this->apiKey, $channel, $locale, $this->session, $this->logger, $this->profiler),
-            new CustomersClient($baseUrl . 'customers/v2/', $this->apiKey, $channel, $locale, $this->session, $this->logger, $this->profiler)
+            new CatalogClient($baseUrl . 'catalog/v2/', $this->apiKey, $channel, $locale, $this->logger, $this->successLogFormat, $this->errorLogFormat, $this->profiler),
+            new CheckoutClient($baseUrl . 'checkout/v2/', $this->apiKey, $channel, $locale, $this->session, $this->logger, $this->successLogFormat, $this->errorLogFormat, $this->profiler),
+            new CustomersClient($baseUrl . 'customers/v2/', $this->apiKey, $channel, $locale, $this->session, $this->logger, $this->successLogFormat, $this->errorLogFormat, $this->profiler)
         );
     }
 

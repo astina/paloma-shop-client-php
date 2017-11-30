@@ -8,9 +8,9 @@ use Psr\Log\LoggerInterface;
 
 class CatalogClient extends BaseClient implements CatalogClientInterface
 {
-    public function __construct($baseUrl, $apiKey, $channel, $locale, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    public function __construct($baseUrl, $apiKey, $channel, $locale, LoggerInterface $logger = null, $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null)
     {
-        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $profiler);
+        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $successLogFormat, $errorLogFormat, $profiler);
     }
 
     public function search($search)

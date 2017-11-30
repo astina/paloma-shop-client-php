@@ -17,9 +17,9 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
 
     const ORDERS_PATH = 'orders';
 
-    public function __construct($baseUrl, $apiKey, $channel, $locale, SessionInterface $session = null, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    public function __construct($baseUrl, $apiKey, $channel, $locale, SessionInterface $session = null, LoggerInterface $logger = null, $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null)
     {
-        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $profiler);
+        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $successLogFormat, $errorLogFormat, $profiler);
 
         if ($session == null) {
             $session = new Session();

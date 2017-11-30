@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
-use Monolog\Logger;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 abstract class BaseClient
@@ -17,15 +17,23 @@ abstract class BaseClient
 
     protected $locale;
 
-    public function __construct($baseUrl, $apiKey, $channel, $locale, LoggerInterface $logger = null, PalomaProfiler $profiler = null)
+    public function __construct($baseUrl, $apiKey, $channel, $locale, LoggerInterface $logger = null, $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null)
     {
         $handlerStack = HandlerStack::create();
-        $handlerStack->push(
-            Middleware::log(
-                $logger ? $logger : new Logger('Paloma'),
-                new MessageFormatter(($logger instanceof Logger && $logger->isHandling(Logger::DEBUG)) ? MessageFormatter::DEBUG : MessageFormatter::SHORT)
-            )
-        );
+
+        if ($logger) {
+            $formatterSuccess = new MessageFormatter($successLogFormat !== null ? $successLogFormat : MessageFormatter::SHORT);
+            $formatterError = new MessageFormatter($errorLogFormat !== null ? $errorLogFormat : MessageFormatter::DEBUG);
+            $handlerStack->push(
+                Middleware::tap(null, function ($request, $options, ResponseInterface $response) use ($logger, $formatterSuccess, $formatterError) {
+                    if ($response->getStatusCode() < 400) {
+                        $logger->debug($formatterSuccess->format($request, $response));
+                    } else {
+                        $logger->error($formatterError->format($request, $response));
+                    }
+                })
+            );
+        }
 
         if ($profiler) {
             $handlerStack->push(
