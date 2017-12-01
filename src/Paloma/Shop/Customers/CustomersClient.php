@@ -4,6 +4,7 @@ namespace Paloma\Shop\Customers;
 
 use Paloma\Shop\BaseClient;
 use Paloma\Shop\PalomaProfiler;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -15,9 +16,12 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
      */
     private $session;
 
-    public function __construct($baseUrl, $apiKey, $channel, $locale, SessionInterface $session = null, LoggerInterface $logger = null, $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null)
+    public function __construct($baseUrl, $apiKey, $channel, $locale, SessionInterface $session = null,
+        LoggerInterface $logger = null, $successLogFormat = null, $errorLogFormat = null,
+        PalomaProfiler $profiler = null, CacheItemPoolInterface $cache = null)
     {
-        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $successLogFormat, $errorLogFormat, $profiler);
+        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $successLogFormat, $errorLogFormat,
+            $profiler, $cache);
 
         if ($session == null) {
             $session = new Session();

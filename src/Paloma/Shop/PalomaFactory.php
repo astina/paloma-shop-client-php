@@ -5,6 +5,7 @@ namespace Paloma\Shop;
 use Paloma\Shop\Catalog\CatalogClient;
 use Paloma\Shop\Checkout\CheckoutClient;
 use Paloma\Shop\Customers\CustomersClient;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -50,6 +51,10 @@ class PalomaFactory
      * @var PalomaProfiler
      */
     private $profiler;
+    /**
+     * @var CacheItemPoolInterface
+     */
+    private $cache;
 
     /**
      * @param string $baseUrl API base URL
@@ -67,7 +72,8 @@ class PalomaFactory
                                 LoggerInterface $logger = null,
                                 $successLogFormat = null,
                                 $errorLogFormat = null,
-                                PalomaProfiler $profiler = null)
+                                PalomaProfiler $profiler = null,
+                                CacheItemPoolInterface $cache = null)
     {
         $this->baseUrl = $baseUrl;
         $this->apiKey = $apiKey;
@@ -80,6 +86,7 @@ class PalomaFactory
         $this->successLogFormat = $successLogFormat;
         $this->errorLogFormat = $errorLogFormat;
         $this->profiler = $profiler;
+        $this->cache = $cache;
     }
 
     /**
@@ -98,9 +105,15 @@ class PalomaFactory
         }
 
         return new PalomaClient(
-            new CatalogClient($baseUrl . 'catalog/v2/', $this->apiKey, $channel, $locale, $this->logger, $this->successLogFormat, $this->errorLogFormat, $this->profiler),
-            new CheckoutClient($baseUrl . 'checkout/v2/', $this->apiKey, $channel, $locale, $this->session, $this->logger, $this->successLogFormat, $this->errorLogFormat, $this->profiler),
-            new CustomersClient($baseUrl . 'customers/v2/', $this->apiKey, $channel, $locale, $this->session, $this->logger, $this->successLogFormat, $this->errorLogFormat, $this->profiler)
+            new CatalogClient($baseUrl . 'catalog/v2/', $this->apiKey, $channel,
+                $locale, $this->logger, $this->successLogFormat, $this->errorLogFormat,
+                $this->profiler, $this->cache),
+            new CheckoutClient($baseUrl . 'checkout/v2/', $this->apiKey, $channel,
+                $locale, $this->session, $this->logger, $this->successLogFormat,
+                $this->errorLogFormat, $this->profiler, $this->cache),
+            new CustomersClient($baseUrl . 'customers/v2/', $this->apiKey, $channel,
+                $locale, $this->session, $this->logger, $this->successLogFormat,
+                $this->errorLogFormat, $this->profiler, $this->cache)
         );
     }
 

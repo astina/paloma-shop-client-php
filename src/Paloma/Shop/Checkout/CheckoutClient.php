@@ -4,6 +4,7 @@ namespace Paloma\Shop\Checkout;
 
 use Paloma\Shop\BaseClient;
 use Paloma\Shop\PalomaProfiler;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -17,9 +18,12 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
 
     const ORDERS_PATH = 'orders';
 
-    public function __construct($baseUrl, $apiKey, $channel, $locale, SessionInterface $session = null, LoggerInterface $logger = null, $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null)
+    public function __construct($baseUrl, $apiKey, $channel, $locale, SessionInterface $session = null,
+        LoggerInterface $logger = null, $successLogFormat = null, $errorLogFormat = null,
+        PalomaProfiler $profiler = null, CacheItemPoolInterface $cache = null)
     {
-        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $successLogFormat, $errorLogFormat, $profiler);
+        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $successLogFormat, $errorLogFormat,
+            $profiler, $cache);
 
         if ($session == null) {
             $session = new Session();

@@ -2,6 +2,7 @@
 
 namespace Paloma\Shop;
 
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -12,9 +13,11 @@ class Paloma
                                   LoggerInterface $logger = null,
                                   $successLogFormat = null,
                                   $errorLogFormat = null,
-                                  PalomaProfiler $profiler = null)
+                                  PalomaProfiler $profiler = null,
+                                  CacheItemPoolInterface $cache = null)
     {
-        $factory = new PalomaFactory($baseUrl, $apiKey, $defaultChannel, $defaultLocale, $session, $logger, $successLogFormat, $errorLogFormat, $profiler);
+        $factory = new PalomaFactory($baseUrl, $apiKey, $defaultChannel, $defaultLocale, $session, $logger,
+            $successLogFormat, $errorLogFormat, $profiler, $cache);
 
         return $factory->create();
     }

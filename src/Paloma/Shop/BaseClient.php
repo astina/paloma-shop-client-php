@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
@@ -17,7 +18,13 @@ abstract class BaseClient
 
     protected $locale;
 
-    public function __construct($baseUrl, $apiKey, $channel, $locale, LoggerInterface $logger = null, $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null)
+    /**
+     * @var CacheItemPoolInterface
+     */
+    protected $cache;
+
+    public function __construct($baseUrl, $apiKey, $channel, $locale, LoggerInterface $logger = null,
+        $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null, CacheItemPoolInterface $cache = null)
     {
         $handlerStack = HandlerStack::create();
 
@@ -57,40 +64,54 @@ abstract class BaseClient
 
         $this->channel = $channel;
         $this->locale = $locale;
+        $this->cache = $cache;
     }
 
-    protected function get($path, $query = null)
+    protected function get($path, $query = null, $useCache = false, $defaultCacheTtl = null)
     {
-        return $this->req('GET', $path, $query);
+        return $this->req('GET', $path, $query, $useCache, $defaultCacheTtl);
     }
 
-    protected function post($path, $query = null, $body = null)
+    protected function post($path, $query = null, $body = null, $useCache = false, $defaultCacheTtl = null)
     {
-        return $this->req('POST', $path, $query, $body);
+        return $this->req('POST', $path, $query, $body, $useCache, $defaultCacheTtl);
     }
 
-    protected function postFormData($path, $query = null, $body = null)
+    protected function postFormData($path, $query = null, $body = null, $useCache = false, $defaultCacheTtl = null)
     {
-        return $this->req('POST', $path, $query, $body, true);
+        return $this->req('POST', $path, $query, $body, true, $useCache, $defaultCacheTtl);
     }
 
-    protected function put($path, $query = null, $body = null)
+    protected function put($path, $query = null, $body = null, $useCache = false, $defaultCacheTtl = null)
     {
-        return $this->req('PUT', $path, $query, $body);
+        return $this->req('PUT', $path, $query, $body, $useCache, $defaultCacheTtl);
     }
 
-    protected function delete($path, $query = null, $body = null)
+    protected function delete($path, $query = null, $body = null,
+        $useCache = false, $defaultCacheTtl = null)
     {
-        return $this->req('DELETE', $path, $query, $body);
+        return $this->req('DELETE', $path, $query, $body, $useCache, $defaultCacheTtl);
     }
 
-    protected function patch($path, $query = null, $body = null)
+    protected function patch($path, $query = null, $body = null,
+        $useCache = false, $defaultCacheTtl = null)
     {
-        return $this->req('PATCH', $path, $query, $body);
+        return $this->req('PATCH', $path, $query, $body, $useCache, $defaultCacheTtl);
     }
 
-    private function req($method, $path, $query = null, $body = null, $formEncoding = false)
+    private function req($method, $path, $query = null, $body = null, $formEncoding = false,
+        $useCache = false, $defaultCacheTtl = null)
     {
+        $cacheItem = null;
+        if ($this->cache !== null && $useCache) {
+            $cacheKey = md5($method . $path . $this->cacheKeyForArray($query) .
+                $this->cacheKeyForArray($body));
+            $cacheItem = $this->cache->getItem($cacheKey);
+            if ($cacheItem->isHit()) {
+                return $cacheItem->get();
+            }
+        }
+
         $res = $this->http->request(
             $method,
             $path,
@@ -103,7 +124,30 @@ abstract class BaseClient
                 'body' => $body && !$formEncoding ? json_encode($body, JSON_UNESCAPED_SLASHES) : null
             ]);
 
-        return json_decode($res->getBody(), true);
+        $data = json_decode($res->getBody(), true);
+
+        if ($cacheItem !== null) {
+            $cacheItem->set($data);
+            if ($defaultCacheTtl !== null) {
+                $cacheItem->expiresAfter($defaultCacheTtl);
+            }
+            $this->cache->save($cacheItem);
+        }
+
+        return $data;
+    }
+
+    private function cacheKeyForArray(array $arr, $base = true)
+    {
+        if ($arr === null) {
+            return '';
+        }
+        foreach ($arr as $k => $v) {
+            $arr[$k] = is_array($v) ? $this->cacheKeyForArray($v, false) :
+                (string)$v;
+        }
+        ksort($arr);
+        return $base ? json_encode($arr) : $arr;
     }
 
 }
