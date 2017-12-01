@@ -10,9 +10,9 @@ use Psr\Log\LoggerInterface;
 class CatalogClient extends BaseClient implements CatalogClientInterface
 {
     public function __construct($baseUrl, $apiKey, $channel, $locale, LoggerInterface $logger = null,
-        $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null, CacheItemPoolInterface $cache = null)
+        $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null, CacheItemPoolInterface $cache = null, $traceId = null)
     {
-        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $successLogFormat, $errorLogFormat, $profiler, $cache);
+        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $successLogFormat, $errorLogFormat, $profiler, $cache, $traceId);
     }
 
     public function search($search, $useCache = true, $defaultCacheTtl = null)

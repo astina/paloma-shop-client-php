@@ -20,10 +20,10 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
 
     public function __construct($baseUrl, $apiKey, $channel, $locale, SessionInterface $session = null,
         LoggerInterface $logger = null, $successLogFormat = null, $errorLogFormat = null,
-        PalomaProfiler $profiler = null, CacheItemPoolInterface $cache = null)
+        PalomaProfiler $profiler = null, CacheItemPoolInterface $cache = null, $traceId = null)
     {
         parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $successLogFormat, $errorLogFormat,
-            $profiler, $cache);
+            $profiler, $cache, $traceId);
 
         if ($session == null) {
             $session = new Session();

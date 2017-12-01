@@ -24,7 +24,7 @@ abstract class BaseClient
     protected $cache;
 
     public function __construct($baseUrl, $apiKey, $channel, $locale, LoggerInterface $logger = null,
-        $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null, CacheItemPoolInterface $cache = null)
+        $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null, CacheItemPoolInterface $cache = null, $traceId = null)
     {
         $handlerStack = HandlerStack::create();
 
@@ -54,11 +54,19 @@ abstract class BaseClient
             );
         }
 
+        $headers = [ 'x-api-key' => $apiKey ];
+
+        if ($traceId) {
+            if (!preg_match('/^[a-z0-9]{8}$/', $traceId)) {
+                throw new \Exception('Invalid trace ID: ' . $traceId);
+            }
+            $headers['x-astina-trace-id'] = $traceId;
+            $headers['x-paloma-trace-id'] = $traceId;
+        }
+
         $this->http = new Client([
             'base_uri' => $baseUrl,
-            'headers' => [
-                'x-api-key' => $apiKey
-            ],
+            'headers' => $headers,
             'handler' => $handlerStack
         ]);
 

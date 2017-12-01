@@ -10,29 +10,34 @@ class PalomaTest extends TestCase
 {
     public function testInit()
     {
-        $paloma = Paloma::create('https://demo.paloma.one/api/', '', 'de', new Session(new MockFileSessionStorage()));
+        $paloma = Paloma::create('https://demo.paloma.one/api/', 'apikey', 'demo_b2c', 'de',
+            new Session(new MockFileSessionStorage()),
+            null, null, null,
+            null,
+            null,
+            '7429cb0d9');
 
-//        $categories = $paloma->catalog()->categories('ch', 'de', 10);
+//        $categories = $paloma->catalog()->categories(10);
 //        $this->assertNotNull($categories);
 //
-//        $category = $paloma->catalog()->category('ch', 'de', 1, 10, true);
+//        $category = $paloma->catalog()->category(1, 10, true);
 //
-//        $categoryFilters = $paloma->catalog()->categoryFilters('ch', 'de', 1.5);
+//        $categoryFilters = $paloma->catalog()->categoryFilters(1.5);
 //
-//        $product = $paloma->catalog()->product('ch', 'de', '128947');
+//        $product = $paloma->catalog()->product('128947');
 //
-//        $recommendedProducts = $paloma->catalog()->recommendedProducts('ch', 'de', '128ab947');
+//        $recommendedProducts = $paloma->catalog()->recommendedProducts('128ab947');
 //
-//        $similarProducts = $paloma->catalog()->similarProducts('ch', 'de', '128947');
+//        $similarProducts = $paloma->catalog()->similarProducts('128947');
 //
-//        $recommendations = $paloma->catalog()->recommendations('ch', 'de', ['id' => 123], 41);
+//        $recommendations = $paloma->catalog()->recommendations(['id' => 123], 41);
 //
-//        $search = $paloma->catalog()->search('ch', 'de', ['category' => 123]);
+//        $search = $paloma->catalog()->search(['category' => 123]);
 //
-//        $searchSuggestions = $paloma->catalog()->searchSuggestions('ch', 'de', 'shoe');
+//        $searchSuggestions = $paloma->catalog()->searchSuggestions('shoe');
 
 
-//        $createOrder = $paloma->checkout()->createOrder(['country' => 'ch', 'language' => 'de']);
+//        $createOrder = $paloma->checkout()->createOrder(['channel' => 'demo_b2c']);
 //
 //        $deleteOrder = $paloma->checkout()->deleteOrder('123');
 //
@@ -67,31 +72,30 @@ class PalomaTest extends TestCase
 //        $initializePayment = $paloma->checkout()->initializePayment(['order' => '123']);
 //
 //        $getShippingMethods = $paloma->checkout()->getShippingMethods('123');
-
-
-//        $createAdvertisingPrefs = $paloma->customers()->createAdvertisingPrefs('ch', ['emailAddress' => 'admin@astina.ch']);
+//
+//        $createAdvertisingPrefs = $paloma->customers()->createAdvertisingPrefs('ch', ['emailAddress' => 'test@astina.io']);
 //
 //        $confirmAdvertisingPrefs = $paloma->customers()->confirmAdvertisingPrefs('ch', 'myToken');
 //
-//        $authenticate = $paloma->customers()->authenticate('ch', ['emailAddress' => 'admin@astina.ch', 'password' => '1234']);
+//        $authenticate = $paloma->customers()->authenticate('ch', ['emailAddress' => 'test@astina.io', 'password' => '1234']);
 //
-//        $getLoyaltyPrograms = $paloma->customers()->getLoyaltyPrograms('ch', 'admin@astina.ch');
+//        $getLoyaltyPrograms = $paloma->customers()->getLoyaltyPrograms('ch', 'test@astina.io');
 //
-//        $updateLoyaltyPrograms = $paloma->customers()->updateLoyaltyPrograms('ch', 'admin@astina.ch', ['code' => 'crew_member']);
+//        $updateLoyaltyPrograms = $paloma->customers()->updateLoyaltyPrograms('ch', 'test@astina.io', ['code' => 'crew_member']);
 //
-//        $startPasswordReset = $paloma->customers()->startPasswordReset('ch', ['emailAddress' => 'admin@astina.ch']);
+//        $startPasswordReset = $paloma->customers()->startPasswordReset('ch', ['emailAddress' => 'test@astina.io']);
 //
 //        $getPasswordResetToken = $paloma->customers()->getPasswordResetToken('ch', 'myToken');
 //
 //        $updatePassword = $paloma->customers()->updatePassword('ch', 'myToken', ['password' => '1234']);
 //
-//        $register = $paloma->customers()->register('ch', ['emailAddress' => 'admin@astina.ch']);
+//        $register = $paloma->customers()->register('ch', ['emailAddress' => 'test@astina.io']);
 //
 //        $getUser = $paloma->customers()->getUser('ch', '987');
 //
-//        $updateUserPartially = $paloma->customers()->updateUserPartially('ch', '987', ['emailAddress' => 'admin@astina.ch']);
+//        $updateUserPartially = $paloma->customers()->updateUserPartially('ch', '987', ['emailAddress' => 'test@astina.io']);
 //
-//        $updateUser = $paloma->customers()->updateUser('ch', '987', ['emailAddress' => 'admin@astina.ch']);
+//        $updateUser = $paloma->customers()->updateUser('ch', '987', ['emailAddress' => 'test@astina.io']);
 //
 //        $getWishList = $paloma->customers()->getWishList('ch', '987');
 //

@@ -14,10 +14,11 @@ class Paloma
                                   $successLogFormat = null,
                                   $errorLogFormat = null,
                                   PalomaProfiler $profiler = null,
-                                  CacheItemPoolInterface $cache = null)
+                                  CacheItemPoolInterface $cache = null,
+                                  $traceId = null)
     {
         $factory = new PalomaFactory($baseUrl, $apiKey, $defaultChannel, $defaultLocale, $session, $logger,
-            $successLogFormat, $errorLogFormat, $profiler, $cache);
+            $successLogFormat, $errorLogFormat, $profiler, $cache, $traceId);
 
         return $factory->create();
     }

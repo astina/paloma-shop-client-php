@@ -57,6 +57,11 @@ class PalomaFactory
     private $cache;
 
     /**
+     * @var string
+     */
+    private $traceId;
+
+    /**
      * @param string $baseUrl API base URL
      * @param string $apiKey API key
      * @param string $defaultChannel Default Paloma channel
@@ -66,6 +71,7 @@ class PalomaFactory
      * @param string $successLogFormat
      * @param string $errorLogFormat
      * @param PalomaProfiler|null $profiler
+     * @param string $traceId
      */
     public function __construct($baseUrl, $apiKey, $defaultChannel, $defaultLocale,
                                 SessionInterface $session = null,
@@ -73,7 +79,8 @@ class PalomaFactory
                                 $successLogFormat = null,
                                 $errorLogFormat = null,
                                 PalomaProfiler $profiler = null,
-                                CacheItemPoolInterface $cache = null)
+                                CacheItemPoolInterface $cache = null,
+                                $traceId = null)
     {
         $this->baseUrl = $baseUrl;
         $this->apiKey = $apiKey;
@@ -87,17 +94,20 @@ class PalomaFactory
         $this->errorLogFormat = $errorLogFormat;
         $this->profiler = $profiler;
         $this->cache = $cache;
+        $this->traceId = $traceId;
     }
 
     /**
      * @param string|null $channel Paloma channel; if null default channel is used
      * @param string|null $locale Locale; if null, default locale is used
+     * @param string|null $traceId
      * @return PalomaClient
      */
-    public function create($channel = null, $locale = null)
+    public function create($channel = null, $locale = null, $traceId = null)
     {
         $channel = $channel ?: $this->defaultChannel;
         $locale = $locale ?: $this->defaultLocale;
+        $traceId = $traceId ?: $this->traceId;
 
         $baseUrl = $this->baseUrl;
         if (!preg_match('/\/$/', $baseUrl)) {
@@ -107,13 +117,13 @@ class PalomaFactory
         return new PalomaClient(
             new CatalogClient($baseUrl . 'catalog/v2/', $this->apiKey, $channel,
                 $locale, $this->logger, $this->successLogFormat, $this->errorLogFormat,
-                $this->profiler, $this->cache),
+                $this->profiler, $this->cache, $traceId),
             new CheckoutClient($baseUrl . 'checkout/v2/', $this->apiKey, $channel,
                 $locale, $this->session, $this->logger, $this->successLogFormat,
-                $this->errorLogFormat, $this->profiler, $this->cache),
+                $this->errorLogFormat, $this->profiler, $this->cache, $traceId),
             new CustomersClient($baseUrl . 'customers/v2/', $this->apiKey, $channel,
                 $locale, $this->session, $this->logger, $this->successLogFormat,
-                $this->errorLogFormat, $this->profiler, $this->cache)
+                $this->errorLogFormat, $this->profiler, $this->cache, $traceId)
         );
     }
 

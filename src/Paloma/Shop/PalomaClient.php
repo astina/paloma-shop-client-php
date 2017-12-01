@@ -2,14 +2,9 @@
 
 namespace Paloma\Shop;
 
-use Paloma\Shop\Catalog\CatalogClient;
 use Paloma\Shop\Catalog\CatalogClientInterface;
-use Paloma\Shop\Checkout\CheckoutClient;
 use Paloma\Shop\Checkout\CheckoutClientInterface;
-use Paloma\Shop\Customers\CustomersClient;
 use Paloma\Shop\Customers\CustomersClientInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class PalomaClient
 {
