@@ -24,7 +24,15 @@ abstract class BaseClient
     /**
      * @var CacheItemPoolInterface
      */
-    protected $cache;
+    protected $cache = null;
+    /**
+     * @var bool
+     */
+    protected $useCache = false;
+    /**
+     * @var int
+     */
+    protected $defaultCacheTtl = null;
 
     /**
      * BaseClient accepts an array of constructor parameters:
@@ -37,6 +45,8 @@ abstract class BaseClient
      * - log_format_success: (opt) a MessageFormatter format string
      * - log_format_failure: (opt) a MessageFormatter format string
      * - cache: (opt) a CacheItemPoolInterface implementation
+     * - use_cache: (opt) wheter to make of of a potentially specified cache
+     * - default_cache_ttl: (opt) the default TTL for cache items
      * - trace_id: (opt) the trace ID to send to Paloma
      *
      * @param string $baseUrl
@@ -85,45 +95,45 @@ abstract class BaseClient
         $this->channel = $options['channel'];
         $this->locale = $options['locale'];
         $this->cache = isset($options['cache']) ? $options['cache'] : null;
+        $this->useCache = isset($options['use_cache']) ? $options['use_cache'] : null;
+        $this->defaultCacheTtl = isset($options['default_cache_ttl']) ?
+            $options['default_cache_ttl'] : null;
     }
 
-    protected function get($path, $query = null, $useCache = false, $defaultCacheTtl = null)
+    protected function get($path, $query = null)
     {
-        return $this->req('GET', $path, $query, null, false, $useCache, $defaultCacheTtl);
+        return $this->req('GET', $path, $query, null, false);
     }
 
-    protected function post($path, $query = null, $body = null, $useCache = false, $defaultCacheTtl = null)
+    protected function post($path, $query = null, $body = null)
     {
-        return $this->req('POST', $path, $query, $body, false, $useCache, $defaultCacheTtl);
+        return $this->req('POST', $path, $query, $body, false);
     }
 
-    protected function postFormData($path, $query = null, $body = null, $useCache = false, $defaultCacheTtl = null)
+    protected function postFormData($path, $query = null, $body = null)
     {
-        return $this->req('POST', $path, $query, $body, true, $useCache, $defaultCacheTtl);
+        return $this->req('POST', $path, $query, $body, true);
     }
 
-    protected function put($path, $query = null, $body = null, $useCache = false, $defaultCacheTtl = null)
+    protected function put($path, $query = null, $body = null)
     {
-        return $this->req('PUT', $path, $query, $body, false, $useCache, $defaultCacheTtl);
+        return $this->req('PUT', $path, $query, $body, false);
     }
 
-    protected function delete($path, $query = null, $body = null,
-        $useCache = false, $defaultCacheTtl = null)
+    protected function delete($path, $query = null, $body = null)
     {
-        return $this->req('DELETE', $path, $query, $body, $useCache, $defaultCacheTtl);
+        return $this->req('DELETE', $path, $query, $body);
     }
 
-    protected function patch($path, $query = null, $body = null,
-        $useCache = false, $defaultCacheTtl = null)
+    protected function patch($path, $query = null, $body = null)
     {
-        return $this->req('PATCH', $path, $query, $body, $useCache, $defaultCacheTtl);
+        return $this->req('PATCH', $path, $query, $body);
     }
 
-    private function req($method, $path, $query = null, $body = null, $formEncoding = false,
-        $useCache = false, $defaultCacheTtl = null)
+    private function req($method, $path, $query = null, $body = null, $formEncoding = false)
     {
         $cacheItem = null;
-        if ($this->cache !== null && $useCache) {
+        if ($this->cache !== null && $this->useCache) {
             $cacheKey = md5($method . $path . $this->cacheKeyForArray($query) .
                 $this->cacheKeyForArray($body));
             $cacheItem = $this->cache->getItem($cacheKey);
@@ -148,8 +158,8 @@ abstract class BaseClient
 
         if ($cacheItem !== null) {
             $cacheItem->set($data);
-            if ($defaultCacheTtl !== null) {
-                $cacheItem->expiresAfter($defaultCacheTtl);
+            if ($this->defaultCacheTtl !== null) {
+                $cacheItem->expiresAfter($this->defaultCacheTtl);
             }
             $this->cache->save($cacheItem);
         }

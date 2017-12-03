@@ -16,59 +16,53 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
      */
     public function __construct($baseUrl, array $options)
     {
+        // Enable caching by default in the catalog endpoint
+        $options['use_cache'] = isset($options['use_cache']) ? $options['use_cache'] : true;
         parent::__construct($baseUrl, $options);
     }
 
-    public function search($search, $useCache = true, $defaultCacheTtl = null)
+    public function search($search)
     {
-        return $this->post($this->channel . '/' . $this->locale . '/search', null, $search,
-            $useCache, $defaultCacheTtl);
+        return $this->post($this->channel . '/' . $this->locale . '/search', null, $search);
     }
 
-    function searchSuggestions($query, $useCache = true, $defaultCacheTtl = null)
+    function searchSuggestions($query)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/search/suggestions', ['query' => $query],
-            $useCache, $defaultCacheTtl);
+        return $this->get($this->channel . '/' . $this->locale . '/search/suggestions', ['query' => $query]);
     }
 
-    public function product($itemNumber, $useCache = true, $defaultCacheTtl = null)
+    public function product($itemNumber)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber,
-            $useCache, $defaultCacheTtl);
+        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber);
     }
 
-    function similarProducts($itemNumber, $useCache = true, $defaultCacheTtl = null)
+    function similarProducts($itemNumber)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/similar',
-            $useCache, $defaultCacheTtl);
+        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/similar');
     }
 
-    function recommendedProducts($itemNumber, $useCache = true, $defaultCacheTtl = null)
+    function recommendedProducts($itemNumber)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/recommended',
-            $useCache, $defaultCacheTtl);
+        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/recommended');
     }
 
-    function recommendations($order, $size = null, $useCache = true, $defaultCacheTtl = null)
+    function recommendations($order, $size = null)
     {
         return $this->post($this->channel . '/' . $this->locale . '/recommendations',
-            $size ? ['size' => $size] : null, $order, $useCache, $defaultCacheTtl);
+            $size ? ['size' => $size] : null, $order);
     }
 
-    public function categories($depth = null, $products = true, $useCache = true,
-        $defaultCacheTtl = null)
+    public function categories($depth = null, $products = true)
     {
         $query = ['products' => ($products ? 'true' : 'false')];
         if ($depth) {
             $query['depth'] = $depth;
         }
 
-        return $this->get($this->channel . '/' . $this->locale . '/categories', $query,
-            $useCache, $defaultCacheTtl);
+        return $this->get($this->channel . '/' . $this->locale . '/categories', $query);
     }
 
-    public function category($code, $depth = null, $filterAggregates = null,
-        $useCache = true, $defaultCacheTtl = null)
+    public function category($code, $depth = null, $filterAggregates = null)
     {
         $query = [];
         if ($depth) {
@@ -79,12 +73,11 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         }
 
         return $this->get($this->channel . '/' . $this->locale . '/categories/' . $code,
-            count($query) > 0 ? $query : null, $useCache, $defaultCacheTtl);
+            count($query) > 0 ? $query : null);
     }
 
-    public function categoryFilters($code, $useCache = true, $defaultCacheTtl = null)
+    public function categoryFilters($code)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/categories/' . $code . '/filter-aggregates',
-            $useCache, $defaultCacheTtl);
+        return $this->get($this->channel . '/' . $this->locale . '/categories/' . $code . '/filter-aggregates');
     }
 }
