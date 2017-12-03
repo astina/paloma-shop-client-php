@@ -5,96 +5,40 @@ namespace Paloma\Shop;
 use Paloma\Shop\Catalog\CatalogClient;
 use Paloma\Shop\Checkout\CheckoutClient;
 use Paloma\Shop\Customers\CustomersClient;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class PalomaFactory
 {
-    /**
-     * @var string
-     */
-    private $baseUrl;
 
     /**
-     * @var string
+     * @var array
      */
-    private $apiKey;
+    private $options;
 
     /**
-     * @var string
+     * PalomaFactory accepts an array of constructor parameters:
+     *
+     * - base_url: (req) the Paloma API endpoint URL
+     * - api_key: (req) the Paloma API key
+     * - channel: (req) the Paloma channel
+     * - locale: (req) the Paloma locale
+     * - session: (opt) a SessionInterface implementation
+     * - profiler: (opt) a PalomaProfiler instance
+     * - logger: (opt) a LoggerInterface implementation
+     * - log_format_success: (opt) a MessageFormatter format string
+     * - log_format_failure: (opt) a MessageFormatter format string
+     * - cache: (opt) a CacheItemPoolInterface implementation
+     * - trace_id: (opt) the trace ID to send to Paloma
+     *
+     * @param array $options
      */
-    private $defaultChannel;
-
-    /**
-     * @var string
-     */
-    private $defaultLocale;
-
-    /**
-     * @var SessionInterface
-     */
-    private $session;
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-    /**
-     * @var string
-     */
-    private $successLogFormat;
-    /**
-     * @var string
-     */
-    private $errorLogFormat;
-    /**
-     * @var PalomaProfiler
-     */
-    private $profiler;
-    /**
-     * @var CacheItemPoolInterface
-     */
-    private $cache;
-
-    /**
-     * @var string
-     */
-    private $traceId;
-
-    /**
-     * @param string $baseUrl API base URL
-     * @param string $apiKey API key
-     * @param string $defaultChannel Default Paloma channel
-     * @param string $defaultLocale Default locale
-     * @param SessionInterface|null $session
-     * @param LoggerInterface|null $logger
-     * @param string $successLogFormat
-     * @param string $errorLogFormat
-     * @param PalomaProfiler|null $profiler
-     * @param string $traceId
-     */
-    public function __construct($baseUrl, $apiKey, $defaultChannel, $defaultLocale,
-                                SessionInterface $session = null,
-                                LoggerInterface $logger = null,
-                                $successLogFormat = null,
-                                $errorLogFormat = null,
-                                PalomaProfiler $profiler = null,
-                                CacheItemPoolInterface $cache = null,
-                                $traceId = null)
+    public function __construct(array $options)
     {
-        $this->baseUrl = $baseUrl;
-        $this->apiKey = $apiKey;
+        if (empty($options['base_url'])) {
+            throw new \InvalidArgumentException('base_url is required');
+        }
+        // The rest of the parameters are checked in BaseClient.
 
-        $this->defaultChannel = $defaultChannel;
-        $this->defaultLocale = $defaultLocale;
-
-        $this->session = $session;
-        $this->logger = $logger;
-        $this->successLogFormat = $successLogFormat;
-        $this->errorLogFormat = $errorLogFormat;
-        $this->profiler = $profiler;
-        $this->cache = $cache;
-        $this->traceId = $traceId;
+        $this->options = $options;
     }
 
     /**
@@ -105,25 +49,21 @@ class PalomaFactory
      */
     public function create($channel = null, $locale = null, $traceId = null)
     {
-        $channel = $channel ?: $this->defaultChannel;
-        $locale = $locale ?: $this->defaultLocale;
-        $traceId = $traceId ?: $this->traceId;
+        $params = $this->options;
 
-        $baseUrl = $this->baseUrl;
+        $params['channel'] = $channel ?: $this->options['channel'];
+        $params['locale'] = $locale ?: $this->options['locale'];
+        $params['trace_id'] = $traceId ?: $this->options['trace_id'];
+
+        $baseUrl = $this->options['base_url'];
         if (!preg_match('/\/$/', $baseUrl)) {
             $baseUrl = $baseUrl . '/';
         }
 
         return new PalomaClient(
-            new CatalogClient($baseUrl . 'catalog/v2/', $this->apiKey, $channel,
-                $locale, $this->logger, $this->successLogFormat, $this->errorLogFormat,
-                $this->profiler, $this->cache, $traceId),
-            new CheckoutClient($baseUrl . 'checkout/v2/', $this->apiKey, $channel,
-                $locale, $this->session, $this->logger, $this->successLogFormat,
-                $this->errorLogFormat, $this->profiler, $this->cache, $traceId),
-            new CustomersClient($baseUrl . 'customers/v2/', $this->apiKey, $channel,
-                $locale, $this->session, $this->logger, $this->successLogFormat,
-                $this->errorLogFormat, $this->profiler, $this->cache, $traceId)
+            new CatalogClient($baseUrl . 'catalog/v2/', $params),
+            new CheckoutClient($baseUrl . 'checkout/v2/', $params),
+            new CustomersClient($baseUrl . 'customers/v2/', $params)
         );
     }
 

@@ -26,26 +26,54 @@ abstract class BaseClient
      */
     protected $cache;
 
-    public function __construct($baseUrl, $apiKey, $channel, $locale, LoggerInterface $logger = null,
-        $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null, CacheItemPoolInterface $cache = null, $traceId = null)
+    /**
+     * BaseClient accepts an array of constructor parameters:
+     *
+     * - api_key: (req) the Paloma API key
+     * - channel: (req) the Paloma channel
+     * - locale: (req) the Paloma locale
+     * - profiler: (opt) a PalomaProfiler instance
+     * - logger: (opt) a LoggerInterface implementation
+     * - log_format_success: (opt) a MessageFormatter format string
+     * - log_format_failure: (opt) a MessageFormatter format string
+     * - cache: (opt) a CacheItemPoolInterface implementation
+     * - trace_id: (opt) the trace ID to send to Paloma
+     *
+     * @param string $baseUrl
+     * @param array $options
+     * @throws \Exception
+     */
+    public function __construct($baseUrl, array $options)
     {
+        if (empty($options['api_key'])) {
+            throw new \InvalidArgumentException('api_key is required');
+        }
+        if (empty($options['channel'])) {
+            throw new \InvalidArgumentException('channel is required');
+        }
+        if (empty($options['locale'])) {
+            throw new \InvalidArgumentException('locale is required');
+        }
+
         $handlerStack = HandlerStack::create();
 
-        if ($profiler) {
-            $handlerStack->push(self::profilerHandler($profiler));
+        if (!empty($options['profiler'])) {
+            $handlerStack->push(self::profilerHandler($options['profiler']));
         }
-        if ($logger) {
-            $handlerStack->push(self::logHandler($logger, $successLogFormat, $errorLogFormat));
+        if (!empty($options['logger'])) {
+            $handlerStack->push(self::logHandler($options['logger'],
+                isset($options['log_format_success']) ? $options['log_format_success'] : null,
+                isset($options['log_format_failure']) ? $options['log_format_failure'] : null));
         }
 
-        $headers = [ 'x-api-key' => $apiKey ];
+        $headers = [ 'x-api-key' => $options['api_key'] ];
 
-        if ($traceId) {
-            if (!preg_match('/^[a-z0-9]{8}$/', $traceId)) {
-                throw new \Exception('Invalid trace ID: ' . $traceId);
+        if (!empty($options['trace_id'])) {
+            if (!preg_match('/^[a-z0-9]{8}$/', $options['trace_id'])) {
+                throw new \Exception('Invalid trace ID: ' . $options['trace_id']);
             }
-            $headers['x-astina-trace-id'] = $traceId;
-            $headers['x-paloma-trace-id'] = $traceId;
+            $headers['x-astina-trace-id'] = $options['trace_id'];
+            $headers['x-paloma-trace-id'] = $options['trace_id'];
         }
 
         $this->http = new Client([
@@ -54,9 +82,9 @@ abstract class BaseClient
             'handler' => $handlerStack
         ]);
 
-        $this->channel = $channel;
-        $this->locale = $locale;
-        $this->cache = $cache;
+        $this->channel = $options['channel'];
+        $this->locale = $options['locale'];
+        $this->cache = isset($options['cache']) ? $options['cache'] : null;
     }
 
     protected function get($path, $query = null, $useCache = false, $defaultCacheTtl = null)
@@ -153,9 +181,9 @@ abstract class BaseClient
         });
     }
 
-    private static function logHandler(LoggerInterface $logger, $successLogFormat = null, $errorLogFormat = null) {
-        $formatterSuccess = new MessageFormatter($successLogFormat !== null ? $successLogFormat : MessageFormatter::SHORT);
-        $formatterError = new MessageFormatter($errorLogFormat !== null ? $errorLogFormat : MessageFormatter::DEBUG);
+    private static function logHandler(LoggerInterface $logger, $logFormatSuccess = null, $logFormatFailure = null) {
+        $formatterSuccess = new MessageFormatter($logFormatSuccess !== null ? $logFormatSuccess : MessageFormatter::SHORT);
+        $formatterError = new MessageFormatter($logFormatFailure !== null ? $logFormatFailure : MessageFormatter::DEBUG);
 
         return Middleware::tap(null, function ($request, $options, PromiseInterface $response) use ($logger, $formatterSuccess, $formatterError) {
             $response->then(

@@ -3,9 +3,6 @@
 namespace Paloma\Shop\Customers;
 
 use Paloma\Shop\BaseClient;
-use Paloma\Shop\PalomaProfiler;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -16,18 +13,21 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
      */
     private $session;
 
-    public function __construct($baseUrl, $apiKey, $channel, $locale, SessionInterface $session = null,
-        LoggerInterface $logger = null, $successLogFormat = null, $errorLogFormat = null,
-        PalomaProfiler $profiler = null, CacheItemPoolInterface $cache = null, $traceId = null)
+    /**
+     * CustomersClient accepts an array of constructor parameters.
+     *
+     * - session: (opt) a SessionInterface implementation
+     *
+     * And all parameters of BaseClient.
+     *
+     * @param string $baseUrl
+     * @param array $options
+     */
+    public function __construct($baseUrl, array $options)
     {
-        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $successLogFormat, $errorLogFormat,
-            $profiler, $cache, $traceId);
+        parent::__construct($baseUrl, $options);
 
-        if ($session == null) {
-            $session = new Session();
-        }
-
-        $this->session = $session;
+        $this->session = empty($options['session']) ? new Session() : $options['base_url'];
     }
 
     function register($customer)

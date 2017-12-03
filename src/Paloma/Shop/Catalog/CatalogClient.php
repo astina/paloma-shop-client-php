@@ -3,16 +3,20 @@
 namespace Paloma\Shop\Catalog;
 
 use Paloma\Shop\BaseClient;
-use Paloma\Shop\PalomaProfiler;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Log\LoggerInterface;
 
 class CatalogClient extends BaseClient implements CatalogClientInterface
 {
-    public function __construct($baseUrl, $apiKey, $channel, $locale, LoggerInterface $logger = null,
-        $successLogFormat = null, $errorLogFormat = null, PalomaProfiler $profiler = null, CacheItemPoolInterface $cache = null, $traceId = null)
+    /**
+     * CatalogClient accepts an array of constructor parameters.
+     *
+     * All parameters of BaseClient.
+     *
+     * @param string $baseUrl
+     * @param array $options
+     */
+    public function __construct($baseUrl, array $options)
     {
-        parent::__construct($baseUrl, $apiKey, $channel, $locale, $logger, $successLogFormat, $errorLogFormat, $profiler, $cache, $traceId);
+        parent::__construct($baseUrl, $options);
     }
 
     public function search($search, $useCache = true, $defaultCacheTtl = null)

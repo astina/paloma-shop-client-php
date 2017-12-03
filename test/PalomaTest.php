@@ -10,12 +10,14 @@ class PalomaTest extends TestCase
 {
     public function testInit()
     {
-        $paloma = Paloma::create('https://demo.paloma.one/api/', 'apikey', 'demo_b2c', 'de',
-            new Session(new MockFileSessionStorage()),
-            null, null, null,
-            null,
-            null,
-            '7429cb0d9');
+        $paloma = Paloma::create([
+            'base_url' => 'https://demo.paloma.one/api/',
+            'api_key' => 'apikey',
+            'channel' => 'demo_b2c',
+            'locale' => 'de',
+            'session' => new Session(new MockFileSessionStorage()),
+            'trace_id' => '7429cb0d9'
+        ]);
 
 //        $categories = $paloma->catalog()->categories(10);
 //        $this->assertNotNull($categories);
