@@ -29,7 +29,7 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
     {
         parent::__construct($baseUrl, $options);
 
-        $this->session = empty($options['session']) ? new Session() : $options['base_url'];
+        $this->session = empty($options['session']) ? new Session() : $options['session'];
     }
 
     function cart()
