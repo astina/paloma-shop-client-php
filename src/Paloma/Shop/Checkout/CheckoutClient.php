@@ -39,6 +39,9 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
 
     function createOrder($order)
     {
+        $order = $order ?: [];
+        $order['locale'] = isset($order['locale']) ? $order['locale'] : $this->locale;
+
         return $this->post($this->channel . '/' . self::ORDERS_PATH, null, $order);
     }
 
