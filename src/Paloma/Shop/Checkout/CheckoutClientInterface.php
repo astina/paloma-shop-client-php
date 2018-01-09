@@ -27,6 +27,8 @@ interface CheckoutClientInterface
 
     function getShippingMethods($orderId);
 
+    function getShippingMethodOptions($orderId, $methodName, $from = null, $until = null);
+
     function setShippingMethod($orderId, $method);
 
     function getPaymentMethods($orderId);

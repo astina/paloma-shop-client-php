@@ -85,6 +85,18 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
         return $this->get($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/shipping-methods');
     }
 
+    function getShippingMethodOptions($orderId, $methodName, $from = null, $until = null)
+    {
+        $query = [];
+        if ($from !== null) {
+            $query['from'] = $from;
+        }
+        if ($until !== null) {
+            $query['until'] = $until;
+        }
+        return $this->get($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/shipping-methods/' . $methodName, $query);
+    }
+
     function setShippingMethod($orderId, $method)
     {
         return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/shipping-method', null, $method);
