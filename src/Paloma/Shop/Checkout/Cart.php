@@ -2,6 +2,7 @@
 
 namespace Paloma\Shop\Checkout;
 
+use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Cart
@@ -38,22 +39,30 @@ class Cart
 
     public function get()
     {
-        return $this->checkoutClient->getOrder($this->getCartId(), $this->locale);
+        return $this->checkedCall(function () {
+            return $this->checkoutClient->getOrder($this->getCartId(), $this->locale);
+        });
     }
 
     public function addItem($sku, $quantity = 1)
     {
-        return $this->checkoutClient->addOrderItem($this->getCartId(), ['sku' => $sku, 'quantity' => $quantity]);
+        return $this->checkedCall(function() use ($sku, $quantity) {
+            return $this->checkoutClient->addOrderItem($this->getCartId(), ['sku' => $sku, 'quantity' => $quantity]);
+        });
     }
 
     public function updateQuantity($itemId, $quantity)
     {
-        return $this->checkoutClient->updateOrderItem($this->getCartId(), $itemId, ['quantity' => $quantity]);
+        return $this->checkedCall(function () use ($itemId, $quantity) {
+            return $this->checkoutClient->updateOrderItem($this->getCartId(), $itemId, ['quantity' => $quantity]);
+        });
     }
 
     public function removeItem($itemId)
     {
-        return $this->checkoutClient->deleteOrderItem($this->getCartId(), $itemId);
+        return $this->checkedCall(function () use ($itemId) {
+            return $this->checkoutClient->deleteOrderItem($this->getCartId(), $itemId);
+        });
     }
 
     /**
@@ -67,7 +76,9 @@ class Cart
             return 0;
         }
 
-        $order = $this->checkoutClient->getOrder($cartId);
+        $order = $this->checkedCall(function () use ($cartId) {
+            return $this->checkoutClient->getOrder($cartId);
+        });
 
         return count($order['items']);
     }
@@ -83,7 +94,9 @@ class Cart
             return 0;
         }
 
-        $order = $this->checkoutClient->getOrder($cartId);
+        $order = $this->checkedCall(function () use ($cartId) {
+            return $this->checkoutClient->getOrder($cartId);
+        });
 
         $count = 0;
         foreach ($order['items'] as $item) {
@@ -105,27 +118,35 @@ class Cart
             $customer['confirmed'] = false;
         }
 
-        return $this->checkoutClient->setCustomer($this->getCartId(), $customer);
+        return $this->checkedCall(function () use ($customer) {
+            return $this->checkoutClient->setCustomer($this->getCartId(), $customer);
+        });
     }
 
     public function setAddresses($billingAddress, $shippingAddress)
     {
-        return $this->checkoutClient->setAddresses($this->getCartId(), [
-            'billingAddress' => $billingAddress,
-            'shippingAddress' => $shippingAddress,
-        ]);
+        return $this->checkedCall(function () use ($billingAddress, $shippingAddress) {
+            return $this->checkoutClient->setAddresses($this->getCartId(), [
+                'billingAddress' => $billingAddress,
+                'shippingAddress' => $shippingAddress,
+            ]);
+        });
     }
 
     public function finalize()
     {
-        return $this->checkoutClient->finalizeOrder($this->getCartId());
+        return $this->checkedCall(function () {
+            return $this->checkoutClient->finalizeOrder($this->getCartId());
+        });
     }
 
     public function initPayment($params)
     {
         $orderId = $this->getCartId();
 
-        $this->checkoutClient->finalizeOrder($orderId);
+        $this->checkedCall(function () use ($orderId) {
+            $this->checkoutClient->finalizeOrder($orderId);
+        });
 
         $params['order'] = $orderId;
 
@@ -134,7 +155,9 @@ class Cart
 
     public function purchase()
     {
-        $order = $this->checkoutClient->purchaseOrder($this->getCartId());
+        $order = $this->checkedCall(function () {
+            return $this->checkoutClient->purchaseOrder($this->getCartId());
+        });
 
         $this->clearCartId();
 
@@ -168,10 +191,12 @@ class Cart
 
     private function createCartOrder()
     {
-        return $this->checkoutClient->createOrder([
-            'channel' => $this->channel,
-            'locale' => $this->locale,
-        ]);
+        return $this->checkedCall(function () {
+            return $this->checkoutClient->createOrder([
+                'channel' => $this->channel,
+                'locale' => $this->locale,
+            ]);
+        });
     }
 
     private function clearCartId()
@@ -183,5 +208,17 @@ class Cart
         }
 
         $this->session->set(self::$CART_ID_VAR, $cartIds);
+    }
+
+    private function checkedCall(callable $call)
+    {
+        try {
+            return $call();
+        } catch (ClientException $e) {
+            if ($e->getCode() == 404) {
+                $this->clearCartId();
+            }
+            throw $e;
+        }
     }
 }
