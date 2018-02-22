@@ -77,7 +77,7 @@ class Cart
         }
 
         $order = $this->checkedCall(function () use ($cartId) {
-            return $this->checkoutClient->getOrder($cartId);
+            return $this->checkoutClient->getOrder($cartId, $this->locale);
         });
 
         return count($order['items']);
@@ -95,7 +95,7 @@ class Cart
         }
 
         $order = $this->checkedCall(function () use ($cartId) {
-            return $this->checkoutClient->getOrder($cartId);
+            return $this->checkoutClient->getOrder($cartId, $this->locale);
         });
 
         $count = 0;
