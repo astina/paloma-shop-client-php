@@ -172,8 +172,9 @@ class Cart
 
     private function getCartId($createOrder = true)
     {
-        if (!$this->session->isStarted()) {
-            $this->session->start();
+        // Do not force a session to be created unless needed
+        if (!$createOrder && !$this->session->isStarted()) {
+            return 0;
         }
 
         $cartIds = $this->session->get(self::$CART_ID_VAR);
