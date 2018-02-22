@@ -77,6 +77,12 @@
                     <td><pre style="max-height: 200px; overflow-y: auto; white-space: pre-wrap;">{{ exchange.response.body }}</pre></td>
                 </tr>
             {% endif %}
+            {% if exchange.call_stack %}
+                <tr>
+                    <th>Call stack</th>
+                    <td><pre style="max-height: 200px; overflow-y: auto; white-space: pre-wrap;">{{ exchange.call_stack }}</pre></td>
+                </tr>
+            {% endif %}
             </tbody>
         </table>
     {% endfor %}

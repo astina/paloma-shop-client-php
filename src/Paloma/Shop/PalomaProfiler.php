@@ -13,8 +13,11 @@ class PalomaProfiler
 
     private $started = null;
 
+    private $callStack = null;
+
     public function startRequest()
     {
+        $this->callStack = (new \Exception())->getTraceAsString();
         $this->started = microtime(true);
     }
 
@@ -35,6 +38,7 @@ class PalomaProfiler
                 'body' => ($response->getBody() . '') ? json_encode(json_decode($response->getBody()), JSON_PRETTY_PRINT) : null,
             ],
             'duration' => round($duration),
+            'call_stack' => $this->callStack,
         ];
     }
 
