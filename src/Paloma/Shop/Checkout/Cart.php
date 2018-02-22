@@ -21,6 +21,11 @@ class Cart
      */
     private $session;
 
+    /**
+     * @var array
+     */
+    private $order;
+
     private static $CART_ID_VAR = 'paloma-cart-id';
 
     /**
@@ -40,28 +45,32 @@ class Cart
     public function get()
     {
         return $this->checkedCall(function () {
-            return $this->checkoutClient->getOrder($this->getCartId(), $this->locale);
+            $this->order = $this->order ? $this->order : $this->checkoutClient->getOrder($this->getCartId(), $this->locale);
+            return $this->order;
         });
     }
 
     public function addItem($sku, $quantity = 1)
     {
         return $this->checkedCall(function() use ($sku, $quantity) {
-            return $this->checkoutClient->addOrderItem($this->getCartId(), ['sku' => $sku, 'quantity' => $quantity]);
+            $this->order = $this->checkoutClient->addOrderItem($this->getCartId(), ['sku' => $sku, 'quantity' => $quantity]);
+            return $this->order;
         });
     }
 
     public function updateQuantity($itemId, $quantity)
     {
         return $this->checkedCall(function () use ($itemId, $quantity) {
-            return $this->checkoutClient->updateOrderItem($this->getCartId(), $itemId, ['quantity' => $quantity]);
+            $this->order = $this->checkoutClient->updateOrderItem($this->getCartId(), $itemId, ['quantity' => $quantity]);
+            return $this->order;
         });
     }
 
     public function removeItem($itemId)
     {
         return $this->checkedCall(function () use ($itemId) {
-            return $this->checkoutClient->deleteOrderItem($this->getCartId(), $itemId);
+            $this->order = $this->checkoutClient->deleteOrderItem($this->getCartId(), $itemId);
+            return $this->order;
         });
     }
 
@@ -76,10 +85,7 @@ class Cart
             return 0;
         }
 
-        $order = $this->checkedCall(function () use ($cartId) {
-            return $this->checkoutClient->getOrder($cartId, $this->locale);
-        });
-
+        $order = $this->get();
         return count($order['items']);
     }
 
@@ -94,10 +100,7 @@ class Cart
             return 0;
         }
 
-        $order = $this->checkedCall(function () use ($cartId) {
-            return $this->checkoutClient->getOrder($cartId, $this->locale);
-        });
-
+        $order = $this->get();
         $count = 0;
         foreach ($order['items'] as $item) {
             $count += $item['quantity'];
@@ -119,24 +122,27 @@ class Cart
         }
 
         return $this->checkedCall(function () use ($customer) {
-            return $this->checkoutClient->setCustomer($this->getCartId(), $customer);
+            $this->order = $this->checkoutClient->setCustomer($this->getCartId(), $customer);
+            $this->order;
         });
     }
 
     public function setAddresses($billingAddress, $shippingAddress)
     {
         return $this->checkedCall(function () use ($billingAddress, $shippingAddress) {
-            return $this->checkoutClient->setAddresses($this->getCartId(), [
+            $this->order = $this->checkoutClient->setAddresses($this->getCartId(), [
                 'billingAddress' => $billingAddress,
                 'shippingAddress' => $shippingAddress,
             ]);
+            return $this->order;
         });
     }
 
     public function finalize()
     {
         return $this->checkedCall(function () {
-            return $this->checkoutClient->finalizeOrder($this->getCartId());
+            $this->order = $this->checkoutClient->finalizeOrder($this->getCartId());
+            return $this->order;
         });
     }
 
@@ -192,10 +198,11 @@ class Cart
     private function createCartOrder()
     {
         return $this->checkedCall(function () {
-            return $this->checkoutClient->createOrder([
+            $this->order = $this->checkoutClient->createOrder([
                 'channel' => $this->channel,
                 'locale' => $this->locale,
             ]);
+            return $this->order;
         });
     }
 
@@ -208,6 +215,7 @@ class Cart
         }
 
         $this->session->set(self::$CART_ID_VAR, $cartIds);
+        $this->order = null;
     }
 
     private function checkedCall(callable $call)
