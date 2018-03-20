@@ -106,20 +106,20 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         return $this->post($this->channel . '/customers/' . $customerId . '/loyalty-programs', null, $program);
     }
 
-    function getOrders($customerId, $pageNr = null, $pageSize = null, $sortOrder = null)
+    function getOrders($customerId, $page = null, $size = null, $order = null)
     {
         $query = [];
-        if ($pageNr) {
-            $query['pageNr'] = $pageNr;
+        if ($page !== null) {
+            $query['page'] = $page;
         }
-        if ($pageSize) {
-            $query['pageSize'] = $pageSize;
+        if ($size !== null) {
+            $query['size'] = $size;
         }
-        if ($sortOrder) {
-            $query['sortOrder'] = $sortOrder;
+        if ($order !== null) {
+            $query['order'] = $order;
         }
 
-        return $this->get($this->channel . '/' . $this->locale . '/customers/' . $customerId . '/orders', count($query) > 0 ? $query : null);
+        return $this->get($this->channel . '/' . $this->locale . '/customers/' . $customerId . '/orders', $query ? $query : null);
     }
 
     function getOrder($customerId, $orderNr)
