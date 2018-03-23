@@ -6,7 +6,7 @@ use Paloma\Shop\Catalog\CatalogClientInterface;
 use Paloma\Shop\Checkout\CheckoutClientInterface;
 use Paloma\Shop\Customers\CustomersClientInterface;
 
-class PalomaClient
+class PalomaClient implements PalomaClientInterface
 {
     /**
      * @var CatalogClientInterface
