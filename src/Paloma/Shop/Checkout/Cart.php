@@ -153,6 +153,13 @@ class Cart
         });
     }
 
+    public function setPaymentMethod($paymentMethod)
+    {
+        return $this->checkedCall(function () use ($paymentMethod) {
+            return $this->checkoutClient->setPaymentMethod($this->getCartId(), $paymentMethod);
+        });
+    }
+
     public function initPayment($params)
     {
         $orderId = $this->getCartId();
