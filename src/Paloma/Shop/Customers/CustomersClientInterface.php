@@ -14,6 +14,8 @@ interface CustomersClientInterface
 
     function confirmEmailAddress($token);
 
+    function exists($emailAddress);
+
     function authenticateUser($username, $password);
 
     function updateUserPassword($password);
