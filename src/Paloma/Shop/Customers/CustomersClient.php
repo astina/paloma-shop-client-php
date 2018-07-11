@@ -141,4 +141,45 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
     {
         return $this->get($this->channel . '/' . $this->locale . '/orders/' . $orderNr . '/status');
     }
+
+    function addressCompleteHouse($country, $zipCode, $street, $house)
+    {
+        return $this->get($this->channel . '/address/complete/house', [
+            'country' => $country,
+            'zipCode' => $zipCode,
+            'street' => $street,
+            'house' => $house,
+        ]);
+    }
+
+    function addressCompleteStreet($country, $zipCode, $street)
+    {
+        return $this->get($this->channel . '/address/complete/street', [
+            'country' => $country,
+            'zipCode' => $zipCode,
+            'street' => $street,
+        ]);
+    }
+
+    function addressCompleteZip($country, $zipCity)
+    {
+        return $this->get($this->channel . '/address/complete/zip', [
+            'country' => $country,
+            'zipCity' => $zipCity,
+        ]);
+    }
+
+    function addressCompleteStreetAndHouse($country, $zipCode, $streetAndHouse)
+    {
+        return $this->get($this->channel . '/address/complete/street-and-house', [
+            'country' => $country,
+            'zipCode' => $zipCode,
+            'streetAndHouse' => $streetAndHouse,
+        ]);
+    }
+
+    function addressValidate($address)
+    {
+        return $this->post($this->channel . '/address/validate', null, $address);
+    }
 }

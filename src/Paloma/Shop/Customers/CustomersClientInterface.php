@@ -43,4 +43,14 @@ interface CustomersClientInterface
     function getOrderReceipt($customerId, $orderNr);
 
     function getOrderStatus($orderNr);
+
+    function addressCompleteHouse($country, $zipCode, $street, $house);
+
+    function addressCompleteStreet($country, $zipCode, $street);
+
+    function addressCompleteZip($country, $zipCity);
+
+    function addressCompleteStreetAndHouse($country, $zipCode, $streetAndHouse);
+
+    function addressValidate($address);
 }
