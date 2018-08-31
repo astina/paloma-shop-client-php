@@ -184,11 +184,15 @@ class Cart
         return $order;
     }
 
+    public function existsInSession() {
+        return boolval($this->getCartId(false));
+    }
+
     private function getCartId($createOrder = true)
     {
         // Do not force a session to be created unless needed
         if (!$createOrder && !$this->session->isStarted()) {
-            return 0;
+            return null;
         }
 
         $cartIds = $this->session->get(self::$CART_ID_VAR);
@@ -196,7 +200,7 @@ class Cart
         if (!isset($cartIds[$this->channel])) {
 
             if (!$createOrder) {
-                return 0;
+                return null;
             }
 
             $cart = $this->createCartOrder();
