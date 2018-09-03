@@ -57,7 +57,7 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
 
     function exists($emailAddress)
     {
-        return $this->post($this->channel . '/customers/exists', ['emailAddress' => $emailAddress], null);
+        return $this->get($this->channel . '/customers/exists', ['emailAddress' => $emailAddress]);
     }
 
     function authenticateUser($username, $password)
