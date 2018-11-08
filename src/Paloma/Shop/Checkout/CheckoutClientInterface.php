@@ -44,4 +44,6 @@ interface CheckoutClientInterface
     function initPayment($orderId, $payment);
 
     function purchaseOrder($id);
+
+    function setBroker($orderId, $broker);
 }
