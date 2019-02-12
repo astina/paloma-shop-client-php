@@ -50,4 +50,9 @@ class PalomaDataCollector extends DataCollector
     {
         return 'paloma';
     }
+
+    public function reset()
+    {
+        $this->data = [];
+    }
 }
