@@ -2,5 +2,7 @@
 /composer.lock
 /composer.phar
 
+.phpunit.result.cache
+
 /.idea/
 *.iml
