@@ -1,4 +1,4 @@
-Paloma\Shop\Checkout\Address:
+Paloma\Shop\Common\Address:
   properties:
     title:
       - Length: { max: 10 }
@@ -27,3 +27,31 @@ Paloma\Shop\Checkout\Address:
       - Length: { max: 50 }
     remarks:
       - Length: { max: 200 }
+
+Paloma\Shop\Customers\CustomerDraft:
+  properties:
+    emailAddress:
+      - NotBlank: ~
+      - Email: ~
+    password:
+      - NotBlank: ~
+      - Length: { min: 6 }
+    confirmationBaseUrl:
+      - NotBlank: ~
+    firstName:
+      - Length: { max: 30 }
+    lastName:
+      - Length: { max: 30 }
+
+
+Paloma\Shop\Customers\CustomerUpdate:
+  properties:
+    addressType:
+      - NotBlank: ~
+      - Choice: [ contact, billing, shipping ]
+    emailAddress:
+      - Email: ~
+    firstName:
+      - Length: { max: 30 }
+    lastName:
+      - Length: { max: 30 }

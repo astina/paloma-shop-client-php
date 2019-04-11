@@ -1,6 +1,6 @@
 <?php
 
-namespace Paloma\Shop\Checkout;
+namespace Paloma\Shop\Common;
 
 class Address implements AddressInterface
 {
@@ -43,7 +43,30 @@ class Address implements AddressInterface
         );
     }
 
-    public function __construct($title, $firstName, $lastName, $company, $street, $zipCode, $city, $country, $phoneNumber, $emailAddress, $remarks)
+
+    public static function toAddressArray(AddressInterface $address)
+    {
+        if ($address === null) {
+            return null;
+        }
+
+        return [
+            'title' => $address->getTitle(),
+            'firstName' => $address->getFirstName(),
+            'lastName' => $address->getLastName(),
+            'company' => $address->getCompany(),
+            'street' => $address->getStreet(),
+            'zipCode' => $address->getZipCode(),
+            'country' => $address->getCountry(),
+            'phoneNumber' => $address->getPhoneNumber(),
+            'emailAddress' => $address->getEmailAddress(),
+            'remarks' => $address->getRemarks(),
+        ];
+    }
+
+    public function __construct(?string $title, ?string $firstName, ?string $lastName, ?string $company,
+                                ?string $street, ?string $zipCode, ?string $city, ?string $country,
+                                ?string $phoneNumber, ?string $emailAddress, ?string $remarks)
     {
         $this->title = $title;
         $this->firstName = $firstName;

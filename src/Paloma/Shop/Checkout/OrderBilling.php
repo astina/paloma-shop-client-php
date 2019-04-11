@@ -2,6 +2,9 @@
 
 namespace Paloma\Shop\Checkout;
 
+use Paloma\Shop\Common\Address;
+use Paloma\Shop\Common\AddressInterface;
+
 class OrderBilling implements OrderBillingInterface
 {
     private $data;

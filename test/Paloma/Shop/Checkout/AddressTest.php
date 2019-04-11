@@ -2,9 +2,9 @@
 
 namespace Paloma\Shop\Checkout;
 
+use Paloma\Shop\Common\Address;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AddressTest extends TestCase

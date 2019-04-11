@@ -4,6 +4,7 @@ namespace Paloma\Shop\Checkout;
 
 use DateTime;
 use Paloma\Shop\Api\CartIsEmpty;
+use Paloma\Shop\Common\AddressInterface;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\CartItemNotFound;
 use Paloma\Shop\Error\CartUnavailable;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Paloma\Shop\Checkout;
+namespace Paloma\Shop\Common;
 
 interface AddressInterface
 {

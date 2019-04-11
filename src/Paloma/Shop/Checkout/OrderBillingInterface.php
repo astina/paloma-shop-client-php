@@ -2,6 +2,8 @@
 
 namespace Paloma\Shop\Checkout;
 
+use Paloma\Shop\Common\AddressInterface;
+
 interface OrderBillingInterface
 {
     /**

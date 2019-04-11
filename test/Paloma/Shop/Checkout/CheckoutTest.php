@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Paloma\Shop\Common\Address;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\CartItemNotFound;
 use Paloma\Shop\Error\InvalidCouponCode;

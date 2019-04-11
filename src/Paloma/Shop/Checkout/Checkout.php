@@ -5,6 +5,8 @@ namespace Paloma\Shop\Checkout;
 use DateTime;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ServerException;
+use Paloma\Shop\Common\Address;
+use Paloma\Shop\Common\AddressInterface;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\CartItemNotFound;
 use Paloma\Shop\Error\InvalidCouponCode;
@@ -353,22 +355,7 @@ class Checkout implements CheckoutInterface
 
     private function toAddressArray(AddressInterface $address)
     {
-        if ($address === null) {
-            return null;
-        }
-
-        return [
-            'title' => $address->getTitle(),
-            'firstName' => $address->getFirstName(),
-            'lastName' => $address->getLastName(),
-            'company' => $address->getCompany(),
-            'street' => $address->getStreet(),
-            'zipCode' => $address->getZipCode(),
-            'country' => $address->getCountry(),
-            'phoneNumber' => $address->getPhoneNumber(),
-            'emailAddress' => $address->getEmailAddress(),
-            'remarks' => $address->getRemarks(),
-        ];
+        return Address::toAddressArray($address);
     }
 
     /**
