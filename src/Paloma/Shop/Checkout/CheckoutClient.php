@@ -32,9 +32,9 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
         $this->session = empty($options['session']) ? new Session() : $options['session'];
     }
 
-    function cart()
+    function checkoutOrder()
     {
-        return new Cart($this->channel, $this->locale, $this, $this->session);
+        return new CheckoutOrder($this->channel, $this->locale, $this, $this->session);
     }
 
     function createOrder($order)

@@ -65,7 +65,7 @@ class Product implements ProductInterface
     }
 
     /**
-     * @return ProductVariant[]
+     * @return ProductVariantInterface[]
      */
     function getVariants(): array
     {
@@ -79,7 +79,7 @@ class Product implements ProductInterface
     }
 
     /**
-     * @return ProductAttribute[]
+     * @return ProductAttributeInterface[]
      */
     function getAttributes(): array
     {
@@ -104,7 +104,7 @@ class Product implements ProductInterface
     }
 
     /**
-     * @return Image[]
+     * @return ImageInterface[]
      */
     function getImages(): array
     {

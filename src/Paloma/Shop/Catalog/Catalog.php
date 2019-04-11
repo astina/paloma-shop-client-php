@@ -121,7 +121,7 @@ class Catalog implements CatalogInterface
 
     function getProductsForCart($size = 5): ProductPageInterface
     {
-        $cart = $this->client->checkout()->cart();
+        $cart = $this->client->checkout()->checkoutOrder();
 
         if ($cart->itemsCount() === 0) {
             return ProductPage::createEmpty();

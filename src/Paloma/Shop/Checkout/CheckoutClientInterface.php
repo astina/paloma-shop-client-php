@@ -5,9 +5,9 @@ namespace Paloma\Shop\Checkout;
 interface CheckoutClientInterface
 {
     /**
-     * @return Cart
+     * @return CheckoutOrder
      */
-    function cart();
+    function checkoutOrder();
 
     function createOrder($order);
 

@@ -2,6 +2,7 @@
 
 namespace Paloma\Shop\Checkout;
 
+use Exception;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
@@ -11,7 +12,9 @@ class CheckoutTestClient implements CheckoutClientInterface
 
     private $session;
 
-    public function __construct(array $order = null)
+    private $exception;
+
+    public function __construct(array $order = null, Exception $exception = null)
     {
         $this->session = new Session(new MockArraySessionStorage());
 
@@ -21,14 +24,20 @@ class CheckoutTestClient implements CheckoutClientInterface
             $this->session->start();
             $this->session->set('paloma-cart-id', ['test' => 'cart1']);
         }
+
+        $this->exception = $exception;
     }
 
     /**
-     * @return Cart
+     * @return CheckoutOrder
      */
-    function cart()
+    function checkoutOrder()
     {
-        return new Cart('test', 'de_CH', $this, $this->session);
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return new CheckoutOrder('test', 'de_CH', $this, $this->session);
     }
 
     function createOrder($order)
@@ -43,86 +52,110 @@ class CheckoutTestClient implements CheckoutClientInterface
 
     function deleteOrder($id)
     {
-        // TODO: Implement deleteOrder() method.
     }
 
     function addOrderItem($orderId, $item)
     {
-        // TODO: Implement addOrderItem() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return $this->order;
     }
 
     function updateOrderItem($orderId, $itemId, $item)
     {
-        // TODO: Implement updateOrderItem() method.
+        return $this->order;
     }
 
     function deleteOrderItem($orderId, $itemId)
     {
-        // TODO: Implement deleteOrderItem() method.
+        return $this->order;
     }
 
     function setCustomer($orderId, $customer)
     {
-        // TODO: Implement setCustomer() method.
+        return $this->order;
     }
 
     function setAddresses($orderId, $addresses)
     {
-        // TODO: Implement setAddresses() method.
+        return $this->order;
     }
 
     function getShippingMethods($orderId)
     {
-        // TODO: Implement getShippingMethods() method.
+        return [
+            [ 'name' => 'method1' ],
+            [ 'name' => 'method2' ],
+        ];
     }
 
     function getShippingMethodOptions($orderId, $methodName, $from = null, $until = null)
     {
-        // TODO: Implement getShippingMethodOptions() method.
+        return [
+            'validUntil' => '2019-04-11T08:06:41.875+0000',
+            'delivery' => [
+                [ 'targetDate' => '2019-04-12' ],
+                [ 'targetDate' => '2019-04-13' ],
+                [ 'targetDate' => '2019-04-14' ],
+            ]
+        ];
     }
 
     function setShippingMethod($orderId, $method)
     {
-        // TODO: Implement setShippingMethod() method.
+        return $this->order;
     }
 
     function getPaymentMethods($orderId)
     {
-        // TODO: Implement getPaymentMethods() method.
+        return [
+            [ 'name' => 'method1', 'type' => 'invoice' ],
+            [ 'name' => 'method2', 'type' => 'electronic', 'provider' => 'datatrans' ],
+        ];
     }
 
     function setPaymentMethod($orderId, $method)
     {
-        // TODO: Implement setPaymentMethod() method.
+        return $this->order;
     }
 
     function addCoupon($orderId, $coupon)
     {
-        // TODO: Implement addCoupon() method.
+        return $this->order;
     }
 
     function deleteCoupon($orderId, $code)
     {
-        // TODO: Implement deleteCoupon() method.
+        return $this->order;
     }
 
     function finalizeOrder($id)
     {
-        // TODO: Implement finalizeOrder() method.
+        $this->order['status'] = 'finalized';
+
+        return $this->order;
     }
 
     function initPayment($orderId, $payment)
     {
-        // TODO: Implement initPayment() method.
+        return [
+            'paymentMethod' => 'default',
+            'reference' => 'ref123',
+            'currency' => 'CHF',
+            'amount' => 12.40,
+            'status' => 'initiated',
+        ];
     }
 
     function purchaseOrder($id)
     {
-        // TODO: Implement purchaseOrder() method.
+        return $this->order;
     }
 
     function setBroker($orderId, $broker)
     {
-        // TODO: Implement setBroker() method.
+        return $this->order;
     }
 }

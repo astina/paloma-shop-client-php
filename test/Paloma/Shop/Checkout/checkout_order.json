@@ -1,0 +1,398 @@
+{
+  "id": "d47ad875-0d1a-46b1-bec4-df8db17e6377",
+  "orderNumber": "400042958",
+  "locale": "de",
+  "channel": "default",
+  "status": "cart",
+  "purchaseDate": "2017-12-05T15:59:11.000+0000",
+  "currency": "CHF",
+  "comment": "This is a comment.",
+  "items": [
+    {
+      "id": "1",
+      "quantity": 1,
+      "itemNumber": "00013580_200",
+      "status": null,
+      "title": "Pumps",
+      "description": "Very nice",
+      "variant": {
+        "sku": "00013580_000_4_49",
+        "name": "00013580-000",
+        "pricing": {
+          "currency": "CHF",
+          "grossPrice": 199,
+          "netPrice": 184.26,
+          "originalGrossPrice": 299,
+          "grossPriceFormatted": "199.00",
+          "netPriceFormatted": "184.26",
+          "originalGrossPriceFormatted": "299.00",
+          "taxes": {
+            "vat": {
+              "type": "VAT",
+              "rate": 0.08,
+              "name": "MwSt.",
+              "amount": 14.74,
+              "rateFormatted": "8 %",
+              "amountFormatted": "14.74"
+            }
+          }
+        },
+        "attributes": {
+          "size_range": {
+            "type": "size_range",
+            "label": "Schuhgrösse",
+            "value": "DASC",
+            "display": "none"
+          },
+          "master_color": {
+            "type": "master_color",
+            "label": "Master color",
+            "value": "0",
+            "display": "none"
+          }
+        },
+        "options": {
+          "color": {
+            "option": "color",
+            "label": "Schwarz",
+            "value": "#000000"
+          },
+          "size": {
+            "option": "size",
+            "label": "Grösse",
+            "value": "39"
+          }
+        },
+        "images": [
+          {
+            "name": "c800acbe-e963-4bed-a80f-e2c4799350cc.jpg",
+            "title": null,
+            "caption": null,
+            "set": null,
+            "sources": [
+              {
+                "size": "small",
+                "url": "https://demo.paloma.one/images/small/c800acbe-e963-4bed-a80f-e2c4799350cc.jpg"
+              }
+            ]
+          }
+        ],
+        "availability": {
+          "available": true,
+          "totalStock": 3,
+          "stocks": [
+            {
+              "inventory": "099F",
+              "stock": 3
+            }
+          ],
+          "availableFrom": null,
+          "availableStock": 3
+        }
+      },
+      "adjustments": [
+        {
+          "type": "discount",
+          "description": "Test",
+          "pricing": {
+            "currency": "CHF",
+            "grossPrice": 0,
+            "netPrice": 0,
+            "originalGrossPrice": null,
+            "grossPriceFormatted": "0.00",
+            "netPriceFormatted": "0.0",
+            "originalGrossPriceFormatted": null,
+            "taxes": null
+          }
+        }
+      ],
+      "unitPricing": {
+        "currency": "CHF",
+        "grossPrice": 199,
+        "netPrice": 184.26,
+        "originalGrossPrice": null,
+        "grossPriceFormatted": "199.00",
+        "netPriceFormatted": "184.26",
+        "originalGrossPriceFormatted": null,
+        "taxes": null
+      },
+      "itemPricing": {
+        "currency": "CHF",
+        "grossPrice": 199,
+        "netPrice": 184.26,
+        "originalGrossPrice": null,
+        "grossPriceFormatted": "199.00",
+        "netPriceFormatted": "184.26",
+        "originalGrossPriceFormatted": null,
+        "taxes": {
+          "vat": {
+            "type": "VAT",
+            "rate": 0.08,
+            "name": "MwSt.",
+            "amount": 14.74,
+            "rateFormatted": "8 %",
+            "amountFormatted": "14.74"
+          }
+        }
+      },
+      "reservationExpires": 1512384836465
+    },
+    {
+      "id": "2",
+      "quantity": 1,
+      "itemNumber": "00013579_000",
+      "status": null,
+      "title": "Pumps",
+      "description": null,
+      "variant": {
+        "sku": "00013579_000_4_49",
+        "name": "00013579-000",
+        "pricing": {
+          "currency": "CHF",
+          "grossPrice": 199,
+          "netPrice": 184.26,
+          "originalGrossPrice": 299,
+          "grossPriceFormatted": "199.00",
+          "netPriceFormatted": "184.26",
+          "originalGrossPriceFormatted": "299.00",
+          "taxes": {
+            "vat": {
+              "type": "VAT",
+              "rate": 0.08,
+              "name": "MwSt.",
+              "amount": 14.74,
+              "rateFormatted": "8 %",
+              "amountFormatted": "14.74"
+            }
+          }
+        },
+        "attributes": {
+          "size_range": {
+            "type": "size_range",
+            "label": "Schuhgrösse",
+            "value": "DASC",
+            "display": "none"
+          },
+          "master_color": {
+            "type": "master_color",
+            "label": "Master color",
+            "value": "1",
+            "display": "none"
+          }
+        },
+        "options": {
+          "color": {
+            "option": "color",
+            "label": "Schwarz",
+            "value": "#000000"
+          },
+          "size": {
+            "option": "size",
+            "label": "Grösse",
+            "value": "39"
+          }
+        },
+        "images": [
+          {
+            "name": "d32d84a0-18a0-4d1a-b196-926ca8995224.jpg",
+            "title": null,
+            "caption": null,
+            "set": null,
+            "sources": [
+              {
+                "size": "small",
+                "url": "https://demo.paloma.one/images/small/d32d84a0-18a0-4d1a-b196-926ca8995224.jpg"
+              }
+            ]
+          }
+        ],
+        "availability": {
+          "available": true,
+          "totalStock": 2,
+          "stocks": [
+            {
+              "inventory": "099F",
+              "stock": 2
+            }
+          ],
+          "availableFrom": null,
+          "availableStock": 2
+        }
+      },
+      "adjustments": [],
+      "unitPricing": {
+        "currency": "CHF",
+        "grossPrice": 199,
+        "netPrice": 184.26,
+        "originalGrossPrice": null,
+        "grossPriceFormatted": "199.00",
+        "netPriceFormatted": "184.26",
+        "originalGrossPriceFormatted": null,
+        "taxes": null
+      },
+      "itemPricing": {
+        "currency": "CHF",
+        "grossPrice": 199,
+        "netPrice": 184.26,
+        "originalGrossPrice": null,
+        "grossPriceFormatted": "199.00",
+        "netPriceFormatted": "184.26",
+        "originalGrossPriceFormatted": null,
+        "taxes": {
+          "vat": {
+            "type": "VAT",
+            "rate": 0.08,
+            "name": "MwSt.",
+            "amount": 14.74,
+            "rateFormatted": "8 %",
+            "amountFormatted": "14.74"
+          }
+        }
+      },
+      "reservationExpires": 1512384939675
+    }
+  ],
+  "itemsPricing": {
+    "currency": "CHF",
+    "grossPrice": 398,
+    "netPrice": 368.52,
+    "originalGrossPrice": null,
+    "grossPriceFormatted": "398.00",
+    "netPriceFormatted": "368.52",
+    "originalGrossPriceFormatted": null,
+    "taxes": {
+      "vat": {
+        "type": "VAT",
+        "rate": 0.08,
+        "name": "MwSt.",
+        "amount": 29.48,
+        "rateFormatted": "8 %",
+        "amountFormatted": "29.48"
+      }
+    }
+  },
+  "adjustments": [
+    {
+      "type": "shipping",
+      "description": "Versandkosten",
+      "pricing": {
+        "currency": "CHF",
+        "grossPrice": 0,
+        "netPrice": null,
+        "originalGrossPrice": null,
+        "grossPriceFormatted": "0.00",
+        "netPriceFormatted": null,
+        "originalGrossPriceFormatted": null,
+        "taxes": null
+      }
+    }
+  ],
+  "orderPricing": {
+    "currency": "CHF",
+    "grossPrice": 398,
+    "netPrice": null,
+    "originalGrossPrice": null,
+    "grossPriceFormatted": "398.00",
+    "netPriceFormatted": null,
+    "originalGrossPriceFormatted": null,
+    "taxes": null
+  },
+  "taxSummary": {
+    "taxes": [
+      {
+        "type": "VAT",
+        "rate": 0.08,
+        "name": "MwSt.",
+        "amount": 29.48,
+        "rateFormatted": "8 %",
+        "amountFormatted": "29.48"
+      }
+    ]
+  },
+  "customer": {
+    "emailAddress": "test@astina.io",
+    "customerNumber": "CH000350921",
+    "firstName": "Petra",
+    "lastName": "Muster",
+    "gender": "female",
+    "userId": "CH000350921"
+  },
+  "billingAddress": {
+    "title": "Frau",
+    "firstName": "Petra",
+    "lastName": "Muster",
+    "company": null,
+    "street": "Musterweg 30",
+    "zipCode": "8055",
+    "city": "Zürich",
+    "country": "CH",
+    "phoneNumber": "0555555555",
+    "emailAddress": null,
+    "remarks": null
+  },
+  "shippingAddress": {
+    "title": "Frau",
+    "firstName": "Petra",
+    "lastName": "Muster",
+    "company": null,
+    "street": "Musterweg 30",
+    "zipCode": "8055",
+    "city": "Zürich",
+    "country": "CH",
+    "phoneNumber": "0555555555",
+    "emailAddress": null,
+    "remarks": "PIN Haupteingang: 1234"
+  },
+  "paymentMethod": {
+    "name": "default",
+    "type": "electronic",
+    "provider": "datatrans"
+  },
+  "shippingMethod": {
+    "name": "default"
+  },
+  "payments": [
+    {
+      "order": "d47ad875-0d1a-46b1-bec4-df8db17e6377",
+      "paymentMethod": "electronic",
+      "reference": "400042958-001",
+      "transactionId": "171204114022427752",
+      "currency": "CHF",
+      "amount": 398,
+      "status": "authorized",
+      "providerRequest": {
+        "params": [
+          {
+            "name": "refno",
+            "value": "400042958-001"
+          },
+          {
+            "name": "reqtype",
+            "value": "NOA"
+          },
+          {
+            "name": "currency",
+            "value": "CHF"
+          },
+          {
+            "name": "amount",
+            "value": "39800"
+          }
+        ]
+      }
+    }
+  ],
+  "coupons": [],
+  "campaignCode": null,
+  "deliveryMethod": null,
+  "trackingCode": null,
+  "modifications": [
+    {
+      "code": "item_removed",
+      "itemId": null,
+      "params": {
+        "param1": "value1"
+      }
+    }
+  ]
+}

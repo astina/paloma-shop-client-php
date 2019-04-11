@@ -1,0 +1,29 @@
+Paloma\Shop\Checkout\Address:
+  properties:
+    title:
+      - Length: { max: 10 }
+    firstName:
+      - Length: { max: 30 }
+    lastName:
+      - Length: { max: 30 }
+    company:
+      - Length: { max: 50 }
+    street:
+      - Length: { max: 50 }
+    city:
+      - Length: { max: 30 }
+    zipCode:
+      - Length: { max: 10 }
+    country:
+      - NotBlank: ~
+      - Country: ~
+    phoneNumber:
+      - Length: { max: 30 }
+      - Regex:
+          pattern: '/^[+0-9 -]$/'
+          message: 'This value is not a valid phone number.'
+    emailAddress:
+      - Email: ~
+      - Length: { max: 50 }
+    remarks:
+      - Length: { max: 200 }

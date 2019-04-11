@@ -6,9 +6,15 @@ class ProductVariant implements ProductVariantInterface
 {
     private $data;
 
+    /**
+     * @var Price
+     */
+    private $price;
+
     public function __construct(array $data)
     {
         $this->data = $data;
+        $this->price = new Price($data['pricing']);
     }
 
     function getSku(): string
@@ -23,11 +29,7 @@ class ProductVariant implements ProductVariantInterface
 
     function getPrice(): string
     {
-        return sprintf('%s %s',
-            $this->data['pricing']['currency'],
-            $this->isTaxIncluded()
-                ? $this->data['pricing']['grossPriceFormatted']
-                : $this->data['pricing']['netPriceFormatted']);
+        return $this->price->getPrice();
     }
 
     function getOriginalPrice(): string
@@ -37,16 +39,16 @@ class ProductVariant implements ProductVariantInterface
 
     function getTaxRate(): string
     {
-        return $this->data['pricing']['taxes']['vat']['rateFormatted'];
+        return $this->price->getTaxRate();
     }
 
     function isTaxIncluded(): bool
     {
-        return true;
+        return $this->price->isTaxIncluded();
     }
 
     /**
-     * @return ProductVariantOption[]
+     * @return ProductVariantOptionInterface[]
      */
     function getOptions(): array
     {
@@ -56,7 +58,7 @@ class ProductVariant implements ProductVariantInterface
     }
 
     /**
-     * @return ProductAttribute[]
+     * @return ProductAttributeInterface[]
      */
     function getAttributes(): array
     {
@@ -81,7 +83,7 @@ class ProductVariant implements ProductVariantInterface
     }
 
     /**
-     * @return Image[]
+     * @return ImageInterface[]
      */
     function getImages(): array
     {
