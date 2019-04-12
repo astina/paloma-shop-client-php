@@ -6,9 +6,8 @@ use Paloma\Shop\Catalog\CatalogClient;
 use Paloma\Shop\Checkout\CheckoutClient;
 use Paloma\Shop\Customers\CustomersClient;
 
-class PalomaFactory
+class PalomaClientFactory
 {
-
     /**
      * @var array
      */
