@@ -277,10 +277,38 @@
       "description": "Versandkosten",
       "pricing": {
         "currency": "CHF",
-        "grossPrice": 0,
+        "grossPrice": 10,
         "netPrice": null,
         "originalGrossPrice": null,
-        "grossPriceFormatted": "0.00",
+        "grossPriceFormatted": "10.00",
+        "netPriceFormatted": null,
+        "originalGrossPriceFormatted": null,
+        "taxes": null
+      }
+    },
+    {
+      "type": "discount",
+      "description": "Discount",
+      "pricing": {
+        "currency": "CHF",
+        "grossPrice": -30,
+        "netPrice": null,
+        "originalGrossPrice": null,
+        "grossPriceFormatted": "-30.00",
+        "netPriceFormatted": null,
+        "originalGrossPriceFormatted": null,
+        "taxes": null
+      }
+    },
+    {
+      "type": "tax",
+      "description": "Tax",
+      "pricing": {
+        "currency": "CHF",
+        "grossPrice": 20,
+        "netPrice": null,
+        "originalGrossPrice": null,
+        "grossPriceFormatted": "20.00",
         "netPriceFormatted": null,
         "originalGrossPriceFormatted": null,
         "taxes": null

@@ -1,0 +1,399 @@
+{
+  "id": "fea05d5b-80a3-4b1b-ad3f-17577e4df625",
+  "orderNumber": "100000124",
+  "channel": "demo_b2c",
+  "orderDate": "2019-04-05T19:14:11.000+0000",
+  "locale": "de_CH",
+  "status": "purchased",
+  "currency": "CHF",
+  "customer": {
+    "customerId": "95948e65-94a5-4cb0-b703-b1a33077d68e",
+    "customerNumber": "123",
+    "emailAddress": "test@astina.io",
+    "firstName": "Hans",
+    "lastName": "Muster",
+    "gender": "male",
+    "name": "Hans Muster"
+  },
+  "billing": {
+    "address": {
+      "title": "Herr",
+      "firstName": "Hans",
+      "lastName": "Muster",
+      "company": null,
+      "street": "Musterweg 1",
+      "zipCode": "8000",
+      "city": "Musterstadt",
+      "country": "CH",
+      "phoneNumber": "",
+      "emailAddress": "test@astina.io",
+      "remarks": "Hallo"
+    },
+    "paymentMethod": "invoice",
+    "accountNumber": null
+  },
+  "shipping": {
+    "address": {
+      "title": "Herr",
+      "firstName": "Hans2",
+      "lastName": "Muster",
+      "company": null,
+      "street": "Musterweg 1",
+      "zipCode": "8000",
+      "city": "Musterstadt",
+      "country": "CH",
+      "phoneNumber": "",
+      "emailAddress": "test@astina.io",
+      "remarks": "Hallo"
+    },
+    "addressReference": null,
+    "deliveryMethod": "swisspost_priority",
+    "targetDate": null
+  },
+  "items": [
+    {
+      "position": 1,
+      "sku": "6414242",
+      "code": "6414242",
+      "name": "Daily Adult Häppchen mit Pute & Ente",
+      "params": null,
+      "quantity": 1,
+      "unitPrice": "1.00",
+      "originalPrice": "1.00",
+      "taxAmount": "0.08",
+      "taxRate": "7.7 %",
+      "grossItemTotal": "1.00",
+      "netItemTotal": "0.92",
+      "image": {
+        "name": "f914fdfee99354ddda53ea1aca15e0399b20b329_d1ec8de4e67a8fcd7d0e8e1bb067cc2fad26574ad4734ce907d357bb.jpg",
+        "title": null,
+        "caption": null,
+        "set": null,
+        "sources": [
+          {
+            "size": "small",
+            "url": "https://demo.paloma.one/images/small/f/9/1/4/f914fdfee99354ddda53ea1aca15e0399b20b329_d1ec8de4e67a8fcd7d0e8e1bb067cc2fad26574ad4734ce907d357bb.jpg"
+          }
+        ]
+      },
+      "deliveryId": null,
+      "appliedAdjustments": [],
+      "inventoryState": "unknown"
+    },
+    {
+      "position": 2,
+      "sku": "6414538",
+      "code": "6414538",
+      "name": "Daily Adult Häppchen mit Forelle",
+      "params": null,
+      "quantity": 1,
+      "unitPrice": "1.00",
+      "originalPrice": "1.00",
+      "taxAmount": "0.08",
+      "taxRate": "7.7 %",
+      "grossItemTotal": "1.00",
+      "netItemTotal": "0.92",
+      "image": {
+        "name": "c5515afe9a4442d1f970cde6ad00bb457665ddbd_2d10c71d8df41de5669069655d027ba902d3970308927d023b7b70c0.jpg",
+        "title": null,
+        "caption": null,
+        "set": null,
+        "sources": [
+          {
+            "size": "small",
+            "url": "https://demo.paloma.one/images/small/c/5/5/1/c5515afe9a4442d1f970cde6ad00bb457665ddbd_2d10c71d8df41de5669069655d027ba902d3970308927d023b7b70c0.jpg"
+          }
+        ]
+      },
+      "deliveryId": null,
+      "appliedAdjustments": [],
+      "inventoryState": "unknown"
+    },
+    {
+      "position": 3,
+      "sku": "6414478",
+      "code": "6414478",
+      "name": "Daily Adult Häppchen mit Rind",
+      "params": null,
+      "quantity": 1,
+      "unitPrice": "1.00",
+      "originalPrice": "1.00",
+      "taxAmount": "0.08",
+      "taxRate": "7.7 %",
+      "grossItemTotal": "1.00",
+      "netItemTotal": "0.92",
+      "image": {
+        "name": "5bd9f6bb100928a2e4cd566a2111c908e7818cc2_739274e9c78a5e94d412be7383e52eba82c410f27fcf6b3d4909e94c.jpg",
+        "title": null,
+        "caption": null,
+        "set": null,
+        "sources": [
+          {
+            "size": "small",
+            "url": "https://demo.paloma.one/images/small/5/b/d/9/5bd9f6bb100928a2e4cd566a2111c908e7818cc2_739274e9c78a5e94d412be7383e52eba82c410f27fcf6b3d4909e94c.jpg"
+          }
+        ]
+      },
+      "deliveryId": null,
+      "appliedAdjustments": [],
+      "inventoryState": "unknown"
+    },
+    {
+      "position": 4,
+      "sku": "6414592",
+      "code": "6414592",
+      "name": "Daily Menu Mousse Pute",
+      "params": null,
+      "quantity": 1,
+      "unitPrice": "1.00",
+      "originalPrice": "1.00",
+      "taxAmount": "0.08",
+      "taxRate": "7.7 %",
+      "grossItemTotal": "1.00",
+      "netItemTotal": "0.92",
+      "image": {
+        "name": "51e7aa6b239aef208bd4dbd6797695752f395a07_25d4e2e21bbd3813493381cd0569c34ba554c46e42710cc514ecee2d.jpg",
+        "title": null,
+        "caption": null,
+        "set": null,
+        "sources": [
+          {
+            "size": "small",
+            "url": "https://demo.paloma.one/images/small/5/1/e/7/51e7aa6b239aef208bd4dbd6797695752f395a07_25d4e2e21bbd3813493381cd0569c34ba554c46e42710cc514ecee2d.jpg"
+          }
+        ]
+      },
+      "deliveryId": null,
+      "appliedAdjustments": [],
+      "inventoryState": "unknown"
+    },
+    {
+      "position": 5,
+      "sku": "6414268",
+      "code": "6414268",
+      "name": "Daily Adult Mousse Lachs",
+      "params": null,
+      "quantity": 1,
+      "unitPrice": "1.00",
+      "originalPrice": "1.00",
+      "taxAmount": "0.08",
+      "taxRate": "7.7 %",
+      "grossItemTotal": "1.00",
+      "netItemTotal": "0.92",
+      "image": {
+        "name": "f6096f6904373db37c0fe1f428db0057b4d4e3f1_163b9c7a4414e9cd77e4f8e3cba0a756c9fc4a1c0f6d906f09124b79.jpg",
+        "title": null,
+        "caption": null,
+        "set": null,
+        "sources": [
+          {
+            "size": "small",
+            "url": "https://demo.paloma.one/images/small/f/6/0/9/f6096f6904373db37c0fe1f428db0057b4d4e3f1_163b9c7a4414e9cd77e4f8e3cba0a756c9fc4a1c0f6d906f09124b79.jpg"
+          }
+        ]
+      },
+      "deliveryId": null,
+      "appliedAdjustments": [],
+      "inventoryState": "unknown"
+    },
+    {
+      "position": 6,
+      "sku": "6414350",
+      "code": "6414350",
+      "name": "Daily Adult Mousse Kaninchen",
+      "params": null,
+      "quantity": 1,
+      "unitPrice": "1.00",
+      "originalPrice": "1.00",
+      "taxAmount": "0.08",
+      "taxRate": "7.7 %",
+      "grossItemTotal": "1.00",
+      "netItemTotal": "0.92",
+      "image": {
+        "name": "dd4f3d678a3cc632d40487ffe4c64d03d83e86f1_142c449a24204b6403fd805f045344558ed542af9965c9baa4880131.jpg",
+        "title": null,
+        "caption": null,
+        "set": null,
+        "sources": [
+          {
+            "size": "small",
+            "url": "https://demo.paloma.one/images/small/d/d/4/f/dd4f3d678a3cc632d40487ffe4c64d03d83e86f1_142c449a24204b6403fd805f045344558ed542af9965c9baa4880131.jpg"
+          }
+        ]
+      },
+      "deliveryId": null,
+      "appliedAdjustments": [],
+      "inventoryState": "unknown"
+    },
+    {
+      "position": 7,
+      "sku": "6414424",
+      "code": "6414424",
+      "name": "Daily Adult Mousse Thun+Lachs",
+      "params": null,
+      "quantity": 1,
+      "unitPrice": "1.00",
+      "originalPrice": "1.00",
+      "taxAmount": "0.08",
+      "taxRate": "7.7 %",
+      "grossItemTotal": "1.00",
+      "netItemTotal": "0.92",
+      "image": {
+        "name": "505f6df51474113e7fb72220fe6d2161d81ddaec_a4fc29722caf76ff1d510f43318ae3c7e061ea8ea372a5bd502bbdb6.jpg",
+        "title": null,
+        "caption": null,
+        "set": null,
+        "sources": [
+          {
+            "size": "small",
+            "url": "https://demo.paloma.one/images/small/5/0/5/f/505f6df51474113e7fb72220fe6d2161d81ddaec_a4fc29722caf76ff1d510f43318ae3c7e061ea8ea372a5bd502bbdb6.jpg"
+          }
+        ]
+      },
+      "deliveryId": null,
+      "appliedAdjustments": [],
+      "inventoryState": "unknown"
+    },
+    {
+      "position": 8,
+      "sku": "6414389",
+      "code": "6414389",
+      "name": "Daily Adult Mousse mit Thunfisch & Huhn",
+      "params": null,
+      "quantity": 1,
+      "unitPrice": "1.00",
+      "originalPrice": "1.00",
+      "taxAmount": "0.08",
+      "taxRate": "7.7 %",
+      "grossItemTotal": "1.00",
+      "netItemTotal": "0.92",
+      "image": {
+        "name": "27af8e64cafaf472e5c107708cf8c0627a9e39a1_bb9e4d9aee1cbc299c35353101aa7227abdfa5958587ae2b39529d7f.jpg",
+        "title": null,
+        "caption": null,
+        "set": null,
+        "sources": [
+          {
+            "size": "small",
+            "url": "https://demo.paloma.one/images/small/2/7/a/f/27af8e64cafaf472e5c107708cf8c0627a9e39a1_bb9e4d9aee1cbc299c35353101aa7227abdfa5958587ae2b39529d7f.jpg"
+          }
+        ]
+      },
+      "deliveryId": null,
+      "appliedAdjustments": [],
+      "inventoryState": "unknown"
+    },
+    {
+      "position": 9,
+      "sku": "6414333",
+      "code": "6414333",
+      "name": "Daily Menu Mousse Ozeanfisch",
+      "params": null,
+      "quantity": 1,
+      "unitPrice": "1.00",
+      "originalPrice": "1.00",
+      "taxAmount": "0.08",
+      "taxRate": "7.7 %",
+      "grossItemTotal": "1.00",
+      "netItemTotal": "0.92",
+      "image": {
+        "name": "809ceca9701eff085b193a0016f5ef49a13e972e_5a561bf8387e00e29915ddfe26ab886cd09857934a5384bbec4d690a.jpg",
+        "title": null,
+        "caption": null,
+        "set": null,
+        "sources": [
+          {
+            "size": "small",
+            "url": "https://demo.paloma.one/images/small/8/0/9/c/809ceca9701eff085b193a0016f5ef49a13e972e_5a561bf8387e00e29915ddfe26ab886cd09857934a5384bbec4d690a.jpg"
+          }
+        ]
+      },
+      "deliveryId": null,
+      "appliedAdjustments": [],
+      "inventoryState": "unknown"
+    },
+    {
+      "position": 10,
+      "sku": "6414415",
+      "code": "6414415",
+      "name": "Daily Menu Mousse Huhn",
+      "params": null,
+      "quantity": 1,
+      "unitPrice": "1.00",
+      "originalPrice": "1.00",
+      "taxAmount": "0.08",
+      "taxRate": "7.7 %",
+      "grossItemTotal": "1.00",
+      "netItemTotal": "0.92",
+      "image": {
+        "name": "f39e77d9fb2b01df907d98c9aad7816acd698895_87ce8087f6457bbc6477659c4cf984cfddfb4457a0d549c4d8231133.jpg",
+        "title": null,
+        "caption": null,
+        "set": null,
+        "sources": [
+          {
+            "size": "small",
+            "url": "https://demo.paloma.one/images/full/f/3/9/e/f39e77d9fb2b01df907d98c9aad7816acd698895_87ce8087f6457bbc6477659c4cf984cfddfb4457a0d549c4d8231133.jpg"
+          }
+        ]
+      },
+      "deliveryId": null,
+      "appliedAdjustments": [],
+      "inventoryState": "unknown"
+    }
+  ],
+  "adjustments": [
+    {
+      "position": 1,
+      "type": "surcharge",
+      "name": "de: orders.minimum_amount_surcharge",
+      "quantity": 1,
+      "unitPrice": "40.00",
+      "taxAmount": "0.00",
+      "taxRate": "0 %",
+      "grossItemTotal": "40.00",
+      "netItemTotal": "40.00"
+    },
+    {
+      "position": 2,
+      "type": "shipping",
+      "name": "Priority Shipping",
+      "quantity": 1,
+      "unitPrice": "10.00",
+      "taxAmount": "0.72",
+      "taxRate": "7.7 %",
+      "grossItemTotal": "10.00",
+      "netItemTotal": "9.28"
+    },
+    {
+      "type": "discount",
+      "name": "Discount",
+      "grossItemTotal": "-1.00"
+    },
+    {
+      "type": "tax",
+      "name": "Tax",
+      "grossItemTotal": "1.00"
+    }
+  ],
+  "deliveries": [],
+  "pointOfSale": null,
+  "totals": {
+    "itemsTotal": "10.00",
+    "netItemsTotal": "9.20",
+    "shippingTotal": "10.00",
+    "taxTotal": null,
+    "discountTotal": null,
+    "surchargeTotal": "40.00",
+    "orderTotal": "60.00",
+    "netOrderTotal": "58.48",
+    "includedTaxes": [
+      {
+        "type": "vat",
+        "name": "MWSt.",
+        "rate": "7.7 %",
+        "amount": "1.52"
+      }
+    ]
+  }
+}

@@ -15,7 +15,7 @@ interface CartInterface
     function isEmpty(): bool;
 
     /**
-     * If an operation requires modification to the order that where not explicitly requested by the client,
+     * If an operation requires modification to the cart that where not explicitly requested by the client,
      * those modifications are listed here. Example: Item was removed because it is no longer available
      * @return CartModificationInterface[]
      */

@@ -2,7 +2,6 @@
 
 namespace Paloma\Shop\Customers;
 
-use Exception;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ServerException;
 use Paloma\Shop\Common\Address;
@@ -28,15 +27,31 @@ class Customers implements CustomersInterface
      */
     private $validator;
 
-    public function __construct(PalomaClientInterface $client, ValidatorInterface $validator)
+    /**
+     * @var UserProviderInterface
+     */
+    private $userProvider;
+
+    public function __construct(UserProviderInterface $userProvider, PalomaClientInterface $client, ValidatorInterface $validator)
     {
         $this->client = $client;
         $this->validator = $validator;
+        $this->userProvider = $userProvider;
     }
 
+    /**
+     * @return string Customer Id
+     * @throws NotAuthenticated
+     */
     protected function getCustomerId(): string
     {
-        return 'TODO'; // TODO implement
+        $user = $this->userProvider->getUser();
+
+        if ($user === null) {
+            throw new NotAuthenticated();
+        }
+
+        return $user->getCustomerId();
     }
 
     function registerCustomer(CustomerDraftInterface $draft): CustomerInterface
@@ -73,23 +88,19 @@ class Customers implements CustomersInterface
 
     function getCustomer(): CustomerInterface
     {
-        // TODO throw NotAuthenticated
-
         try {
 
             $data = $this->client->customers()->getCustomer($this->getCustomerId());
 
             return new Customer($data);
 
-        }  catch (ServerException $se) {
+        } catch (ServerException $se) {
             throw new BackendUnavailable();
         }
     }
 
     function updateCustomer(CustomerUpdateInterface $update): CustomerInterface
     {
-        // TODO throw NotAuthenticated
-
         $validation = $this->validator->validate($update);
         if ($validation->count() > 0) {
             throw new InvalidInput($validation);
@@ -117,8 +128,6 @@ class Customers implements CustomersInterface
 
     function updateAddress(AddressUpdateInterface $update): AddressInterface
     {
-        // TODO throw NotAuthenticated
-
         $validation = $this->validator->validate($update);
         if ($validation->count() > 0) {
             throw new InvalidInput($validation);
@@ -154,110 +163,169 @@ class Customers implements CustomersInterface
 
     function confirmEmailAddress(string $confirmationToken): UserDetailsInterface
     {
-        $this->client->customers()->confirmEmailAddress($confirmationToken);
+        try {
+
+            $this->client->customers()->confirmEmailAddress($confirmationToken);
+
+            return $this->userProvider->getUser();
+
+        } catch (ServerException $se) {
+            throw new BackendUnavailable();
+        } catch (BadResponseException $se) {
+            throw new InvalidConfirmationToken();
+        }
     }
 
-    /**
-     * @param string $emailAddress
-     * @return bool True if a customer exists with the given email address
-     * @throws NotAuthenticated
-     * @throws BackendUnavailable
-     */
     function existsCustomerByEmailAddress(string $emailAddress): bool
     {
-        // TODO: Implement existsCustomerByEmailAddress() method.
+        try {
+
+            $this->client->customers()->exists($emailAddress);
+
+            return true;
+
+        } catch (ServerException $se) {
+            throw new BackendUnavailable();
+        } catch (BadResponseException $se) {
+            return false;
+        }
     }
 
-    /**
-     * @param string $username
-     * @param string $password
-     * @return UserDetailsInterface
-     * @throws BadCredentials
-     * @throws BackendUnavailable
-     */
     function authenticate(string $username, string $password): UserDetailsInterface
     {
-        // TODO: Implement authenticate() method.
+        try {
+
+            $data = $this->client->customers()->authenticateUser($username, $password);
+
+            return new UserDetails($data);
+
+        } catch (ServerException $se) {
+            throw new BackendUnavailable();
+        } catch (BadResponseException $se) {
+            throw new BadCredentials();
+        }
     }
 
-    /**
-     * @param string $currentPassword
-     * @param string $newPassword
-     * @return UserDetailsInterface
-     * @throws NotAuthenticated
-     * @throws BadCredentials
-     * @throws BackendUnavailable
-     */
-    function updatePassword(string $currentPassword, string $newPassword): UserDetailsInterface
+    function updatePassword(PasswordUpdateInterface $update): UserDetailsInterface
     {
-        // TODO: Implement updatePassword() method.
+        $validation = $this->validator->validate($update);
+        if ($validation->count() > 0) {
+            throw new InvalidInput($validation);
+        }
+
+        try {
+
+            $data = $this->client->customers()->updateUserPassword([
+                'username' => $this->userProvider->getUser()->getUsername(),
+                'currentPassword' => $update->getCurrentPassword(),
+                'newPassword' => $update->getNewPassword(),
+            ]);
+
+            return new UserDetails($data);
+
+        } catch (ServerException $se) {
+            throw new BackendUnavailable();
+        } catch (BadResponseException $bre) {
+            if ($bre->getCode() === 403) {
+                throw new BadCredentials();
+            }
+            throw new InvalidInput(); // TODO validation info
+        }
     }
 
-    /**
-     * If the email address belongs to a known user, an email with a confirmation link is sent to the user.
-     *
-     * @param string $emailAddress
-     * @throws NotAuthenticated
-     * @throws InvalidInput
-     * @throws BackendUnavailable
-     */
-    function startPasswordReset(string $emailAddress): void
+    function startPasswordReset(PasswordResetDraftInterface $draft): void
     {
-        // TODO: Implement startPasswordReset() method.
+        $validation = $this->validator->validate($draft);
+        if ($validation->count() > 0) {
+            throw new InvalidInput($validation);
+        }
+
+        try {
+
+            $this->client->customers()->startUserPasswordReset(
+                $draft->getEmailAddress(),
+                $draft->getConfirmationBaseUrl()
+            );
+
+        } catch (ServerException $se) {
+            throw new BackendUnavailable();
+        } catch (BadResponseException $bre) {
+            throw new InvalidInput();
+        }
     }
 
-    /**
-     * @param string $resetToken
-     * @return bool True if the password reset token is valid
-     * @throws NotAuthenticated
-     * @throws BackendUnavailable
-     */
     function existsPasswordResetToken(string $resetToken): bool
     {
-        // TODO: Implement existsPasswordResetToken() method.
+        try {
+
+            $this->client->customers()->getUserPasswordResetToken($resetToken);
+
+            return true;
+
+        } catch (ServerException $se) {
+            throw new BackendUnavailable();
+        } catch (BadResponseException $bre) {
+            return false;
+        }
     }
 
-    /**
-     * @param string $resetToken
-     * @param string $newPassword
-     * @return UserDetailsInterface
-     * @throws NotAuthenticated
-     * @throws InvalidInput
-     * @throws InvalidConfirmationToken
-     * @throws BackendUnavailable
-     */
-    function updatePasswordWithResetToken(string $resetToken, string $newPassword): UserDetailsInterface
+        function updatePasswordWithResetToken(PasswordResetInterface $passwordReset): UserDetailsInterface
     {
-        // TODO: Implement updatePasswordWithResetToken() method.
+        $validation = $this->validator->validate($passwordReset);
+        if ($validation->count() > 0) {
+            throw new InvalidInput($validation);
+        }
+
+        try {
+
+            $data = $this->client->customers()->finishUserPasswordReset(
+                $passwordReset->getToken(),
+                $passwordReset->getNewPassword());
+
+            return new UserDetails($data);
+
+        } catch (ServerException $se) {
+            throw new BackendUnavailable();
+        } catch (BadResponseException $bre) {
+            throw new InvalidConfirmationToken();
+        }
     }
 
-    /**
-     * Returns the customer's purchased orders, sorted date.
-     *
-     * @param int $page
-     * @param int $size
-     * @param bool $orderDesc
-     * @return OrderPageInterface
-     * @throws NotAuthenticated
-     * @throws InvalidInput
-     * @throws BackendUnavailable
-     */
     function getOrders(int $page = 0, int $size = 5, bool $orderDesc = true): OrderPageInterface
     {
-        // TODO: Implement getOrders() method.
+        try {
+
+            $data = $this->client->customers()->getOrders(
+                $this->getCustomerId(),
+                $page,
+                $size,
+                $orderDesc ? 'orderDate,desc' : 'orderDate,asc'
+            );
+
+            return new OrderPage($data);
+
+        } catch (ServerException $se) {
+            throw new BackendUnavailable();
+        } catch (BadResponseException $bre) {
+            throw new InvalidInput();
+        }
     }
 
-    /**
-     * Returns the customer's purchased order for the given order number.
-     *
-     * @param string $orderNumber
-     * @return OrderInterface
-     * @throws NotAuthenticated
-     * @throws OrderNotFound
-     * @throws BackendUnavailable
-     */
     function getOrder(string $orderNumber): OrderInterface
     {
-        // TODO: Implement getOrder() method.
+        try {
+
+            $data = $this->client->customers()->getOrder(
+                $this->getCustomerId(),
+                $orderNumber
+            );
+
+            return new Order($data);
+
+        } catch (ServerException $se) {
+            throw new BackendUnavailable();
+        } catch (BadResponseException $bre) {
+            throw new OrderNotFound();
+        }
     }
 }

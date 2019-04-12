@@ -54,7 +54,6 @@ interface CustomersInterface
     /**
      * @param string $confirmationToken
      * @return UserDetailsInterface
-     * @throws NotAuthenticated
      * @throws InvalidConfirmationToken
      * @throws BackendUnavailable
      */
@@ -63,7 +62,6 @@ interface CustomersInterface
     /**
      * @param string $emailAddress
      * @return bool True if a customer exists with the given email address
-     * @throws NotAuthenticated
      * @throws BackendUnavailable
      */
     function existsCustomerByEmailAddress(string $emailAddress): bool;
@@ -78,23 +76,23 @@ interface CustomersInterface
     function authenticate(string $username, string $password): UserDetailsInterface;
 
     /**
-     * @param string $currentPassword
-     * @param string $newPassword
+     * @param PasswordUpdateInterface $update
      * @return UserDetailsInterface
      * @throws NotAuthenticated
      * @throws BadCredentials
+     * @throws InvalidInput
      * @throws BackendUnavailable
      */
-    function updatePassword(string $currentPassword, string $newPassword): UserDetailsInterface;
+    function updatePassword(PasswordUpdateInterface $update): UserDetailsInterface;
 
     /**
      * If the email address belongs to a known user, an email with a confirmation link is sent to the user.
      *
-     * @param string $emailAddress
+     * @param PasswordResetDraftInterface $draft
      * @throws InvalidInput
      * @throws BackendUnavailable
      */
-    function startPasswordReset(string $emailAddress): void;
+    function startPasswordReset(PasswordResetDraftInterface $draft): void;
 
     /**
      * @param string $resetToken
@@ -104,14 +102,13 @@ interface CustomersInterface
     function existsPasswordResetToken(string $resetToken): bool;
 
     /**
-     * @param string $resetToken
-     * @param string $newPassword
+     * @param PasswordResetInterface $passwordReset
      * @return UserDetailsInterface
      * @throws InvalidInput
      * @throws InvalidConfirmationToken
      * @throws BackendUnavailable
      */
-    function updatePasswordWithResetToken(string $resetToken, string $newPassword): UserDetailsInterface;
+    function updatePasswordWithResetToken(PasswordResetInterface $passwordReset): UserDetailsInterface;
 
     /**
      * Returns the customer's purchased orders, sorted date.

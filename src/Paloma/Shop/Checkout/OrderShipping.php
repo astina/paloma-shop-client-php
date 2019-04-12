@@ -9,6 +9,14 @@ class OrderShipping implements OrderShippingInterface
 {
     private $data;
 
+    public static function ofCartData(array $data)
+    {
+        return new OrderShipping([
+            'address' => $data['shippingAddress'],
+            'deliveryMethod' => $data['shippingMethod']['name'],
+        ]);
+    }
+
     public function __construct(array $data)
     {
         $this->data = $data;

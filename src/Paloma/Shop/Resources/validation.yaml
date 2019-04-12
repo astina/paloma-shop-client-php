@@ -42,9 +42,30 @@ Paloma\Shop\Customers\CustomerDraft:
       - Length: { max: 30 }
     lastName:
       - Length: { max: 30 }
-
+    locale:
+      - NotBlank: ~
+      - Length: { min: 2, max: 5 }
+    gender:
+      - NotBlank: ~
+      - Choice: [ female, male, unknown ]
 
 Paloma\Shop\Customers\CustomerUpdate:
+  properties:
+    emailAddress:
+      - NotBlank: ~
+      - Email: ~
+    firstName:
+      - Length: { max: 30 }
+    lastName:
+      - Length: { max: 30 }
+    locale:
+      - NotBlank: ~
+      - Length: { min: 2, max: 5 }
+    gender:
+      - NotBlank: ~
+      - Choice: [ female, male, unknown ]
+
+Paloma\Shop\Customers\AddressUpdate:
   properties:
     addressType:
       - NotBlank: ~
@@ -55,3 +76,25 @@ Paloma\Shop\Customers\CustomerUpdate:
       - Length: { max: 30 }
     lastName:
       - Length: { max: 30 }
+
+Paloma\Shop\Customers\PasswordUpdate:
+  properties:
+    currentPassword:
+      - NotBlank: ~
+    newPassword:
+      - NotBlank: ~
+      - Length: { min: 6, max: 1024 }
+
+Paloma\Shop\Customers\PasswordResetDraft:
+  properties:
+    emailAddress:
+      - NotBlank: ~
+      - Email: ~
+
+Paloma\Shop\Customers\PasswordReset:
+  properties:
+    token:
+      - NotBlank: ~
+    newPassword:
+      - NotBlank: ~
+      - Length: { min: 6, max: 1024 }

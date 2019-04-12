@@ -9,6 +9,14 @@ class OrderBilling implements OrderBillingInterface
 {
     private $data;
 
+    public static function ofCartData(array $data)
+    {
+        return new OrderBilling([
+            'address' => $data['billingAddress'],
+            'paymentMethod' => $data['paymentMethod']['name'],
+        ]);
+    }
+
     public function __construct(array $data)
     {
         $this->data = $data;

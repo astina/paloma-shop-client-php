@@ -29,4 +29,9 @@ class Price implements PriceInterface
     {
         return true; // TODO
     }
+
+    function getCurrency(): string
+    {
+        return $this->data['currency'];
+    }
 }

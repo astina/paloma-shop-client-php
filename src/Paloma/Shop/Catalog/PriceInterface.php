@@ -2,11 +2,7 @@
 
 namespace Paloma\Shop\Catalog;
 
-interface PriceInterface
+interface PriceInterface extends \Paloma\Shop\Common\PriceInterface
 {
-    function getPrice(): string;
 
-    function getTaxRate(): string;
-
-    function isTaxIncluded(): bool;
 }

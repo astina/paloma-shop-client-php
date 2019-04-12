@@ -2,29 +2,41 @@
 
 namespace Paloma\Shop\Customers;
 
+use InvalidArgumentException;
+
 class UserDetails implements UserDetailsInterface
 {
-    /**
-     * @return string Username
-     */
+    private $data;
+
+    public function __construct(array $data)
+    {
+        if (!isset($data['user'])) {
+            throw new InvalidArgumentException('user data missing');
+        }
+        if (!isset($data['customer'])) {
+            throw new InvalidArgumentException('customer data missing');
+        }
+
+        $this->data = $data;
+    }
+
     function getUsername(): string
     {
-        // TODO: Implement getUsername() method.
+        return $this->data['user']['username'];
     }
 
-    /**
-     * @return string User ID
-     */
     function getUserId(): string
     {
-        // TODO: Implement getUserId() method.
+        return $this->data['user']['id'];
     }
 
-    /**
-     * @return CustomerBasicsInterface
-     */
+    function getCustomerId(): string
+    {
+        return $this->data['customer']['id'];
+    }
+
     function getCustomer(): CustomerBasicsInterface
     {
-        // TODO: Implement getCustomer() method.
+        return new CustomerBasics($this->data['customer']);
     }
 }

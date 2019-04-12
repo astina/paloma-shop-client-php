@@ -29,4 +29,9 @@ class PalomaTestClient extends PalomaClient
     {
         return new PalomaTestClient($this->catalog(), $checkoutClient, $this->customers());
     }
+
+    public function withCustomers(CustomersClientInterface $customersClient)
+    {
+        return new PalomaTestClient($this->catalog(), $this->checkout(), $customersClient);
+    }
 }

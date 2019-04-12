@@ -2,66 +2,152 @@
 
 namespace Paloma\Shop\Customers;
 
+use Exception;
+
 class CustomersTestClient implements CustomersClientInterface
 {
+    private $customer = [
+        'id' => '2',
+        'contactAddress' => [
+
+        ],
+        'billingAddress' => [
+
+        ],
+        'shippingAddress' => [
+
+        ],
+    ];
+
+    private $user = [
+        'id' => '1',
+        'username' => 'user',
+    ];
+
+    private $exception;
+
+    public function __construct(Exception $exception = null)
+    {
+        $this->exception = $exception;
+    }
 
     function register($customer)
     {
-        // TODO: Implement register() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return $this->customer;
     }
 
     function getCustomer($customerId)
     {
-        // TODO: Implement getCustomer() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return $this->customer;
     }
 
     function updateCustomer($customerId, $customer)
     {
-        // TODO: Implement updateCustomer() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return $this->customer;
     }
 
     function updateAddress($customerId, $addressType, $address)
     {
-        // TODO: Implement updateAddress() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return $this->customer;
     }
 
     function confirmEmailAddress($token)
     {
-        // TODO: Implement confirmEmailAddress() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return $this->customer;
     }
 
     function exists($emailAddress)
     {
-        // TODO: Implement exists() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return true;
     }
 
     function authenticateUser($username, $password)
     {
-        // TODO: Implement authenticateUser() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return [
+            'user' => $this->user,
+            'customer' => $this->customer,
+        ];
     }
 
     function updateUserPassword($password)
     {
-        // TODO: Implement updateUserPassword() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return [
+            'user' => $this->user,
+            'customer' => $this->customer,
+        ];
     }
 
     function startUserPasswordReset($emailAddress, $confirmationBaseUrl)
     {
-        // TODO: Implement startUserPasswordReset() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
     }
 
     function getUserPasswordResetToken($token)
     {
-        // TODO: Implement getUserPasswordResetToken() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return [
+            'user' => '1',
+            'emailAddress' => 'test@astina.io',
+            'token' => 'token',
+            'confirmationUrl' => 'https://test',
+            'expires' => null,
+        ];
     }
 
     function finishUserPasswordReset($token, $password)
     {
-        // TODO: Implement finishUserPasswordReset() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return [
+            'user' => $this->user,
+            'customer' => $this->customer,
+        ];
     }
 
     function updateAdvertisingPreferences($customerId, $advertisingPrefs)
     {
+        if ($this->exception) {
+            throw $this->exception;
+        }
         // TODO: Implement updateAdvertisingPreferences() method.
     }
 
@@ -87,12 +173,25 @@ class CustomersTestClient implements CustomersClientInterface
 
     function getOrders($customerId, $pageNr = null, $pageSize = null, $sortOrder = null)
     {
-        // TODO: Implement getOrders() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return [
+            'content' => [],
+        ];
     }
 
     function getOrder($customerId, $orderNr)
     {
-        // TODO: Implement getOrder() method.
+        if ($this->exception) {
+            throw $this->exception;
+        }
+
+        return [
+            'id' => '123',
+            'orderNumber' => 'order1',
+        ];
     }
 
     function getOrderReceipt($customerId, $orderNr)

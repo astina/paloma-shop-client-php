@@ -15,6 +15,11 @@ interface UserDetailsInterface
     function getUserId(): string;
 
     /**
+     * @return string Customer ID
+     */
+    function getCustomerId(): string;
+
+    /**
      * @return CustomerBasicsInterface
      */
     function getCustomer(): CustomerBasicsInterface;

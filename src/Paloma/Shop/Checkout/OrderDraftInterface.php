@@ -14,6 +14,13 @@ interface OrderDraftInterface
     function getItems(): array;
 
     /**
+     * If an operation requires modification to the order that where not explicitly requested by the client,
+     * those modifications are listed here. Example: Item was removed because it is no longer available
+     * @return OrderDraftModificationInterface[]
+     */
+    function getModifications(): array;
+
+    /**
      * @return string Total price for all items as formatted string including currency symbol (e.g. "CHF 12.80")
      */
     function getItemsPrice(): string;
@@ -29,11 +36,11 @@ interface OrderDraftInterface
     function getReductions(): array;
 
     /**
-     * Returns a list of taxes being added additionally
+     * Returns a list of surcharges (e.g. taxes) being added additionally
      *
      * @return OrderAdjustmentInterface[]
      */
-    function getTaxes(): array;
+    function getSurcharges(): array;
 
     /**
      * @return string Total price for the order as formatted string including currency symbol (e.g. "CHF 12.80")

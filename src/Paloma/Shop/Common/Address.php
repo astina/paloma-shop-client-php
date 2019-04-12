@@ -4,27 +4,27 @@ namespace Paloma\Shop\Common;
 
 class Address implements AddressInterface
 {
-    private $title;
+    protected $title;
 
-    private $firstName;
+    protected $firstName;
 
-    private $lastName;
+    protected $lastName;
 
-    private $company;
+    protected $company;
 
-    private $street;
+    protected $street;
 
-    private $zipCode;
+    protected $zipCode;
 
-    private $city;
+    protected $city;
 
-    private $country;
+    protected $country;
 
-    private $phoneNumber;
+    protected $phoneNumber;
 
-    private $emailAddress;
+    protected $emailAddress;
 
-    private $remarks;
+    protected $remarks;
 
     public static function ofData($data)
     {
