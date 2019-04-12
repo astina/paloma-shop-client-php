@@ -10,6 +10,16 @@ interface CartInterface
     function getItems(): array;
 
     /**
+     * @return int Cart items count
+     */
+    function itemsCount(): int;
+
+    /**
+     * @return int Number of cart items times quantities
+     */
+    function unitsCount(): int;
+
+    /**
      * @return bool True if the cart contains no items
      */
     function isEmpty(): bool;

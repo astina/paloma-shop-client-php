@@ -28,6 +28,24 @@ class Cart implements CartInterface
         }, $this->data['items'] ?? []);
     }
 
+    /**
+     * @return int Cart items count
+     */
+    function itemsCount(): int
+    {
+        return count($this->data['items'] ?? []);
+    }
+
+    /**
+     * @return int Number of cart items times quantities
+     */
+    function unitsCount(): int
+    {
+        return array_reduce($this->getItems(), function($carry, CartItemInterface $item) {
+            return $carry + $item->getQuantity();
+        }, 0);
+    }
+
     function isEmpty(): bool
     {
         return count($this->data['items'] ?? []) === 0;
