@@ -22,7 +22,7 @@ interface CategoryInterface
     /**
      * @return string Parent category code
      */
-    function getParentCategoryCode(): string;
+    function getParentCategoryCode(): ?string;
 
     /**
      * @return CategoryInterface[] Optional: list of child categories

@@ -26,7 +26,7 @@ class Category implements CategoryInterface
         return $this->data['slug'];
     }
 
-    function getParentCategoryCode(): string
+    function getParentCategoryCode(): ?string
     {
         return $this->data['parent'];
     }
