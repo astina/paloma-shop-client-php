@@ -23,7 +23,7 @@ interface AddressInterface
 
     function getCity(): ?string;
 
-    function getCountry(): string;
+    function getCountry(): ?string;
 
     function getPhoneNumber(): ?string;
 

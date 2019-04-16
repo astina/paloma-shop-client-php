@@ -27,10 +27,10 @@ interface FilterAggregateInterface
     /**
      * @return float Optional: minimum value (for numeric properties)
      */
-    function getMin(): float;
+    function getMin(): ?float;
 
     /**
      * @return float Optional: maximum value (for numeric properties)
      */
-    function getMax(): float;
+    function getMax(): ?float;
 }

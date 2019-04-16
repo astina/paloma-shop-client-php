@@ -18,10 +18,10 @@ interface SearchFilterInterface
     /**
      * @return float Greater-than or equal to. Only applicable for numeric filter values.
      */
-    function getGreaterThan(): float;
+    function getGreaterThan(): ?float;
 
     /**
      * @return float Less-than or equal to. Only applicable for numeric filter values.
      */
-    function getLessThan(): float;
+    function getLessThan(): ?float;
 }

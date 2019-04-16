@@ -70,6 +70,11 @@ class CatalogTestClient implements CatalogClientInterface
         return $this->search([ 'query' => $itemNumber ]);
     }
 
+    function purchasedTogether($itemNumber)
+    {
+        return $this->search([ 'query' => $itemNumber ]);
+    }
+
     function recommendations($order, $size = null)
     {
         return $this->search([]);

@@ -28,12 +28,20 @@ class ProductPage extends Page implements ProductPageInterface
         }, $this->data['content']);
     }
 
-    function getFilterAggregates(): array
+    function getFilterAggregates(): ?array
     {
-        return isset($this->data['filterAggregates'])
-            ? array_map(function ($elem) {
+        $field = isset($this->data['filterAggregates'])
+            ? 'filterAggregates'
+            : (isset($this->data['aggregates'])
+                ? 'aggregates'
+                : null);
+
+        if (!$field) {
+            return null;
+        }
+
+        return array_map(function($elem) {
                 return new FilterAggregate($elem);
-            }, $this->data['filterAggregates'])
-            : null;
+            }, $this->data[$field]);
     }
 }

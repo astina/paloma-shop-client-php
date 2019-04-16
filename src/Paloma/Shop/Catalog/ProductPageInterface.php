@@ -14,5 +14,5 @@ interface ProductPageInterface extends PageInterface
     /**
      * @return FilterAggregateInterface[]
      */
-    function getFilterAggregates(): array;
+    function getFilterAggregates(): ?array;
 }

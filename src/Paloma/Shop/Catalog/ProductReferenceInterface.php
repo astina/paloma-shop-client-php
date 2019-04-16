@@ -22,10 +22,10 @@ interface ProductReferenceInterface
     /**
      * @return CategoryReferenceInterface One of the categories this product is in
      */
-    function getCategory(): CategoryReferenceInterface;
+    function getCategory(): ?CategoryReferenceInterface;
 
     /**
      * @return CategoryReferenceInterface Top-level ancestor of the category (from getCategory())
      */
-    function getMainCategory(): CategoryReferenceInterface;
+    function getMainCategory(): ?CategoryReferenceInterface;
 }

@@ -23,6 +23,6 @@ class CategoryReference implements CategoryReferenceInterface
 
     function getSlug(): string
     {
-        return $this->data['slug'];
+        return $this->data['slug'] ?? '';
     }
 }

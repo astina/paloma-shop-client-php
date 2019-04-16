@@ -15,13 +15,13 @@ class SearchSuggestions implements SearchSuggestionsInterface
     {
         return array_map(function($elem) {
             return new CategoryReference($elem);
-        }, $this->data['categories']);
+        }, ($this->data['categories'] ?? []));
     }
 
     function getProducts(): array
     {
         return array_map(function($elem) {
             return new ProductReference($elem);
-        }, $this->data['products']);
+        }, ($this->data['products'] ?? []));
     }
 }

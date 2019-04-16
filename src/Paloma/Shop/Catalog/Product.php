@@ -34,12 +34,12 @@ class Product implements ProductInterface
         return $this->data['slug'];
     }
 
-    function getDescription(): string
+    function getDescription(): ?string
     {
         return $this->data['description'];
     }
 
-    function getShortDescription(): string
+    function getShortDescription(): ?string
     {
         return $this->data['shortDescription'];
     }
@@ -49,7 +49,7 @@ class Product implements ProductInterface
         return $this->getVariants()[0]->getPrice();
     }
 
-    function getOriginalBasePrice(): string
+    function getOriginalBasePrice(): ?string
     {
         return $this->getVariants()[0]->getOriginalPrice();
     }

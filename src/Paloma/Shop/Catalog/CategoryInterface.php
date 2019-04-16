@@ -27,10 +27,10 @@ interface CategoryInterface
     /**
      * @return CategoryInterface[] Optional: list of child categories
      */
-    function getSubCategories(): array;
+    function getSubCategories(): ?array;
 
     /**
      * @return FilterAggregateInterface[] Optional: list of filter aggregates
      */
-    function getFilterAggregates(): array;
+    function getFilterAggregates(): ?array;
 }

@@ -8,6 +8,9 @@ class SearchRequest implements SearchRequestInterface
 
     private $query;
 
+    /**
+     * @var SearchFilterInterface[]
+     */
     private $filters;
 
     private $includeFilterAggregates;
@@ -41,12 +44,32 @@ class SearchRequest implements SearchRequestInterface
     {
         $this->category = $category;
         $this->query = $query;
-        $this->filters = $filters;
+        $this->filters = $this->createFilters($filters);
         $this->includeFilterAggregates = $includeFilterAggregates;
         $this->page = $page;
         $this->size = $size;
         $this->sort = $sort ?? ($category ? 'position' : 'relevance');
         $this->orderDesc = $orderDesc;
+    }
+
+    private function createFilters(array $data)
+    {
+        if (count($data) === 0) {
+            return [];
+        }
+
+        if ($data[0] instanceof SearchFilterInterface) {
+            return $data; // Trust that all items implement this interface
+        }
+
+        return array_map(function($filter) {
+            return new SearchFilter(
+                $filter['name'] ?? $filter['property'],
+                $filter['values'] ?? [],
+                $filter['greaterThan'] ?? null,
+                $filter['lessThan'] ?? null
+            );
+        }, $data);
     }
 
     function getCategory(): ?string

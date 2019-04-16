@@ -79,7 +79,7 @@ abstract class BaseClient
         $headers = [ 'x-api-key' => $options['api_key'] ];
 
         if (!empty($options['trace_id'])) {
-            if (!preg_match('/^[a-z0-9]{8}$/', $options['trace_id'])) {
+            if (!preg_match('/^[a-z0-9]{8,12}$/', $options['trace_id'])) {
                 throw new \Exception('Invalid trace ID: ' . $options['trace_id']);
             }
             $headers['x-astina-trace-id'] = $options['trace_id'];

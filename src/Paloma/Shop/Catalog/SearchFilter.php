@@ -18,7 +18,7 @@ class SearchFilter implements SearchFilterInterface
      * @param float $greaterThan
      * @param float $lessThan
      */
-    public function __construct(string $name, array $values, float $greaterThan = null, float $lessThan = null)
+    public function __construct(string $name, array $values = [], float $greaterThan = null, float $lessThan = null)
     {
         $this->name = $name;
         $this->values = array_values($values);
@@ -37,12 +37,12 @@ class SearchFilter implements SearchFilterInterface
         return $this->values;
     }
 
-    function getGreaterThan(): float
+    function getGreaterThan(): ?float
     {
         return $this->greaterThan;
     }
 
-    function getLessThan(): float
+    function getLessThan(): ?float
     {
         return $this->lessThan;
     }

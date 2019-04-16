@@ -26,7 +26,7 @@ interface ProductVariantInterface
     /**
      * @return string If the price is reduced, this property holds the original price.
      */
-    function getOriginalPrice(): string;
+    function getOriginalPrice(): ?string;
 
     /**
      * @return string Tax rate, formatted with percent sign (e.g. "7.7 %")

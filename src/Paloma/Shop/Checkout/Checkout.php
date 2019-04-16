@@ -209,7 +209,7 @@ class Checkout implements CheckoutInterface
         } catch (ServerException $se) {
             throw new BackendUnavailable();
         } catch (BadResponseException $be) {
-            if ($be->getCode() === 404) {
+            if ($be->getCode() === 404 || $targetDate == null) {
                 throw new UnknownShippingMethod();
             }
             throw new InvalidShippingTargetDate();
@@ -353,23 +353,17 @@ class Checkout implements CheckoutInterface
         }
     }
 
-    private function toAddressArray(AddressInterface $address)
+    private function toAddressArray(?AddressInterface $address)
     {
         return Address::toAddressArray($address);
     }
 
-    /**
-     * @return CheckoutOrder
-     */
-    public function getCheckoutOrder(): CheckoutOrder
+    private function getCheckoutOrder(): CheckoutOrder
     {
         return $this->getCheckout()->checkoutOrder();
     }
 
-    /**
-     * @return CheckoutClientInterface
-     */
-    public function getCheckout(): CheckoutClientInterface
+    private function getCheckout(): CheckoutClientInterface
     {
         return $this->client->checkout();
     }

@@ -58,6 +58,14 @@ interface CatalogInterface
     function getRecommendedProducts(string $itemNumber): ProductPageInterface;
 
     /**
+     * @param string $itemNumber
+     * @return ProductPageInterface Products purchased together with this product
+     * @throws ProductNotFound
+     * @throws BackendUnavailable
+     */
+    function getPurchasedTogether(string $itemNumber): ProductPageInterface;
+
+    /**
      * @param int $size Maximum number of results (default: 5)
      * @return ProductPageInterface Product recommendations for the contents of the current shopping cart
      * @throws BackendUnavailable

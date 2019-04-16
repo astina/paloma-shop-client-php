@@ -26,12 +26,12 @@ interface ProductInterface
     /**
      * @return string Product description
      */
-    function getDescription(): string;
+    function getDescription(): ?string;
 
     /**
      * @return string Short version of the product description
      */
-    function getShortDescription(): string;
+    function getShortDescription(): ?string;
 
     /**
      * @return string Price for one unit of the first variant of this product as formatted string including currency symbol (e.g. "CHF 12.80")
@@ -41,7 +41,7 @@ interface ProductInterface
     /**
      * @return string If the base price is reduced, this property holds the original price.
      */
-    function getOriginalBasePrice(): string;
+    function getOriginalBasePrice(): ?string;
 
     /**
      * @return string Tax rate, formatted with percent sign (e.g. "7.7 %")

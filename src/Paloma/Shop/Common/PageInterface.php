@@ -42,7 +42,7 @@ interface PageInterface
     /**
      * @return string Sort property
      */
-    function getSort(): string;
+    function getSort(): ?string;
 
     /**
      * @return bool If results are in descending order

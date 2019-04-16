@@ -26,14 +26,16 @@ class ProductReference implements ProductReferenceInterface
         return $this->data['slug'];
     }
 
-    function getCategory(): CategoryReferenceInterface
+    function getCategory(): ?CategoryReferenceInterface
     {
-        return new CategoryReference($this->data['category']);
+        return isset($this->data['category']) && isset($this->data['category']['code'])
+            ? new CategoryReference($this->data['category'])
+            : null;
     }
 
     function getMainCategory(): CategoryReferenceInterface
     {
-        return $this->data['mainCategory']
+        return isset($this->data['mainCategory']) && isset($this->data['mainCategory']['code'])
             ? new CategoryReference($this->data['mainCategory'])
             : null;
     }

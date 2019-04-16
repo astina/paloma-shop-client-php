@@ -31,10 +31,12 @@ class Catalog implements CatalogInterface
                 'query' => $searchRequest->getQuery(),
                 'page' => max(0, $searchRequest->getPage()),
                 'size' => min(100, $searchRequest->getSize()),
-                'filters' => array_map(function (SearchFilterInterface $filter) {
+                'filters' => array_map(function(SearchFilterInterface $filter) {
                         return [
                             'property' => $filter->getName(), // Filter name can be used here
                             'values' => array_values($filter->getValues()),
+                            'greaterThan' => $filter->getGreaterThan(),
+                            'lessThan' => $filter->getLessThan(),
                         ];
                     }, $searchRequest->getFilters()),
                 'filterAggregates' => $searchRequest->includeFilterAggregates(),
@@ -117,6 +119,11 @@ class Catalog implements CatalogInterface
             }
             throw $bre;
         }
+    }
+
+    function getPurchasedTogether(string $itemNumber): ProductPageInterface
+    {
+        // TODO implement
     }
 
     function getProductsForCart($size = 5): ProductPageInterface

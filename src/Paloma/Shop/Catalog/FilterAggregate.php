@@ -33,13 +33,13 @@ class FilterAggregate implements FilterAggregateInterface
         }, $this->data['values']);
     }
 
-    function getMin(): float
+    function getMin(): ?float
     {
-        return (float) $this->data['min'];
+        return isset($this->data['min']) ? (float) $this->data['min'] : null;
     }
 
-    function getMax(): float
+    function getMax(): ?float
     {
-        return (float) $this->data['max'];
+        return isset($this->data['max']) ? (float) $this->data['max'] : null;
     }
 }

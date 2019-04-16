@@ -41,13 +41,17 @@ abstract class Page implements PageInterface
         return (bool)$this->data['first'];
     }
 
-    function getSort(): string
+    function getSort(): ?string
     {
-        return $this->data['sort'];
+        return count($this->data['sort']) === 0
+            ? null
+            : $this->data['sort'][0]['property'];
     }
 
     function isOrderDesc(): bool
     {
-        return $this->data['order'] === 'desc';
+        return isset($this->data['order'])
+            ? $this->data['order'][0]['direction'] === 'DESC'
+            : false;
     }
 }

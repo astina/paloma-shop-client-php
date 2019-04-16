@@ -32,9 +32,9 @@ class Category implements CategoryInterface
     }
 
     /**
-     * @return Category[]
+     * @return CategoryInterface[]
      */
-    function getSubCategories(): array
+    function getSubCategories(): ?array
     {
         return isset($this->data['subCategories'])
             ? array_map(function($elem) {
@@ -44,9 +44,9 @@ class Category implements CategoryInterface
     }
 
     /**
-     * @return FilterAggregate[]
+     * @return FilterAggregateInterface[]
      */
-    function getFilterAggregates(): array
+    function getFilterAggregates(): ?array
     {
         return isset($this->data['filterAggregates'])
             ? array_map(function($elem) {

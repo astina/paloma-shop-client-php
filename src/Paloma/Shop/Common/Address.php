@@ -44,7 +44,7 @@ class Address implements AddressInterface
     }
 
 
-    public static function toAddressArray(AddressInterface $address)
+    public static function toAddressArray(?AddressInterface $address)
     {
         if ($address === null) {
             return null;
@@ -121,7 +121,7 @@ class Address implements AddressInterface
         return $this->city;
     }
 
-    function getCountry(): string
+    function getCountry(): ?string
     {
         return $this->country;
     }

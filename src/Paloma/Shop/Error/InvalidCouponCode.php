@@ -11,4 +11,9 @@ class InvalidCouponCode extends Exception
     {
         // TODO implement
     }
+
+    public function getErrors()
+    {
+        return []; // TODO
+    }
 }

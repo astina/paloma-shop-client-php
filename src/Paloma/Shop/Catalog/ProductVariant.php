@@ -32,7 +32,7 @@ class ProductVariant implements ProductVariantInterface
         return $this->price->getPrice();
     }
 
-    function getOriginalPrice(): string
+    function getOriginalPrice(): ?string
     {
         return $this->data['pricing']['originalGrossPriceFormatted'];
     }
