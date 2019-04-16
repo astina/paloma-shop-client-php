@@ -309,14 +309,6 @@ class CheckoutTest extends TestCase
         $this->checkout(true, $this->createNotFoundException())->setShippingMethod('method1');
     }
 
-    public function testSetShippingMethodWith400Response()
-    {
-        $this->expectException(InvalidShippingTargetDate::class);
-
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $this->checkout(true, $this->createBadRequestException())->setShippingMethod('method1');
-    }
-
     public function testGetPaymentMethods()
     {
         /** @noinspection PhpUnhandledExceptionInspection */

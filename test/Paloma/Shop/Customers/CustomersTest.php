@@ -15,6 +15,7 @@ use Paloma\Shop\Error\InvalidConfirmationToken;
 use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\OrderNotFound;
 use Paloma\Shop\PalomaTestClient;
+use Paloma\Shop\PalomaTestConfig;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -27,7 +28,6 @@ class CustomersTest extends TestCase
         $customer = $this->customers()->registerCustomer(new CustomerDraft(
             'test@astina.io',
             '123456',
-            'https://test',
             'de_CH',
             'Hans',
             'Muster',
@@ -47,7 +47,6 @@ class CustomersTest extends TestCase
             'invalid',
             '',
             'invalid',
-            'invalid',
             '',
             '',
             'invalid',
@@ -62,7 +61,6 @@ class CustomersTest extends TestCase
         $this->customers($this->createServerException())->registerCustomer(new CustomerDraft(
             'test@astina.io',
             '123456',
-            'https://test',
             'de_CH',
             'Hans',
             'Muster',
@@ -79,7 +77,6 @@ class CustomersTest extends TestCase
         $this->customers($this->createBadRequestException())->registerCustomer(new CustomerDraft(
             'test@astina.io',
             '123456',
-            'https://test',
             'de_CH',
             'Hans',
             'Muster',
@@ -551,7 +548,11 @@ class CustomersTest extends TestCase
 
     private function customers(Exception $exception = null): Customers
     {
-        return new Customers(new TestUserProvider(), (new PalomaTestClient())->withCustomers(new CustomersTestClient($exception)), $this->validator());
+        return new Customers(
+            (new PalomaTestClient())->withCustomers(new CustomersTestClient($exception)),
+            $this->validator(),
+            new TestUserProvider(),
+            new PalomaTestConfig());
     }
 
     /**

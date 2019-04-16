@@ -12,24 +12,17 @@ interface CustomerDraftInterface
      *
      * @return string
      */
-    function getEmailAddress(): string;
+    function getEmailAddress(): ?string;
 
     /**
      * @return string User password
      */
-    function getPassword(): string;
-
-    /**
-     * A confirmation token will be appended to this URL to be included in the confirmation email sent to the user.
-     *
-     * @return string
-     */
-    function getConfirmationBaseUrl(): string;
+    function getPassword(): ?string;
 
     /**
      * @return string Locale code (de, en, fr, de_CH, ...)
      */
-    function getLocale(): string;
+    function getLocale(): ?string;
 
     /**
      * @return string|null First name
@@ -44,7 +37,7 @@ interface CustomerDraftInterface
     /**
      * @return string Gender, one of 'male', 'female', 'unknown'
      */
-    function getGender(): string;
+    function getGender(): ?string;
 
     /**
      * @return DateTime|null Date without time component

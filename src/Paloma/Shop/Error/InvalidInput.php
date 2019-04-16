@@ -3,26 +3,58 @@
 namespace Paloma\Shop\Error;
 
 use Exception;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class InvalidInput extends Exception
 {
     /**
-     * @var ConstraintViolationListInterface
+     * @var ValidationError[]
      */
-    private $validation;
+    private $errors;
 
-    public function __construct(ConstraintViolationListInterface $validation = null)
+    public static function ofValidation(ConstraintViolationListInterface $validation)
+    {
+        $errors = [];
+
+        /** @var ConstraintViolationInterface $violation */
+        foreach ($validation as $violation) {
+            $errors[] = new ValidationError($violation->getPropertyPath(), $violation->getMessage());
+        }
+
+        return new InvalidInput($errors);
+    }
+
+    public static function ofHttpResponse(ResponseInterface $response)
+    {
+        $errors = [];
+
+        try {
+            $data = json_decode($response->getBody(), true);
+
+            if (isset($data['errors'])) {
+                $errors = $data['errors'];
+            }
+
+        } catch (Exception $ignore) {}
+
+        return new InvalidInput($errors);
+    }
+
+    public function __construct(array $errors = [])
     {
         parent::__construct('Invalid input', null, null);
-        $this->validation = $validation;
+        $this->errors = $errors;
     }
 
     /**
-     * @return ConstraintViolationListInterface
+     * @return array]
      */
-    public function getValidation(): ConstraintViolationListInterface
+    public function getValidation(): array
     {
-        return $this->validation;
+        return [
+            'errors' => $this->errors,
+        ];
     }
 }

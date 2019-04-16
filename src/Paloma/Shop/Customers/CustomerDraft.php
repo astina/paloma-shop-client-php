@@ -10,8 +10,6 @@ class CustomerDraft implements CustomerDraftInterface
 
     private $password;
 
-    private $confirmationBaseUrl;
-
     private $locale;
 
     private $firstName;
@@ -25,20 +23,18 @@ class CustomerDraft implements CustomerDraftInterface
     /**
      * @param string $emailAddress
      * @param string $password
-     * @param string $confirmationBaseUrl
      * @param string $locale
      * @param string|null $firstName
      * @param string|null $lastName
      * @param string $gender
      * @param DateTime|null $dateOfBirth
      */
-    public function __construct(string $emailAddress, string $password, string $confirmationBaseUrl,
-                                string $locale, string $firstName = null, string $lastName = null,
+    public function __construct(string $emailAddress = null, string $password = null,
+                                string $locale = null, string $firstName = null, string $lastName = null,
                                 string $gender = 'unknown', DateTime $dateOfBirth = null)
     {
         $this->emailAddress = $emailAddress;
         $this->password = $password;
-        $this->confirmationBaseUrl = $confirmationBaseUrl;
         $this->locale = $locale;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
@@ -46,10 +42,23 @@ class CustomerDraft implements CustomerDraftInterface
         $this->dateOfBirth = $dateOfBirth;
     }
 
+    public function withLocale(string $locale): CustomerDraftInterface
+    {
+        return new CustomerDraft(
+            $this->emailAddress,
+            $this->password,
+            $locale,
+            $this->firstName,
+            $this->lastName,
+            $this->gender,
+            $this->dateOfBirth
+        );
+    }
+
     /**
      * @return string
      */
-    public function getEmailAddress(): string
+    public function getEmailAddress(): ?string
     {
         return $this->emailAddress;
     }
@@ -57,7 +66,7 @@ class CustomerDraft implements CustomerDraftInterface
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -65,15 +74,7 @@ class CustomerDraft implements CustomerDraftInterface
     /**
      * @return string
      */
-    public function getConfirmationBaseUrl(): string
-    {
-        return $this->confirmationBaseUrl;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale(): string
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
@@ -97,7 +98,7 @@ class CustomerDraft implements CustomerDraftInterface
     /**
      * @return string
      */
-    public function getGender(): string
+    public function getGender(): ?string
     {
         return $this->gender;
     }

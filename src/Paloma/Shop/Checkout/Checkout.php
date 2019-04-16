@@ -121,7 +121,7 @@ class Checkout implements CheckoutInterface
         ]);
 
         if ($validation->count() > 0) {
-            throw new InvalidInput($validation);
+            throw InvalidInput::ofValidation($validation);
         }
 
         try {
@@ -277,7 +277,7 @@ class Checkout implements CheckoutInterface
 
             return new OrderDraft($data);
 
-        }  catch (ServerException $se) {
+        } catch (ServerException $se) {
             throw new BackendUnavailable();
         }
     }

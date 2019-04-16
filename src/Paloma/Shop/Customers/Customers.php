@@ -13,6 +13,7 @@ use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\NotAuthenticated;
 use Paloma\Shop\Error\OrderNotFound;
 use Paloma\Shop\PalomaClientInterface;
+use Paloma\Shop\PalomaConfigInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class Customers implements CustomersInterface
@@ -32,11 +33,20 @@ class Customers implements CustomersInterface
      */
     private $userProvider;
 
-    public function __construct(UserProviderInterface $userProvider, PalomaClientInterface $client, ValidatorInterface $validator)
+    /**
+     * @var PalomaConfigInterface
+     */
+    private $config;
+
+    public function __construct(PalomaClientInterface $client,
+                                ValidatorInterface $validator,
+                                UserProviderInterface $userProvider,
+                                PalomaConfigInterface $config)
     {
         $this->client = $client;
         $this->validator = $validator;
         $this->userProvider = $userProvider;
+        $this->config = $config;
     }
 
     /**
@@ -58,14 +68,14 @@ class Customers implements CustomersInterface
     {
         $validation = $this->validator->validate($draft);
         if ($validation->count() > 0) {
-            throw new InvalidInput($validation);
+            throw InvalidInput::ofValidation($validation);
         }
 
         try {
 
             $data = $this->client->customers()->register([
                 'emailAddress' => $draft->getEmailAddress(),
-                'confirmationBaseUrl' => $draft->getConfirmationBaseUrl(),
+                'confirmationBaseUrl' => $this->config->getRegistrationConfirmationBaseUrl(),
                 'user' => [
                     'username' => $draft->getEmailAddress(),
                     'password' => $draft->getPassword(),
@@ -81,8 +91,8 @@ class Customers implements CustomersInterface
 
         } catch (ServerException $se) {
             throw new BackendUnavailable();
-        } catch (BadResponseException $se) {
-            throw new InvalidInput(); // TODO validation info
+        } catch (BadResponseException $bre) {
+            throw InvalidInput::ofHttpResponse($bre->getResponse());
         }
     }
 
@@ -103,7 +113,7 @@ class Customers implements CustomersInterface
     {
         $validation = $this->validator->validate($update);
         if ($validation->count() > 0) {
-            throw new InvalidInput($validation);
+            throw InvalidInput::ofValidation($validation);
         }
 
         try {
@@ -121,8 +131,8 @@ class Customers implements CustomersInterface
 
         } catch (ServerException $se) {
             throw new BackendUnavailable();
-        } catch (BadResponseException $se) {
-            throw new InvalidInput(); // TODO validation info
+        } catch (BadResponseException $bre) {
+            throw InvalidInput::ofHttpResponse($bre->getResponse());
         }
     }
 
@@ -130,7 +140,7 @@ class Customers implements CustomersInterface
     {
         $validation = $this->validator->validate($update);
         if ($validation->count() > 0) {
-            throw new InvalidInput($validation);
+            throw InvalidInput::ofValidation($validation);
         }
 
         try {
@@ -143,8 +153,8 @@ class Customers implements CustomersInterface
 
         } catch (ServerException $se) {
             throw new BackendUnavailable();
-        } catch (BadResponseException $se) {
-            throw new InvalidInput(); // TODO validation info
+        } catch (BadResponseException $bre) {
+            throw InvalidInput::ofHttpResponse($bre->getResponse());
         }
 
         $customer = new Customer($data);
@@ -210,7 +220,7 @@ class Customers implements CustomersInterface
     {
         $validation = $this->validator->validate($update);
         if ($validation->count() > 0) {
-            throw new InvalidInput($validation);
+            throw InvalidInput::ofValidation($validation);
         }
 
         try {
@@ -229,7 +239,7 @@ class Customers implements CustomersInterface
             if ($bre->getCode() === 403) {
                 throw new BadCredentials();
             }
-            throw new InvalidInput(); // TODO validation info
+            throw InvalidInput::ofHttpResponse($bre->getResponse());
         }
     }
 
@@ -237,7 +247,7 @@ class Customers implements CustomersInterface
     {
         $validation = $this->validator->validate($draft);
         if ($validation->count() > 0) {
-            throw new InvalidInput($validation);
+            throw InvalidInput::ofValidation($validation);
         }
 
         try {
@@ -273,7 +283,7 @@ class Customers implements CustomersInterface
     {
         $validation = $this->validator->validate($passwordReset);
         if ($validation->count() > 0) {
-            throw new InvalidInput($validation);
+            throw InvalidInput::ofValidation($validation);
         }
 
         try {

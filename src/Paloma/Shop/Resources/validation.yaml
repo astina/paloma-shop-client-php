@@ -36,8 +36,6 @@ Paloma\Shop\Customers\CustomerDraft:
     password:
       - NotBlank: ~
       - Length: { min: 6 }
-    confirmationBaseUrl:
-      - NotBlank: ~
     firstName:
       - Length: { max: 30 }
     lastName:
