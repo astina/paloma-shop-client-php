@@ -10,4 +10,11 @@ interface PalomaConfigInterface
      * @return string
      */
     function getRegistrationConfirmationBaseUrl(): string;
+
+    /**
+     * A confirmation token will be appended to this URL to be included in the confirmation email sent to the user.
+     *
+     * @return string
+     */
+    function getPasswordResetConfirmationBaseUrl(): string;
 }

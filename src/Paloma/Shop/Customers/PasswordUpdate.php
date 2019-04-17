@@ -8,18 +8,18 @@ class PasswordUpdate implements PasswordUpdateInterface
 
     private $newPassword;
 
-    public function __construct(string $currentPassword, string $newPassword)
+    public function __construct(string $currentPassword = null, string $newPassword = null)
     {
         $this->currentPassword = $currentPassword;
         $this->newPassword = $newPassword;
     }
 
-    function getCurrentPassword(): string
+    function getCurrentPassword(): ?string
     {
         return $this->currentPassword;
     }
 
-    function getNewPassword(): string
+    function getNewPassword(): ?string
     {
         return $this->newPassword;
     }

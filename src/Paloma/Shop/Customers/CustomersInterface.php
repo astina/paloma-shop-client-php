@@ -88,11 +88,11 @@ interface CustomersInterface
     /**
      * If the email address belongs to a known user, an email with a confirmation link is sent to the user.
      *
-     * @param PasswordResetDraftInterface $draft
+     * @param string $emailAddress
      * @throws InvalidInput
      * @throws BackendUnavailable
      */
-    function startPasswordReset(PasswordResetDraftInterface $draft): void;
+    function startPasswordReset(string $emailAddress): void;
 
     /**
      * @param string $resetToken

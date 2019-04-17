@@ -26,7 +26,7 @@ class CustomerUpdate implements CustomerUpdateInterface
      * @param string $gender
      * @param DateTime|null $dateOfBirth
      */
-    public function __construct(string $emailAddress, string $locale,
+    public function __construct(string $emailAddress = null, string $locale = null,
                                 string $firstName = null, string $lastName = null,
                                 string $gender = 'unknown', DateTime $dateOfBirth = null)
     {
@@ -41,7 +41,7 @@ class CustomerUpdate implements CustomerUpdateInterface
     /**
      * @return string
      */
-    public function getEmailAddress(): string
+    public function getEmailAddress(): ?string
     {
         return $this->emailAddress;
     }
@@ -49,7 +49,7 @@ class CustomerUpdate implements CustomerUpdateInterface
     /**
      * @return string
      */
-    public function getLocale(): string
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
@@ -73,7 +73,7 @@ class CustomerUpdate implements CustomerUpdateInterface
     /**
      * @return string
      */
-    public function getGender(): string
+    public function getGender(): ?string
     {
         return $this->gender;
     }

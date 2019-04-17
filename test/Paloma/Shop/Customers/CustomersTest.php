@@ -16,6 +16,7 @@ use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\OrderNotFound;
 use Paloma\Shop\PalomaTestClient;
 use Paloma\Shop\PalomaTestConfig;
+use Paloma\Shop\PalomaTestSecurity;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -394,7 +395,7 @@ class CustomersTest extends TestCase
     public function testStartPasswordReset()
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        $this->customers()->startPasswordReset(new PasswordResetDraft('test@astina.io', 'https://test'));
+        $this->customers()->startPasswordReset('test@astina.io');
 
         $this->assertTrue(true);
     }
@@ -404,7 +405,7 @@ class CustomersTest extends TestCase
         $this->expectException(InvalidInput::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $this->customers()->startPasswordReset(new PasswordResetDraft('invalid', ''));
+        $this->customers()->startPasswordReset('invalid');
     }
 
     public function testStartPasswordResetWith503Response()
@@ -412,7 +413,7 @@ class CustomersTest extends TestCase
         $this->expectException(BackendUnavailable::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $this->customers($this->createServerException())->startPasswordReset(new PasswordResetDraft('test@astina.io', 'https://test'));
+        $this->customers($this->createServerException())->startPasswordReset('test@astina.io');
     }
 
     public function testStartPasswordResetWith400Response()
@@ -420,7 +421,7 @@ class CustomersTest extends TestCase
         $this->expectException(InvalidInput::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $this->customers($this->createBadRequestException())->startPasswordReset(new PasswordResetDraft('test@astina.io', 'https://test'));
+        $this->customers($this->createBadRequestException())->startPasswordReset('test@astina.io');
     }
 
     public function testExistsPasswordResetToken()
@@ -550,9 +551,10 @@ class CustomersTest extends TestCase
     {
         return new Customers(
             (new PalomaTestClient())->withCustomers(new CustomersTestClient($exception)),
-            $this->validator(),
-            new TestUserProvider(),
-            new PalomaTestConfig());
+            new PalomaTestSecurity(),
+            new PalomaTestConfig(),
+            $this->validator()
+        );
     }
 
     /**

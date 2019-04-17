@@ -32,7 +32,7 @@ Paloma\Shop\Customers\CustomerDraft:
   properties:
     emailAddress:
       - NotBlank: ~
-      - Email: ~
+      - Email: { mode: strict }
     password:
       - NotBlank: ~
       - Length: { min: 6 }
@@ -51,7 +51,7 @@ Paloma\Shop\Customers\CustomerUpdate:
   properties:
     emailAddress:
       - NotBlank: ~
-      - Email: ~
+      - Email: { mode: strict }
     firstName:
       - Length: { max: 30 }
     lastName:
@@ -82,12 +82,6 @@ Paloma\Shop\Customers\PasswordUpdate:
     newPassword:
       - NotBlank: ~
       - Length: { min: 6, max: 1024 }
-
-Paloma\Shop\Customers\PasswordResetDraft:
-  properties:
-    emailAddress:
-      - NotBlank: ~
-      - Email: ~
 
 Paloma\Shop\Customers\PasswordReset:
   properties:

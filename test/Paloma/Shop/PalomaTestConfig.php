@@ -8,4 +8,9 @@ class PalomaTestConfig implements PalomaConfigInterface
     {
         return 'https://test/register/confirm';
     }
+
+    function getPasswordResetConfirmationBaseUrl(): string
+    {
+        return 'https://test/password/reset/confirm';
+    }
 }

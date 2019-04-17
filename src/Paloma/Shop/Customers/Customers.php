@@ -2,6 +2,8 @@
 
 namespace Paloma\Shop\Customers;
 
+use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\RFCValidation;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ServerException;
 use Paloma\Shop\Common\Address;
@@ -14,6 +16,7 @@ use Paloma\Shop\Error\NotAuthenticated;
 use Paloma\Shop\Error\OrderNotFound;
 use Paloma\Shop\PalomaClientInterface;
 use Paloma\Shop\PalomaConfigInterface;
+use Paloma\Shop\PalomaSecurityInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class Customers implements CustomersInterface
@@ -24,29 +27,29 @@ class Customers implements CustomersInterface
     private $client;
 
     /**
-     * @var ValidatorInterface
+     * @var PalomaSecurityInterface
      */
-    private $validator;
-
-    /**
-     * @var UserProviderInterface
-     */
-    private $userProvider;
+    private $security;
 
     /**
      * @var PalomaConfigInterface
      */
     private $config;
 
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
+
     public function __construct(PalomaClientInterface $client,
-                                ValidatorInterface $validator,
-                                UserProviderInterface $userProvider,
-                                PalomaConfigInterface $config)
+                                PalomaSecurityInterface $security,
+                                PalomaConfigInterface $config,
+                                ValidatorInterface $validator)
     {
         $this->client = $client;
-        $this->validator = $validator;
-        $this->userProvider = $userProvider;
+        $this->security = $security;
         $this->config = $config;
+        $this->validator = $validator;
     }
 
     /**
@@ -55,7 +58,7 @@ class Customers implements CustomersInterface
      */
     protected function getCustomerId(): string
     {
-        $user = $this->userProvider->getUser();
+        $user = $this->security->getUser();
 
         if ($user === null) {
             throw new NotAuthenticated();
@@ -86,6 +89,16 @@ class Customers implements CustomersInterface
                 'gender' => $draft->getGender(),
                 'dateOfBirth' => $draft->getDateOfBirth() ? $draft->getDateOfBirth()->format('Y-m-d') : null,
             ]);
+
+            try {
+
+                $user = $this->authenticate($draft->getEmailAddress(), $draft->getPassword());
+
+                $this->security->setAuthenticated($user);
+
+            } catch (BadCredentials $e) {
+                // TODO
+            }
 
             return new Customer($data);
 
@@ -168,7 +181,7 @@ class Customers implements CustomersInterface
                 return $customer->getShippingAddress();
         }
 
-        throw new InvalidInput();
+        throw new InvalidInput(['property' => 'addressType', 'message' => 'Unknown address type']);
     }
 
     function confirmEmailAddress(string $confirmationToken): UserDetailsInterface
@@ -177,7 +190,7 @@ class Customers implements CustomersInterface
 
             $this->client->customers()->confirmEmailAddress($confirmationToken);
 
-            return $this->userProvider->getUser();
+            return $this->security->getUser();
 
         } catch (ServerException $se) {
             throw new BackendUnavailable();
@@ -207,7 +220,11 @@ class Customers implements CustomersInterface
 
             $data = $this->client->customers()->authenticateUser($username, $password);
 
-            return new UserDetails($data);
+            $user = new UserDetails($data);
+
+            $this->security->setAuthenticated($user);
+
+            return $user;
 
         } catch (ServerException $se) {
             throw new BackendUnavailable();
@@ -218,6 +235,11 @@ class Customers implements CustomersInterface
 
     function updatePassword(PasswordUpdateInterface $update): UserDetailsInterface
     {
+        $user = $this->security->getUser();
+        if ($user === null) {
+            throw new NotAuthenticated();
+        }
+
         $validation = $this->validator->validate($update);
         if ($validation->count() > 0) {
             throw InvalidInput::ofValidation($validation);
@@ -226,12 +248,16 @@ class Customers implements CustomersInterface
         try {
 
             $data = $this->client->customers()->updateUserPassword([
-                'username' => $this->userProvider->getUser()->getUsername(),
+                'username' => $user->getUsername(),
                 'currentPassword' => $update->getCurrentPassword(),
                 'newPassword' => $update->getNewPassword(),
             ]);
 
-            return new UserDetails($data);
+            $user = new UserDetails($data);
+
+            $this->security->setAuthenticated($user);
+
+            return $user;
 
         } catch (ServerException $se) {
             throw new BackendUnavailable();
@@ -243,24 +269,23 @@ class Customers implements CustomersInterface
         }
     }
 
-    function startPasswordReset(PasswordResetDraftInterface $draft): void
+    function startPasswordReset(string $emailAddress): void
     {
-        $validation = $this->validator->validate($draft);
-        if ($validation->count() > 0) {
-            throw InvalidInput::ofValidation($validation);
+        if (!(new EmailValidator())->isValid($emailAddress, new RFCValidation())) {
+            throw new InvalidInput( ['property' => 'emailAddress', 'message' => 'Invalid email address']);
         }
 
         try {
 
             $this->client->customers()->startUserPasswordReset(
-                $draft->getEmailAddress(),
-                $draft->getConfirmationBaseUrl()
+                $emailAddress,
+                $this->config->getPasswordResetConfirmationBaseUrl()
             );
 
         } catch (ServerException $se) {
             throw new BackendUnavailable();
         } catch (BadResponseException $bre) {
-            throw new InvalidInput();
+            throw InvalidInput::ofHttpResponse($bre->getResponse());
         }
     }
 
@@ -279,7 +304,7 @@ class Customers implements CustomersInterface
         }
     }
 
-        function updatePasswordWithResetToken(PasswordResetInterface $passwordReset): UserDetailsInterface
+    function updatePasswordWithResetToken(PasswordResetInterface $passwordReset): UserDetailsInterface
     {
         $validation = $this->validator->validate($passwordReset);
         if ($validation->count() > 0) {
@@ -292,7 +317,11 @@ class Customers implements CustomersInterface
                 $passwordReset->getToken(),
                 $passwordReset->getNewPassword());
 
-            return new UserDetails($data);
+            $user = new UserDetails($data);
+
+            $this->security->setAuthenticated($user);
+
+            return $user;
 
         } catch (ServerException $se) {
             throw new BackendUnavailable();
@@ -317,7 +346,7 @@ class Customers implements CustomersInterface
         } catch (ServerException $se) {
             throw new BackendUnavailable();
         } catch (BadResponseException $bre) {
-            throw new InvalidInput();
+            throw InvalidInput::ofHttpResponse($bre->getResponse());
         }
     }
 
