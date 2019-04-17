@@ -59,11 +59,13 @@ interface CatalogInterface
 
     /**
      * @param string $itemNumber
+     * @param int $max Maximum number of results
      * @return ProductPageInterface Products purchased together with this product
      * @throws ProductNotFound
      * @throws BackendUnavailable
+     * @throws InvalidInput
      */
-    function getPurchasedTogether(string $itemNumber): ProductPageInterface;
+    function getPurchasedTogether(string $itemNumber, int $max = 5): ProductPageInterface;
 
     /**
      * @param int $size Maximum number of results (default: 5)

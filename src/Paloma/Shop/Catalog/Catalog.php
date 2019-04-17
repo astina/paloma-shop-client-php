@@ -121,9 +121,48 @@ class Catalog implements CatalogInterface
         }
     }
 
-    function getPurchasedTogether(string $itemNumber): ProductPageInterface
+    function getPurchasedTogether(string $itemNumber, int $max = 5): ProductPageInterface
     {
-        // TODO implement
+        $max = min(20, $max);
+
+        $data = $this->client->customers()->getItemCodesPurchasedTogether($itemNumber, $max);
+
+        $itemCodes = array_map(function($elem) {
+            return $elem['itemCode'];
+        }, $data);
+
+        return $this->getProductsForItemCodes($itemCodes, $max);
+    }
+
+    /**
+     * @param array $itemCodes
+     * @param int $max
+     * @return ProductPage|ProductPageInterface
+     * @throws BackendUnavailable
+     * @throws InvalidInput
+     */
+    protected function getProductsForItemCodes(array $itemCodes = [], int $max = 5): ProductPageInterface
+    {
+        if (count($itemCodes) === 0) {
+            return ProductPage::createEmpty();
+        }
+
+        // By default, order item codes contain product item numbers.
+        // However, depending on the Paloma configuration, the item code can contain other identifiers like a short number.
+        // If this is the case, this method can be overridden to find the appropriate products in the catalog.
+
+        $searchFilters = [
+            new SearchFilter('itemNumber', $itemCodes),
+        ];
+
+        return $this->search(new SearchRequest(
+            null,
+            null,
+            $searchFilters,
+            false,
+            0,
+            $max
+        ));
     }
 
     function getProductsForCart($size = 5): ProductPageInterface

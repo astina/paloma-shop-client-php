@@ -163,6 +163,16 @@ class CatalogTest extends TestCase
         $catalog->getRecommendedProducts('test');
     }
 
+    public function testGetPurchasedTogether()
+    {
+        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient()));
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $products = $catalog->getPurchasedTogether('123');
+
+        $this->assertNotNull($products);
+    }
+
     public function testGetProductsForCartEmpty()
     {
         $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(

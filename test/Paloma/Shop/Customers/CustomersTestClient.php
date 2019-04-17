@@ -204,6 +204,17 @@ class CustomersTestClient implements CustomersClientInterface
         // TODO: Implement getOrderStatus() method.
     }
 
+    function getItemCodesPurchasedTogether($itemCode, $max = 5)
+    {
+        return [
+            [ 'itemCode' => '111', 'count' => 15 ],
+            [ 'itemCode' => '222', 'count' => 14 ],
+            [ 'itemCode' => '333', 'count' => 13 ],
+            [ 'itemCode' => '444', 'count' => 12 ],
+            [ 'itemCode' => '555', 'count' => 11 ],
+        ];
+    }
+
     function addressCompleteHouse($country, $zipCode, $street, $house)
     {
         // TODO: Implement addressCompleteHouse() method.

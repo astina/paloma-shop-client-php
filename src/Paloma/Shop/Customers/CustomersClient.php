@@ -142,6 +142,11 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         return $this->get($this->channel . '/' . $this->locale . '/orders/' . $orderNr . '/status');
     }
 
+    function getItemCodesPurchasedTogether($itemCode, $max = 5)
+    {
+        return $this->get($this->channel . '/' . $this->locale . '/orders/items/purchased-together', ['itemCode' => $itemCode, 'max' => $max]);
+    }
+
     function addressCompleteHouse($country, $zipCode, $street, $house)
     {
         return $this->get($this->channel . '/address/complete/house', [

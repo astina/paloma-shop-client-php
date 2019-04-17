@@ -44,6 +44,8 @@ interface CustomersClientInterface
 
     function getOrderStatus($orderNr);
 
+    function getItemCodesPurchasedTogether($itemCode, $max = 5);
+
     function addressCompleteHouse($country, $zipCode, $street, $house);
 
     function addressCompleteStreet($country, $zipCode, $street);
