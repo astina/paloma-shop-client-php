@@ -9,15 +9,14 @@ class PalomaTestSecurity implements PalomaSecurityInterface
 {
     private $user;
 
-    public function __construct()
+    public function __construct(string $customerId = '1')
     {
         $this->user = new UserDetails([
             'user' => [
-                'id' => '1',
-                'username' => 'user',
+                'username' => 'test@astina.io',
             ],
             'customer' => [
-                'id' => '2',
+                'id' => $customerId,
             ]
         ]);
     }
