@@ -191,6 +191,13 @@ class CustomersTestClient implements CustomersClientInterface
         return [
             'id' => '123',
             'orderNumber' => 'order1',
+            'currency' => 'CHF',
+            'items' => [
+                [
+                    'sku' => '111',
+                    'quantity' => 1,
+                ]
+            ]
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace Paloma\Shop\Customers;
 
+use Paloma\Shop\Checkout\CartInterface;
 use Paloma\Shop\Common\AddressInterface;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\BadCredentials;
@@ -133,4 +134,16 @@ interface CustomersInterface
      * @throws BackendUnavailable
      */
     function getOrder(string $orderNumber): OrderInterface;
+
+    /**
+     * Adds all SKUs from the given order to the cart, provided they are still
+     * available in the catalog.
+     *
+     * @param string $orderNumber
+     * @return OrderRepetitionResultInterface
+     * @throws NotAuthenticated
+     * @throws OrderNotFound
+     * @throws BackendUnavailable
+     */
+    function addOrderItemsToCart(string $orderNumber): OrderRepetitionResultInterface;
 }

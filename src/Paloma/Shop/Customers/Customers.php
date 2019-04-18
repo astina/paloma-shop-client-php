@@ -4,8 +4,11 @@ namespace Paloma\Shop\Customers;
 
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use Exception;
 use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
+use Paloma\Shop\Checkout\Cart;
 use Paloma\Shop\Common\Address;
 use Paloma\Shop\Common\AddressInterface;
 use Paloma\Shop\Error\BackendUnavailable;
@@ -366,5 +369,44 @@ class Customers implements CustomersInterface
         } catch (BadResponseException $bre) {
             throw new OrderNotFound();
         }
+    }
+
+    function addOrderItemsToCart(string $orderNumber): OrderRepetitionResultInterface
+    {
+        $order = $this->getOrder($orderNumber);
+
+        $itemResults = [];
+
+        foreach ($order->getItems() as $orderItem) {
+
+            try {
+
+                $data = $this->client->checkout()->checkoutOrder()->addItem(
+                    $orderItem->getSku(),
+                    $orderItem->getQuantity()
+                );
+
+                $cart = new Cart($data);
+
+                foreach ($cart->getItems() as $cartItem) {
+                    if ($cartItem->getSku() === $orderItem->getSku()) {
+                        $itemResults[] = new OrderRepetitionResultItem(
+                            OrderRepetitionResultItem::STATUS_SUCCESS,
+                            $orderItem,
+                            $cartItem
+                        );
+                        break;
+                    }
+                }
+
+            } catch (Exception $e) {
+                $itemResults[] = new OrderRepetitionResultItem(
+                    OrderRepetitionResultItem::STATUS_FAILED,
+                    $orderItem
+                );
+            }
+        }
+
+        return new OrderRepetitionResult($itemResults);
     }
 }

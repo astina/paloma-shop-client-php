@@ -540,6 +540,19 @@ class CustomersTest extends TestCase
         $this->customers($this->createNotFoundException())->getOrder('123');
     }
 
+    public function testAddOrderItemsToCart()
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $results = $this->customers()->addOrderItemsToCart('123');
+
+        $this->assertNotNull($results);
+        $this->assertEquals('failed', $results->getStatus());
+        $this->assertEquals(1, count($results->getItems()));
+        $this->assertEquals('failed', $results->getItems()[0]->getStatus());
+        $this->assertNotNull($results->getItems()[0]->getOrderItem());
+        $this->assertNull($results->getItems()[0]->getCartItem());
+    }
+
     private function validator(): ValidatorInterface
     {
         return Validation::createValidatorBuilder()

@@ -43,7 +43,7 @@ abstract class Page implements PageInterface
 
     function getSort(): ?string
     {
-        return count($this->data['sort']) === 0
+        return (!isset($this->data['sort']) || count($this->data['sort']) === 0)
             ? null
             : $this->data['sort'][0]['property'];
     }

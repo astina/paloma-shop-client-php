@@ -42,7 +42,7 @@ class CheckoutTestClient implements CheckoutClientInterface
 
     function createOrder($order)
     {
-        return $this->order;
+        return $order ?? $this->order;
     }
 
     function getOrder($id, $languageCode = null)

@@ -16,8 +16,8 @@ class ProductPage extends Page implements ProductPageInterface
             'totalPages' => 0,
             'last' => true,
             'first' => true,
-            'sort' => null,
-            'order' => 'asc',
+            'sort' => [],
+            'order' => [ [ 'direction' => 'DESC' ]],
         ]);
     }
 
