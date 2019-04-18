@@ -1,6 +1,8 @@
 <?php
 
-namespace Paloma\Shop\Customers;
+namespace Paloma\Shop\Security;
+
+use Paloma\Shop\Customers\CustomerBasicsInterface;
 
 interface UserDetailsInterface
 {

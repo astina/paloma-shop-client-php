@@ -1,11 +1,8 @@
 <?php
 
-namespace Paloma\Shop;
+namespace Paloma\Shop\Security;
 
-use Paloma\Shop\Customers\UserDetails;
-use Paloma\Shop\Customers\UserDetailsInterface;
-
-class PalomaTestSecurity implements PalomaSecurityInterface
+class TestUserProvider implements UserProviderInterface
 {
     private $user;
 
@@ -17,6 +14,7 @@ class PalomaTestSecurity implements PalomaSecurityInterface
             ],
             'customer' => [
                 'id' => $customerId,
+                'emailAddress' => 'test@astina.io',
             ]
         ]);
     }
@@ -24,10 +22,5 @@ class PalomaTestSecurity implements PalomaSecurityInterface
     function getUser(): ?UserDetailsInterface
     {
         return $this->user;
-    }
-
-    function setAuthenticated(UserDetailsInterface $user): void
-    {
-        $this->user = $user;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Paloma\Shop\Customers;
 
-use Paloma\Shop\Checkout\CartInterface;
 use Paloma\Shop\Common\AddressInterface;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\BadCredentials;
@@ -10,6 +9,7 @@ use Paloma\Shop\Error\InvalidConfirmationToken;
 use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\NotAuthenticated;
 use Paloma\Shop\Error\OrderNotFound;
+use Paloma\Shop\Security\UserDetailsInterface;
 
 interface CustomersInterface
 {

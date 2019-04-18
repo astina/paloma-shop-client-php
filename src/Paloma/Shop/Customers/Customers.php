@@ -6,7 +6,6 @@ use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Exception;
 use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use Paloma\Shop\Checkout\Cart;
 use Paloma\Shop\Common\Address;
@@ -19,7 +18,9 @@ use Paloma\Shop\Error\NotAuthenticated;
 use Paloma\Shop\Error\OrderNotFound;
 use Paloma\Shop\PalomaClientInterface;
 use Paloma\Shop\PalomaConfigInterface;
-use Paloma\Shop\PalomaSecurityInterface;
+use Paloma\Shop\Security\UserDetails;
+use Paloma\Shop\Security\UserDetailsInterface;
+use Paloma\Shop\Security\UserProviderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class Customers implements CustomersInterface
@@ -30,9 +31,9 @@ class Customers implements CustomersInterface
     private $client;
 
     /**
-     * @var PalomaSecurityInterface
+     * @var UserProviderInterface
      */
-    private $security;
+    private $userProvider;
 
     /**
      * @var PalomaConfigInterface
@@ -45,12 +46,12 @@ class Customers implements CustomersInterface
     private $validator;
 
     public function __construct(PalomaClientInterface $client,
-                                PalomaSecurityInterface $security,
+                                UserProviderInterface $userProvider,
                                 PalomaConfigInterface $config,
                                 ValidatorInterface $validator)
     {
         $this->client = $client;
-        $this->security = $security;
+        $this->userProvider = $userProvider;
         $this->config = $config;
         $this->validator = $validator;
     }
@@ -61,7 +62,7 @@ class Customers implements CustomersInterface
      */
     protected function getCustomerId(): string
     {
-        $user = $this->security->getUser();
+        $user = $this->userProvider->getUser();
 
         if ($user === null) {
             throw new NotAuthenticated();
@@ -92,16 +93,6 @@ class Customers implements CustomersInterface
                 'gender' => $draft->getGender(),
                 'dateOfBirth' => $draft->getDateOfBirth() ? $draft->getDateOfBirth()->format('Y-m-d') : null,
             ]);
-
-            try {
-
-                $user = $this->authenticate($draft->getEmailAddress(), $draft->getPassword());
-
-                $this->security->setAuthenticated($user);
-
-            } catch (BadCredentials $e) {
-                // TODO
-            }
 
             return new Customer($data);
 
@@ -193,7 +184,7 @@ class Customers implements CustomersInterface
 
             $this->client->customers()->confirmEmailAddress($confirmationToken);
 
-            return $this->security->getUser();
+            return $this->userProvider->getUser();
 
         } catch (ServerException $se) {
             throw new BackendUnavailable();
@@ -223,11 +214,7 @@ class Customers implements CustomersInterface
 
             $data = $this->client->customers()->authenticateUser($username, $password);
 
-            $user = new UserDetails($data);
-
-            $this->security->setAuthenticated($user);
-
-            return $user;
+            return new UserDetails($data);
 
         } catch (ServerException $se) {
             throw new BackendUnavailable();
@@ -238,7 +225,7 @@ class Customers implements CustomersInterface
 
     function updatePassword(PasswordUpdateInterface $update): UserDetailsInterface
     {
-        $user = $this->security->getUser();
+        $user = $this->userProvider->getUser();
         if ($user === null) {
             throw new NotAuthenticated();
         }
@@ -256,11 +243,7 @@ class Customers implements CustomersInterface
                 'newPassword' => $update->getNewPassword(),
             ]);
 
-            $user = new UserDetails($data);
-
-            $this->security->setAuthenticated($user);
-
-            return $user;
+            return new UserDetails($data);
 
         } catch (ServerException $se) {
             throw new BackendUnavailable();
@@ -320,11 +303,7 @@ class Customers implements CustomersInterface
                 $passwordReset->getToken(),
                 $passwordReset->getNewPassword());
 
-            $user = new UserDetails($data);
-
-            $this->security->setAuthenticated($user);
-
-            return $user;
+            return new UserDetails($data);
 
         } catch (ServerException $se) {
             throw new BackendUnavailable();

@@ -1,8 +1,10 @@
 <?php
 
-namespace Paloma\Shop\Customers;
+namespace Paloma\Shop\Security;
 
 use InvalidArgumentException;
+use Paloma\Shop\Customers\CustomerBasics;
+use Paloma\Shop\Customers\CustomerBasicsInterface;
 
 class UserDetails implements UserDetailsInterface
 {
@@ -25,11 +27,6 @@ class UserDetails implements UserDetailsInterface
         return $this->data['user']['username'];
     }
 
-    function getUserId(): string
-    {
-        return $this->data['user']['id'];
-    }
-
     function getCustomerId(): string
     {
         return $this->data['customer']['id'];
@@ -38,5 +35,10 @@ class UserDetails implements UserDetailsInterface
     function getCustomer(): CustomerBasicsInterface
     {
         return new CustomerBasics($this->data['customer']);
+    }
+
+    public function __toString()
+    {
+        return $this->getUsername();
     }
 }
