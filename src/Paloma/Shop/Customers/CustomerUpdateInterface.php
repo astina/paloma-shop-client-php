@@ -27,6 +27,11 @@ interface CustomerUpdateInterface
     function getLastName(): ?string;
 
     /**
+     * @return string|null Company
+     */
+    function getCompany(): ?string;
+
+    /**
      * @return string Gender, one of 'male', 'female', 'unknown'
      */
     function getGender(): ?string;

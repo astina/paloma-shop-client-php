@@ -14,6 +14,8 @@ class CustomerUpdate implements CustomerUpdateInterface
 
     private $lastName;
 
+    private $company;
+
     private $gender;
 
     private $dateOfBirth;
@@ -23,17 +25,19 @@ class CustomerUpdate implements CustomerUpdateInterface
      * @param string $locale
      * @param string|null $firstName
      * @param string|null $lastName
+     * @param string|null $company
      * @param string $gender
      * @param DateTime|null $dateOfBirth
      */
     public function __construct(string $emailAddress = null, string $locale = null,
-                                string $firstName = null, string $lastName = null,
+                                string $firstName = null, string $lastName = null, string $company = null,
                                 string $gender = 'unknown', DateTime $dateOfBirth = null)
     {
         $this->emailAddress = $emailAddress;
         $this->locale = $locale;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->company = $company;
         $this->gender = $gender;
         $this->dateOfBirth = $dateOfBirth;
     }
@@ -68,6 +72,14 @@ class CustomerUpdate implements CustomerUpdateInterface
     public function getLastName(): ?string
     {
         return $this->lastName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCompany(): ?string
+    {
+        return $this->company;
     }
 
     /**

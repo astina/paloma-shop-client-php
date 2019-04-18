@@ -33,6 +33,7 @@ class CustomersTest extends TestCase
             'de_CH',
             'Hans',
             'Muster',
+            null,
             'male',
             DateTime::createFromFormat('Y-m-d', '1980-01-01')
         ));
@@ -51,6 +52,7 @@ class CustomersTest extends TestCase
             'invalid',
             '',
             '',
+            null,
             'invalid',
             DateTime::createFromFormat('Y-m-d', '1980-01-01')));
     }
@@ -66,6 +68,7 @@ class CustomersTest extends TestCase
             'de_CH',
             'Hans',
             'Muster',
+            null,
             'male',
             DateTime::createFromFormat('Y-m-d', '1980-01-01')
         ));
@@ -82,6 +85,7 @@ class CustomersTest extends TestCase
             'de_CH',
             'Hans',
             'Muster',
+            null,
             'male',
             DateTime::createFromFormat('Y-m-d', '1980-01-01')
         ));
@@ -111,6 +115,7 @@ class CustomersTest extends TestCase
             'fr_CH',
             'Hans',
             'Muster',
+            null,
             'unknown',
             null
         ));
@@ -128,6 +133,7 @@ class CustomersTest extends TestCase
             'invalid',
             null,
             null,
+            null,
             'invalid',
             null
         ));
@@ -143,6 +149,7 @@ class CustomersTest extends TestCase
             'fr_CH',
             'Hans',
             'Muster',
+            null,
             'unknown',
             null
         ));
@@ -158,6 +165,7 @@ class CustomersTest extends TestCase
             'fr_CH',
             'Hans',
             'Muster',
+            null,
             'unknown',
             null
         ));

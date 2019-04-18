@@ -121,7 +121,11 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
             $query['size'] = $size;
         }
         if ($order !== null) {
-            $query['order'] = $order;
+            if ($order === true || $order === false ) {
+                $query['order'] = $order; // BC
+            } else {
+                $query['sort'] = $order;
+            }
         }
 
         return $this->get($this->channel . '/' . $this->locale . '/customers/' . $customerId . '/orders', $query ? $query : null);
