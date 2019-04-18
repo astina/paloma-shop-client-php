@@ -2,7 +2,9 @@
 
 namespace Paloma\Shop\Customers;
 
-interface OrderPageInterface
+use Paloma\Shop\Common\PageInterface;
+
+interface OrderPageInterface extends PageInterface
 {
 
 }

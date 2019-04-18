@@ -11,6 +11,8 @@ class OrderPage extends Page implements OrderPageInterface
      */
     function getContent(): array
     {
-        // TODO: Implement getContent() method.
+        return array_map(function ($elem) {
+            return new Order($elem);
+        }, $this->data['content']);
     }
 }
