@@ -3,10 +3,14 @@
 namespace Paloma\Shop\Catalog;
 
 use InvalidArgumentException;
+use Paloma\Shop\Common\SelfNormalizing;
+use Paloma\Shop\Utils\NormalizationUtils;
 
-class Product implements ProductInterface
+class Product implements ProductInterface, SelfNormalizing
 {
     private $data;
+
+    private $_master = null; // cache
 
     private $_variants = null; // cache
 
@@ -46,22 +50,33 @@ class Product implements ProductInterface
 
     function getBasePrice(): string
     {
-        return $this->getVariants()[0]->getPrice();
+        return $this->getMasterVariant()->getPrice();
     }
 
     function getOriginalBasePrice(): ?string
     {
-        return $this->getVariants()[0]->getOriginalPrice();
+        return $this->getMasterVariant()->getOriginalPrice();
     }
 
     function getTaxRate(): string
     {
-        return $this->getVariants()[0]->getTaxRate();
+        return $this->getMasterVariant()->getTaxRate();
     }
 
     function isTaxIncluded(): bool
     {
-        return $this->getVariants()[0]->isTaxIncluded();
+        return $this->getMasterVariant()->isTaxIncluded();
+    }
+
+    private function getMasterVariant()
+    {
+        if ($this->_master !== null) {
+            return $this->_master;
+        }
+
+        $this->_master = new ProductVariant($this->data['master']);
+
+        return $this->_master;
     }
 
     /**
@@ -69,11 +84,13 @@ class Product implements ProductInterface
      */
     function getVariants(): array
     {
-        if ($this->_variants === null) {
-            $this->_variants = array_map(function($elem) {
-                return new ProductVariant($elem);
-            }, $this->data['variants']);
+        if ($this->_variants !== null) {
+            return $this->_variants;
         }
+
+        $this->_variants = array_map(function($elem) {
+            return new ProductVariant($elem);
+        }, $this->data['variants']);
 
         return $this->_variants;
     }
@@ -128,5 +145,39 @@ class Product implements ProductInterface
         return array_map(function($elem) {
            return new CategoryReference($elem);
         }, $this->data['categories'] ?? []);
+    }
+
+    public function _normalize(): array
+    {
+        $data = NormalizationUtils::copyKeys([
+            'itemNumber',
+            'name',
+            'slug',
+            'description',
+            'shortDescription',
+        ], $this->data);
+
+        $data['basePrice'] = $this->getBasePrice();
+        $data['originalBasePrice'] = $this->getOriginalBasePrice();
+        $data['taxRate'] = $this->getTaxRate();
+        $data['taxIncluded'] = $this->isTaxIncluded();
+
+        $data['variants'] = array_map(function($elem) {
+            return $elem->_normalize();
+        }, $this->getVariants());
+
+        $data['attributes'] = array_map(function($elem) {
+            return $elem->_normalize();
+        }, $this->getAttributes());
+
+        $data['images'] = array_map(function($elem) {
+            return $elem->_normalize();
+        }, $this->getImages());
+
+        $data['firstImage'] = count($data['images']) === 0
+            ? null
+            : $data['images'][0];
+
+        return $data;
     }
 }

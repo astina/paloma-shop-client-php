@@ -62,30 +62,32 @@ class ProductTest extends TestCase
                     ]
                 ]
             ],
-            'attributes' => [
-                'type' => [
-                    'type' => 'type',
-                    'label' => 'label',
-                    'value' => 'value',
-                    'display' => 'product',
+            'master' => [
+                'attributes' => [
+                    'type' => [
+                        'type' => 'type',
+                        'label' => 'label',
+                        'value' => 'value',
+                        'display' => 'product',
+                    ],
+                    'hidden' => [
+                        'type' => 'hidden',
+                        'label' => 'label',
+                        'value' => 'value',
+                        'display' => 'none',
+                    ]
                 ],
-                'hidden' => [
-                    'type' => 'hidden',
-                    'label' => 'label',
-                    'value' => 'value',
-                    'display' => 'none',
-                ]
-            ],
-            'images' => [
-                [
-                    'name' => 'name',
-                    'sources' => [
-                        [
-                            'size' => 'size',
-                            'url' => 'url',
+                'images' => [
+                    [
+                        'name' => 'name',
+                        'sources' => [
+                            [
+                                'size' => 'size',
+                                'url' => 'url',
+                            ]
                         ]
                     ]
-                ]
+                ],
             ],
         ]);
 

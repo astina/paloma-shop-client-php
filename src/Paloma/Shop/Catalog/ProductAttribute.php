@@ -2,7 +2,9 @@
 
 namespace Paloma\Shop\Catalog;
 
-class ProductAttribute implements ProductAttributeInterface
+use Paloma\Shop\Common\SelfNormalizing;
+
+class ProductAttribute implements ProductAttributeInterface, SelfNormalizing
 {
     private $data;
 
@@ -24,5 +26,10 @@ class ProductAttribute implements ProductAttributeInterface
     function getValue(): string
     {
         return $this->data['value'];
+    }
+
+    public function _normalize(): array
+    {
+        return $this->data;
     }
 }

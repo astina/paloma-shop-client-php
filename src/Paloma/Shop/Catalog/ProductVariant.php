@@ -2,7 +2,9 @@
 
 namespace Paloma\Shop\Catalog;
 
-class ProductVariant implements ProductVariantInterface
+use Paloma\Shop\Common\SelfNormalizing;
+
+class ProductVariant implements ProductVariantInterface, SelfNormalizing
 {
     private $data;
 
@@ -94,5 +96,30 @@ class ProductVariant implements ProductVariantInterface
         return count($this->data['images'] ?? []) === 0
             ? null
             : new Image($this->data['images'][0]);
+    }
+
+    public function _normalize(): array
+    {
+        $data = [
+            'sku' => $this->data['sku'],
+            'name' => $this->data['name'],
+            'price' => $this->getPrice(),
+            'originalPrice' => $this->getOriginalPrice(),
+            'taxRate' => $this->getTaxRate(),
+            'taxIncluded' => $this->isTaxIncluded(),
+            'attributes' => array_map(function($elem) {
+                return $elem->_normalize();
+            }, $this->getAttributes()),
+            'images' => array_map(function($elem) {
+                return $elem->_normalize();
+            }, $this->getImages()),
+            // TODO options
+        ];
+
+        $data['firstImage'] = count($data['images']) === 0
+            ? null
+            : $data['images'][0];
+
+        return $data;
     }
 }

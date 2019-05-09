@@ -2,6 +2,8 @@
 
 namespace Paloma\Shop\Common;
 
+use Paloma\Shop\Utils\NormalizationUtils;
+
 abstract class Page implements PageInterface
 {
     protected $data;
@@ -53,5 +55,22 @@ abstract class Page implements PageInterface
         return isset($this->data['order'])
             ? $this->data['order'][0]['direction'] === 'DESC'
             : false;
+    }
+
+    protected function _normalize()
+    {
+        $data = NormalizationUtils::copyKeys([
+            'size',
+            'number',
+            'totalElements',
+            'totalPages',
+            'last',
+            'first',
+        ], $this->data);
+
+        $data['sort'] = $this->getSort();
+        $data['orderDesc'] = $this->isOrderDesc();
+
+        return $data;
     }
 }

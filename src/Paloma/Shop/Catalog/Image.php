@@ -2,9 +2,13 @@
 
 namespace Paloma\Shop\Catalog;
 
-class Image implements ImageInterface
+use Paloma\Shop\Common\SelfNormalizing;
+
+class Image implements ImageInterface, SelfNormalizing
 {
     private $data;
+
+    private $_sources = null; // cache
 
     public function __construct(array $data)
     {
@@ -16,19 +20,41 @@ class Image implements ImageInterface
         return $this->data['name'];
     }
 
-    function getSource(string $size): ImageSourceInterface
+    function getSource(string $size): ?ImageSourceInterface
     {
-        foreach ($this->data['sources'] as $source) {
-            if ($source['size'] === $size) {
-                return new ImageSource($source);
-            }
-        }
+        return $this->getSources()[$size] ?? null;
     }
 
     function getSources(): array
     {
-        return array_map(function($elem) {
-            return new ImageSource($elem);
-        }, $this->data['sources'] ?? []);
+        if ($this->_sources !== null) {
+            return $this->_sources;
+        }
+
+        $sources = [];
+
+        foreach ($this->data['sources'] ?? [] as $source) {
+            $sources[$source['size']] = new ImageSource($source);
+        }
+
+        $this->_sources = $sources;
+
+        return $sources;
+    }
+
+    public function _normalize(): array
+    {
+        $sources = [];
+        foreach ($this->data['sources'] ?? [] as $source) {
+            $sources[$source['size']] = [
+                'size' => $source['size'],
+                'url' => $source['url'],
+            ];
+        }
+
+        return [
+            'name' => $this->data['name'],
+            'sources' => $sources,
+        ];
     }
 }

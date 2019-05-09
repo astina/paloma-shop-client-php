@@ -3,8 +3,9 @@
 namespace Paloma\Shop\Catalog;
 
 use Paloma\Shop\Common\Page;
+use Paloma\Shop\Common\SelfNormalizing;
 
-class ProductPage extends Page implements ProductPageInterface
+class ProductPage extends Page implements ProductPageInterface, SelfNormalizing
 {
     public static function createEmpty()
     {
@@ -43,5 +44,16 @@ class ProductPage extends Page implements ProductPageInterface
         return array_map(function($elem) {
                 return new FilterAggregate($elem);
             }, $this->data[$field]);
+    }
+
+    public function _normalize(): array
+    {
+        $data = parent::_normalize();
+
+        $data['content'] = array_map(function($elem) {
+            return $elem->_normalize();
+        }, $this->getContent());
+
+        return $data;
     }
 }
