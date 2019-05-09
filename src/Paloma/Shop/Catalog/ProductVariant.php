@@ -57,15 +57,12 @@ class ProductVariant implements ProductVariantInterface
         }, $this->data['options'] ?? []);
     }
 
-    /**
-     * @return ProductAttributeInterface[]
-     */
     function getAttributes(): array
     {
         $attributes = [];
         foreach (array_values($this->data['attributes'] ?? []) as $attr) {
             if ($attr['display'] === 'product') {
-                array_push($attributes, new ProductAttribute($attr));
+                $attributes[$attr['type']] = new ProductAttribute($attr);
             }
         }
 

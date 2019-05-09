@@ -44,7 +44,7 @@ interface ProductVariantInterface
     function getOptions(): array;
 
     /**
-     * @return ProductAttributeInterface[] List of attributes specific to this variant
+     * @return array Map of attributes specific to this variant
      */
     function getAttributes(): array;
 

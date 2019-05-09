@@ -13,5 +13,10 @@ interface ImageInterface
      * @param string $size
      * @return ImageSourceInterface
      */
-    function getSource($size = 'small'): ImageSourceInterface;
+    function getSource(string $size): ImageSourceInterface;
+
+    /**
+     * @return ImageSourceInterface[]|array
+     */
+    function getSources(): array;
 }

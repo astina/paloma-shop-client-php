@@ -59,7 +59,7 @@ interface ProductInterface
     function getVariants(): array;
 
     /**
-     * @return ProductAttributeInterface[] List of attributes valid for all variants of this product
+     * @return array Map of attributes valid for all variants of this product
      */
     function getAttributes(): array;
 
@@ -78,4 +78,9 @@ interface ProductInterface
      * @return ImageInterface The first image of getImages()
      */
     function getFirstImage(): ?ImageInterface;
+
+    /**
+     * @return CategoryReferenceInterface[]
+     */
+    function getCategories(): array;
 }

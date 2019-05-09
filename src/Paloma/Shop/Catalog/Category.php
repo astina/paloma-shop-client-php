@@ -26,6 +26,21 @@ class Category implements CategoryInterface
         return $this->data['slug'];
     }
 
+    function getTitle(): ?string
+    {
+        return $this->data['pageTitle'] ?: $this->getName();
+    }
+
+    function getDescription(): ?string
+    {
+        return $this->data['footerText'] ?: null;
+    }
+
+    function getMetaDescription(): ?string
+    {
+        return $this->data['metaDescription'] ?: $this->getDescription();
+    }
+
     function getParentCategoryCode(): ?string
     {
         return $this->data['parent'];
@@ -53,5 +68,15 @@ class Category implements CategoryInterface
                 return new FilterAggregate($elem);
             }, $this->data['filterAggregates'])
             : null;
+    }
+
+    /**
+     * @return CategoryReferenceInterface[]
+     */
+    function getAncestors(): array
+    {
+        return array_map(function($elem) {
+            return new CategoryReference($elem);
+        }, $this->data['ancestors'] ?? []);
     }
 }

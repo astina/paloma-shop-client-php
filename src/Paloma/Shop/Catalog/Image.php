@@ -16,12 +16,19 @@ class Image implements ImageInterface
         return $this->data['name'];
     }
 
-    function getSource($size = 'small'): ImageSourceInterface
+    function getSource(string $size): ImageSourceInterface
     {
         foreach ($this->data['sources'] as $source) {
             if ($source['size'] === $size) {
                 return new ImageSource($source);
             }
         }
+    }
+
+    function getSources(): array
+    {
+        return array_map(function($elem) {
+            return new ImageSource($elem);
+        }, $this->data['sources'] ?? []);
     }
 }

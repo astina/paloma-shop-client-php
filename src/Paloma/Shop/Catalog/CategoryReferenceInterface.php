@@ -5,7 +5,7 @@ namespace Paloma\Shop\Catalog;
 interface CategoryReferenceInterface
 {
     /**
-     * @return string Category code
+     * @return string Category code, unique within a channel
      */
     function getCode(): string;
 
@@ -15,7 +15,7 @@ interface CategoryReferenceInterface
     function getName(): string;
 
     /**
-     * @return string Category slug
+     * @return string SEO friendly name to be used for category URLs (together with the category code)
      */
     function getSlug(): string;
 }

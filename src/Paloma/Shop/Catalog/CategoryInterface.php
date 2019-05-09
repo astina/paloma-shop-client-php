@@ -2,22 +2,22 @@
 
 namespace Paloma\Shop\Catalog;
 
-interface CategoryInterface
+interface CategoryInterface extends CategoryReferenceInterface
 {
     /**
-     * @return string Category code, unique within a channel
+     * @return string Category title (fallback: category name)
      */
-    function getCode(): string;
+    function getTitle(): ?string;
 
     /**
-     * @return string Category name
+     * @return string Category description
      */
-    function getName(): string;
+    function getDescription(): ?string;
 
     /**
-     * @return string SEO friendly name to be used for category URLs (together with the category code)
+     * @return string Category meta description for SEO
      */
-    function getSlug(): string;
+    function getMetaDescription(): ?string;
 
     /**
      * @return string Parent category code
@@ -33,4 +33,9 @@ interface CategoryInterface
      * @return FilterAggregateInterface[] Optional: list of filter aggregates
      */
     function getFilterAggregates(): ?array;
+
+    /**
+     * @return CategoryReferenceInterface[]
+     */
+    function getAncestors(): array;
 }

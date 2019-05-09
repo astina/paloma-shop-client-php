@@ -79,14 +79,14 @@ class Product implements ProductInterface
     }
 
     /**
-     * @return ProductAttributeInterface[]
+     * @return array
      */
     function getAttributes(): array
     {
         $attributes = [];
-        foreach (array_values($this->data['attributes'] ?? []) as $attr) {
+        foreach (array_values($this->data['master']['attributes'] ?? []) as $attr) {
             if ($attr['display'] === 'product') {
-                array_push($attributes, new ProductAttribute($attr));
+                $attributes[$attr['type']] = new ProductAttribute($attr);
             }
         }
 
@@ -95,9 +95,9 @@ class Product implements ProductInterface
 
     function getAttribute(string $type): ?ProductAttributeInterface
     {
-        if (isset($this->data['attributes'][$type])
-            && $this->data['attributes'][$type]['display'] === 'product') {
-            return new ProductAttribute($this->data['attributes'][$type]);
+        if (isset($this->data['master']['attributes'][$type])
+            && $this->data['master']['attributes'][$type]['display'] === 'product') {
+            return new ProductAttribute($this->data['master']['attributes'][$type]);
         }
 
         return null;
@@ -110,13 +110,23 @@ class Product implements ProductInterface
     {
         return array_map(function($elem) {
             return new Image($elem);
-        }, $this->data['images'] ?? []);
+        }, $this->data['master']['images'] ?? []);
     }
 
     function getFirstImage(): ?ImageInterface
     {
-        return count($this->data['images'] ?? []) === 0
+        return count($this->data['master']['images'] ?? []) === 0
             ? null
-            : new Image($this->data['images'][0]);
+            : new Image($this->data['master']['images'][0]);
+    }
+
+    /**
+     * @return CategoryReferenceInterface[]
+     */
+    function getCategories(): array
+    {
+        return array_map(function($elem) {
+           return new CategoryReference($elem);
+        }, $this->data['categories'] ?? []);
     }
 }

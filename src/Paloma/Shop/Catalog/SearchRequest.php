@@ -9,7 +9,7 @@ class SearchRequest implements SearchRequestInterface
     private $query;
 
     /**
-     * @var SearchFilterInterface[]
+     * @var SearchFilterInterface[]|array
      */
     private $filters;
 
@@ -26,7 +26,7 @@ class SearchRequest implements SearchRequestInterface
     /**
      * @param string $category
      * @param string $query
-     * @param SearchFilterInterface[] $filters
+     * @param SearchFilterInterface[]|array $filters
      * @param bool $includeFilterAggregates
      * @param $page
      * @param int $size

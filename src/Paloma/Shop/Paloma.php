@@ -8,7 +8,7 @@ use Paloma\Shop\Checkout\Checkout;
 use Paloma\Shop\Checkout\CheckoutInterface;
 use Paloma\Shop\Customers\Customers;
 use Paloma\Shop\Customers\CustomersInterface;
-use Paloma\Shop\Customers\UserProviderInterface;
+use Paloma\Shop\Security\UserProviderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class Paloma
@@ -19,13 +19,11 @@ class Paloma
 
     private $customers;
 
-    private function __construct(PalomaClientInterface $client,
-                                 UserProviderInterface $userProvider,
-                                 ValidatorInterface $validator)
+    public function __construct(CatalogInterface $catalog, CheckoutInterface $checkout, CustomersInterface $customers)
     {
-        $this->catalog = new Catalog($client);
-        $this->checkout = new Checkout($client, $validator);
-        $this->customers = new Customers($userProvider, $client, $validator);
+        $this->catalog = $catalog;
+        $this->checkout = $checkout;
+        $this->customers = $customers;
     }
 
     public function catalog(): CatalogInterface
