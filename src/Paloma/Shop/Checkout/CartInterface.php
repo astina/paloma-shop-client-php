@@ -25,6 +25,11 @@ interface CartInterface
     function isEmpty(): bool;
 
     /**
+     * @return string
+     */
+    function getItemsPrice(): string;
+
+    /**
      * If an operation requires modification to the cart that where not explicitly requested by the client,
      * those modifications are listed here. Example: Item was removed because it is no longer available
      * @return CartModificationInterface[]

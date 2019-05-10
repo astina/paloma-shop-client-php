@@ -2,6 +2,8 @@
 
 namespace Paloma\Shop\Checkout;
 
+use Paloma\Shop\Common\Price;
+
 class Cart implements CartInterface
 {
     private $data;
@@ -49,6 +51,14 @@ class Cart implements CartInterface
     function isEmpty(): bool
     {
         return count($this->data['items'] ?? []) === 0;
+    }
+
+    function getItemsPrice(): string
+    {
+        return (new Price(
+            $this->data['itemsPricing']['currency'],
+            $this->data['itemsPricing']['grossPriceFormatted'])
+        )->getPrice();
     }
 
     /**
