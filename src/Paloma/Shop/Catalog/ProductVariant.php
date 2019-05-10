@@ -98,6 +98,11 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
             : new Image($this->data['images'][0]);
     }
 
+    function getAvailability(): ProductAvailabilityInterface
+    {
+        return new ProductAvailability($this->data['availability']);
+    }
+
     public function _normalize(): array
     {
         $data = [
@@ -113,6 +118,7 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
             'images' => array_map(function($elem) {
                 return $elem->_normalize();
             }, $this->getImages()),
+            'availability' => $this->getAvailability()->_normalize(),
             // TODO options
         ];
 

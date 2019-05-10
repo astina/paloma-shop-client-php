@@ -14,10 +14,10 @@ interface ProductAvailabilityInterface
     /**
      * @return DateTime Optional: availability date (if not yet available)
      */
-    function getAvailableFrom(): DateTime;
+    function getAvailableFrom(): ?DateTime;
 
     /**
      * @return int Optional: number of units currently available
      */
-    function getAvailableStock(): int;
+    function getAvailableStock(): ?int;
 }

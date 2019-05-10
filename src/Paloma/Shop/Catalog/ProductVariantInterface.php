@@ -63,4 +63,9 @@ interface ProductVariantInterface
      * @return ImageInterface The first image of getImages()
      */
     function getFirstImage(): ?ImageInterface;
+
+    /**
+     * @return ProductAvailabilityInterface
+     */
+    function getAvailability(): ProductAvailabilityInterface;
 }
