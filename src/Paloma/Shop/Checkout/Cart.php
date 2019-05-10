@@ -55,6 +55,10 @@ class Cart implements CartInterface
 
     function getItemsPrice(): string
     {
+        if (!isset($this->data['itemsPricing'])) {
+            return "";
+        }
+
         return (new Price(
             $this->data['itemsPricing']['currency'],
             $this->data['itemsPricing']['grossPriceFormatted'])
