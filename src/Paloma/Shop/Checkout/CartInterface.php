@@ -12,12 +12,12 @@ interface CartInterface
     /**
      * @return int Cart items count
      */
-    function itemsCount(): int;
+    function getItemsCount(): int;
 
     /**
      * @return int Number of cart items times quantities
      */
-    function unitsCount(): int;
+    function getUnitsCount(): int;
 
     /**
      * @return bool True if the cart contains no items

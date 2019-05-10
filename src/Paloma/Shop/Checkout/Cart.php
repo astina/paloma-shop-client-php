@@ -33,7 +33,7 @@ class Cart implements CartInterface
     /**
      * @return int Cart items count
      */
-    function itemsCount(): int
+    function getItemsCount(): int
     {
         return count($this->data['items'] ?? []);
     }
@@ -41,7 +41,7 @@ class Cart implements CartInterface
     /**
      * @return int Number of cart items times quantities
      */
-    function unitsCount(): int
+    function getUnitsCount(): int
     {
         return array_reduce($this->getItems(), function($carry, CartItemInterface $item) {
             return $carry + $item->getQuantity();
