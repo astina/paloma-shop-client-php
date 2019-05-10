@@ -63,6 +63,16 @@ class ProductTest extends TestCase
                 ]
             ],
             'master' => [
+                'pricing' => [
+                    'currency' => 'currency',
+                    'grossPriceFormatted' => 'grossPriceFormatted',
+                    'originalGrossPriceFormatted' => 'originalGrossPriceFormatted',
+                    'taxes' => [
+                        'vat' => [
+                            'rateFormatted' => 'rateFormatted'
+                        ]
+                    ]
+                ],
                 'attributes' => [
                     'type' => [
                         'type' => 'type',
