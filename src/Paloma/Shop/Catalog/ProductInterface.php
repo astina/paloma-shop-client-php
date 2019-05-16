@@ -59,6 +59,11 @@ interface ProductInterface
     function getVariants(): array;
 
     /**
+     * @return array Map of options accumulated from all variants.
+     */
+    function getOptions(): array;
+
+    /**
      * @return array Map of attributes valid for all variants of this product
      */
     function getAttributes(): array;

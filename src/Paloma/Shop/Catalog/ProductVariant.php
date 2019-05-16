@@ -49,9 +49,6 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
         return $this->price->isTaxIncluded();
     }
 
-    /**
-     * @return ProductVariantOptionInterface[]
-     */
     function getOptions(): array
     {
         return array_map(function($elem) {
@@ -119,7 +116,9 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
                 return $elem->_normalize();
             }, $this->getImages()),
             'availability' => $this->getAvailability()->_normalize(),
-            // TODO options
+            'options' => array_map(function($elem) {
+                return $elem->_normalize();
+            }, $this->getOptions()),
         ];
 
         $data['firstImage'] = count($data['images']) === 0

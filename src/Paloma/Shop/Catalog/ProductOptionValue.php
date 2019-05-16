@@ -4,7 +4,7 @@ namespace Paloma\Shop\Catalog;
 
 use Paloma\Shop\Common\SelfNormalizing;
 
-class ProductVariantOption implements ProductVariantOptionInterface, SelfNormalizing
+class ProductOptionValue implements ProductOptionValueInterface, SelfNormalizing
 {
     private $data;
 
@@ -13,9 +13,9 @@ class ProductVariantOption implements ProductVariantOptionInterface, SelfNormali
         $this->data = $data;
     }
 
-    function getOption(): string
+    function getValue(): string
     {
-        return $this->data['option'];
+        return $this->data['value'];
     }
 
     function getLabel(): string
@@ -23,9 +23,9 @@ class ProductVariantOption implements ProductVariantOptionInterface, SelfNormali
         return $this->data['label'];
     }
 
-    function getValue(): string
+    function getVariants(): array
     {
-        return $this->data['value'];
+        return $this->data['variants'];
     }
 
     public function _normalize(): array

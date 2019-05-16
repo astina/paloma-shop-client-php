@@ -14,6 +14,8 @@ class Product implements ProductInterface, SelfNormalizing
 
     private $_variants = null; // cache
 
+    private $_options = null; // cache
+
     public function __construct(array $data)
     {
         if (count($data['variants']) === 0) {
@@ -95,9 +97,48 @@ class Product implements ProductInterface, SelfNormalizing
         return $this->_variants;
     }
 
-    /**
-     * @return array
-     */
+    function getOptions(): array
+    {
+        if ($this->_options !== null) {
+            return $this->_options;
+        }
+
+        $options = [];
+
+        foreach ($this->getVariants() as $variant) {
+
+            /**  @var ProductVariantOptionInterface $option */
+            foreach ($variant->getOptions() as $type => $option) {
+
+                if (!isset($options[$type])) {
+                    $options[$type] = [
+                        'type' => $type,
+                        'label' => $option->getLabel(),
+                        'values' => [],
+                    ];
+                }
+
+                $value = $option->getValue();
+
+                if (!isset($options[$type]['values'][$value])) {
+                    $options[$type]['values'][$value] = [
+                        'value' => $value,
+                        'label' => $value,
+                        'variants' => [],
+                    ];
+                }
+
+                $options[$type]['values'][$value]['variants'][] = $variant->getSku();
+            }
+        }
+
+        $this->_options = array_map(function($elem) {
+            return new ProductOption($elem);
+        }, $options);
+
+        return $this->_options;
+    }
+
     function getAttributes(): array
     {
         $attributes = [];
@@ -165,6 +206,10 @@ class Product implements ProductInterface, SelfNormalizing
         $data['variants'] = array_map(function($elem) {
             return $elem->_normalize();
         }, $this->getVariants());
+
+        $data['options'] = array_map(function($elem) {
+            return $elem->_normalize();
+        }, $this->getOptions());
 
         $data['attributes'] = array_map(function($elem) {
             return $elem->_normalize();

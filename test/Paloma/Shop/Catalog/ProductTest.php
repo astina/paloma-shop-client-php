@@ -8,7 +8,65 @@ class ProductTest extends TestCase
 {
     public function testProduct()
     {
-        $product = new Product([
+        $product = $this->createProduct();
+
+        $this->assertEquals('itemNumber', $product->getItemNumber());
+        $this->assertEquals('name', $product->getName());
+        $this->assertEquals('slug', $product->getSlug());
+        $this->assertEquals('description', $product->getDescription());
+        $this->assertEquals('shortDescription', $product->getShortDescription());
+        $this->assertEquals('currency grossPriceFormatted', $product->getBasePrice());
+        $this->assertEquals('originalGrossPriceFormatted', $product->getOriginalBasePrice());
+        $this->assertEquals('rateFormatted', $product->getTaxRate());
+        $this->assertTrue($product->isTaxIncluded());
+
+        $options = $product->getOptions();
+        $this->assertEquals(2, count($options));
+        $this->assertEquals('sku', $options['option1']->getValues()[0]->getVariants()[0]);
+
+        $variant = $product->getVariants()[0];
+        $this->assertEquals('sku', $variant->getSku());
+        $this->assertEquals('name', $variant->getName());
+        $this->assertEquals('currency grossPriceFormatted', $variant->getPrice());
+        $this->assertEquals('originalGrossPriceFormatted', $variant->getOriginalPrice());
+        $this->assertEquals('rateFormatted', $variant->getTaxRate());
+        $this->assertTrue($variant->isTaxIncluded());
+        $this->assertEquals(2, count($variant->getOptions()));
+        $this->assertEquals(1, count($variant->getAttributes()));
+        $this->assertEquals(1, count($variant->getImages()));
+        $this->assertEquals('name', $variant->getFirstImage()->getName());
+        $this->assertEquals('url', $variant->getFirstImage()->getSource('size')->getUrl());
+
+        $option = $variant->getOptions()['option1'];
+        $this->assertEquals('option1', $option->getOption());
+        $this->assertEquals('label1', $option->getLabel());
+        $this->assertEquals('value1', $option->getValue());
+
+        $this->assertEquals('label', $variant->getAttribute('type')->getLabel());
+        $this->assertNull($variant->getAttribute('hidden'));
+
+        $this->assertEquals(1, count($product->getAttributes()));
+        $this->assertEquals('label', $product->getAttribute('type')->getLabel());
+        $this->assertNull($product->getAttribute('hidden'));
+
+        $this->assertEquals(1, count($product->getImages()));
+        $this->assertEquals('name', $product->getFirstImage()->getName());
+        $this->assertEquals('url', $product->getFirstImage()->getSource('size')->getUrl());
+    }
+
+    public function testNormalize()
+    {
+        $data = $this->createProduct()->_normalize();
+
+        $this->assertNotNull($data);
+    }
+
+    /**
+     * @return Product
+     */
+    private function createProduct(): Product
+    {
+        return new Product([
             'itemNumber' => 'itemNumber',
             'name' => 'name',
             'slug' => 'slug',
@@ -29,11 +87,16 @@ class ProductTest extends TestCase
                         ]
                     ],
                     'options' => [
-                        [
-                            'option' => 'option',
-                            'label' => 'label',
-                            'value' => 'value',
-                        ]
+                        'option1' => [
+                            'option' => 'option1',
+                            'label' => 'label1',
+                            'value' => 'value1',
+                        ],
+                        'option2' => [
+                            'option' => 'option2',
+                            'label' => 'label2',
+                            'value' => 'value2',
+                        ],
                     ],
                     'attributes' => [
                         'type' => [
@@ -59,7 +122,12 @@ class ProductTest extends TestCase
                                 ]
                             ]
                         ]
-                    ]
+                    ],
+                    'availability' => [
+                        'available' => true,
+                        'availableStock' => 10,
+                        'availableFrom' => null,
+                    ],
                 ]
             ],
             'master' => [
@@ -98,46 +166,12 @@ class ProductTest extends TestCase
                         ]
                     ]
                 ],
+                'availability' => [
+                    'available' => true,
+                    'availableStock' => 10,
+                    'availableFrom' => null,
+                ],
             ],
         ]);
-
-        $this->assertEquals('itemNumber', $product->getItemNumber());
-        $this->assertEquals('name', $product->getName());
-        $this->assertEquals('slug', $product->getSlug());
-        $this->assertEquals('description', $product->getDescription());
-        $this->assertEquals('shortDescription', $product->getShortDescription());
-        $this->assertEquals('currency grossPriceFormatted', $product->getBasePrice());
-        $this->assertEquals('originalGrossPriceFormatted', $product->getOriginalBasePrice());
-        $this->assertEquals('rateFormatted', $product->getTaxRate());
-        $this->assertTrue($product->isTaxIncluded());
-
-        $variant = $product->getVariants()[0];
-        $this->assertEquals('sku', $variant->getSku());
-        $this->assertEquals('name', $variant->getName());
-        $this->assertEquals('currency grossPriceFormatted', $variant->getPrice());
-        $this->assertEquals('originalGrossPriceFormatted', $variant->getOriginalPrice());
-        $this->assertEquals('rateFormatted', $variant->getTaxRate());
-        $this->assertTrue($variant->isTaxIncluded());
-        $this->assertEquals(1, count($variant->getOptions()));
-        $this->assertEquals(1, count($variant->getAttributes()));
-        $this->assertEquals(1, count($variant->getImages()));
-        $this->assertEquals('name', $variant->getFirstImage()->getName());
-        $this->assertEquals('url', $variant->getFirstImage()->getSource('size')->getUrl());
-
-        $option = $variant->getOptions()[0];
-        $this->assertEquals('option', $option->getOption());
-        $this->assertEquals('label', $option->getLabel());
-        $this->assertEquals('value', $option->getValue());
-
-        $this->assertEquals('label', $variant->getAttribute('type')->getLabel());
-        $this->assertNull($variant->getAttribute('hidden'));
-
-        $this->assertEquals(1, count($product->getAttributes()));
-        $this->assertEquals('label', $product->getAttribute('type')->getLabel());
-        $this->assertNull($product->getAttribute('hidden'));
-
-        $this->assertEquals(1, count($product->getImages()));
-        $this->assertEquals('name', $product->getFirstImage()->getName());
-        $this->assertEquals('url', $product->getFirstImage()->getSource('size')->getUrl());
     }
 }

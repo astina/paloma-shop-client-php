@@ -39,7 +39,7 @@ interface ProductVariantInterface
     function isTaxIncluded(): bool;
 
     /**
-     * @return ProductVariantOptionInterface[] List of options defining this variant (e.g. color=blue, size=M)
+     * @return array Map of options defining this variant (e.g. color=blue, size=M)
      */
     function getOptions(): array;
 
