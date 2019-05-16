@@ -2,9 +2,10 @@
 
 namespace Paloma\Shop\Error;
 
-use Exception;
-
-class OrderNotReadyForPurchase extends Exception
+class OrderNotReadyForPurchase extends AbstractPalomaException
 {
-
+    function getHttpStatus(): int
+    {
+        return 400;
+    }
 }

@@ -2,9 +2,10 @@
 
 namespace Paloma\Shop\Error;
 
-use Exception;
-
-class UnknownShippingMethod extends Exception
+class UnknownShippingMethod extends AbstractPalomaException
 {
-
+    function getHttpStatus(): int
+    {
+        return 400;
+    }
 }

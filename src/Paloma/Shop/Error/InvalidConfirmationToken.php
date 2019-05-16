@@ -2,9 +2,10 @@
 
 namespace Paloma\Shop\Error;
 
-use Exception;
-
-class InvalidConfirmationToken extends Exception
+class InvalidConfirmationToken extends AbstractPalomaException
 {
-
+    function getHttpStatus(): int
+    {
+        return 400;
+    }
 }

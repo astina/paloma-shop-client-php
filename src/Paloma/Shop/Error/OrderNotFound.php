@@ -2,9 +2,10 @@
 
 namespace Paloma\Shop\Error;
 
-use Exception;
-
-class OrderNotFound extends Exception
+class OrderNotFound extends AbstractPalomaException
 {
-
+    function getHttpStatus(): int
+    {
+        return 404;
+    }
 }

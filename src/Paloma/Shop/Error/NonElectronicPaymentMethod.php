@@ -2,9 +2,10 @@
 
 namespace Paloma\Shop\Error;
 
-use Exception;
-
-class NonElectronicPaymentMethod extends Exception
+class NonElectronicPaymentMethod extends AbstractPalomaException
 {
-
+    function getHttpStatus(): int
+    {
+        return 400;
+    }
 }

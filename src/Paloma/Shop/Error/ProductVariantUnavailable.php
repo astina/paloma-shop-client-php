@@ -2,9 +2,10 @@
 
 namespace Paloma\Shop\Error;
 
-use Exception;
-
-class ProductVariantUnavailable extends Exception
+class ProductVariantUnavailable extends AbstractPalomaException
 {
-
+    function getHttpStatus(): int
+    {
+        return 400;
+    }
 }

@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class InvalidInput extends Exception
+class InvalidInput extends AbstractPalomaException
 {
     /**
      * @var ValidationError[]
@@ -56,5 +56,10 @@ class InvalidInput extends Exception
         return [
             'errors' => $this->errors,
         ];
+    }
+
+    function getHttpStatus(): int
+    {
+        return 400;
     }
 }

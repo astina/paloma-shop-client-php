@@ -1,10 +1,11 @@
 <?php
 
-namespace Paloma\Shop\Api;
+namespace Paloma\Shop\Error;
 
-use Exception;
-
-class CartIsEmpty extends Exception
+class CartIsEmpty extends AbstractPalomaException
 {
-
+    function getHttpStatus(): int
+    {
+        return 400;
+    }
 }

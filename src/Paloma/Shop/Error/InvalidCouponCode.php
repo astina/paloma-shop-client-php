@@ -2,10 +2,9 @@
 
 namespace Paloma\Shop\Error;
 
-use Exception;
 use GuzzleHttp\Exception\BadResponseException;
 
-class InvalidCouponCode extends Exception
+class InvalidCouponCode extends AbstractPalomaException
 {
     public function __construct(BadResponseException $bae)
     {
@@ -15,5 +14,10 @@ class InvalidCouponCode extends Exception
     public function getErrors()
     {
         return []; // TODO
+    }
+
+    function getHttpStatus(): int
+    {
+        return 400;
     }
 }
