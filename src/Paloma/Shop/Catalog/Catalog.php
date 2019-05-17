@@ -39,7 +39,7 @@ class Catalog implements CatalogInterface
                             'lessThan' => $filter->getLessThan(),
                         ];
                     }, $searchRequest->getFilters()),
-                'filterAggregates' => $searchRequest->includeFilterAggregates(),
+                'filterAggregates' => $searchRequest->isIncludeFilterAggregates(),
                 'sort' => $searchRequest->getSort(),
                 'order' => $searchRequest->isOrderDesc() ? 'desc' : 'asc',
                 // TODO context

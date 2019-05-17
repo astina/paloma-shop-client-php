@@ -2,7 +2,9 @@
 
 namespace Paloma\Shop\Catalog;
 
-class FilterAggregate implements FilterAggregateInterface
+use Paloma\Shop\Common\SelfNormalizing;
+
+class FilterAggregate implements FilterAggregateInterface, SelfNormalizing
 {
     private $data;
 
@@ -41,5 +43,19 @@ class FilterAggregate implements FilterAggregateInterface
     function getMax(): ?float
     {
         return isset($this->data['max']) ? (float) $this->data['max'] : null;
+    }
+
+    public function _normalize(): array
+    {
+        return [
+            'name' => $this->data['name'],
+            'label' => $this->data['label'],
+            'type' => $this->data['type'],
+            'values' => array_map(function($elem) {
+                return $elem->_normalize();
+            }, $this->getValues()),
+            'min' => $this->getMin(),
+            'max' => $this->getMax(),
+        ];
     }
 }

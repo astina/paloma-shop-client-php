@@ -87,7 +87,7 @@ class SearchRequest implements SearchRequestInterface
         return $this->filters;
     }
 
-    function includeFilterAggregates(): bool
+    function isIncludeFilterAggregates(): bool
     {
         return $this->includeFilterAggregates;
     }

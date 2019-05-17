@@ -41,9 +41,16 @@ class ProductPage extends Page implements ProductPageInterface, SelfNormalizing
             return null;
         }
 
+        $aggregatesData = [];
+        foreach ($this->data[$field] as $aggregateData) {
+            if (count($aggregateData['values']) > 0) {
+                $aggregatesData[] = $aggregateData;
+            }
+        }
+
         return array_map(function($elem) {
                 return new FilterAggregate($elem);
-            }, $this->data[$field]);
+            }, $aggregatesData);
     }
 
     public function _normalize(): array
@@ -53,6 +60,15 @@ class ProductPage extends Page implements ProductPageInterface, SelfNormalizing
         $data['content'] = array_map(function($elem) {
             return $elem->_normalize();
         }, $this->getContent());
+
+        $aggregates = $this->getFilterAggregates();
+        if ($aggregates === null) {
+            $data['filterAggregates'] = null;
+        } else {
+            $data['filterAggregates'] = array_map(function($elem) {
+                return $elem->_normalize();
+            }, $this->getFilterAggregates());
+        }
 
         return $data;
     }

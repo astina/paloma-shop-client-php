@@ -22,7 +22,7 @@ interface SearchRequestInterface
     /**
      * @return bool Whether to include aggregated option and attribute values over all search results.
      */
-    function includeFilterAggregates(): bool;
+    function isIncludeFilterAggregates(): bool;
 
     /**
      * @return int Page number, starting from 0
