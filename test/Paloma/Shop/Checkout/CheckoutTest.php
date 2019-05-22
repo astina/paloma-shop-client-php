@@ -6,6 +6,7 @@ use DateTime;
 use Exception;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Paloma\Shop\Common\Address;
@@ -21,6 +22,7 @@ use Paloma\Shop\Error\ProductVariantUnavailable;
 use Paloma\Shop\Error\UnknownPaymentMethod;
 use Paloma\Shop\Error\UnknownShippingMethod;
 use Paloma\Shop\PalomaTestClient;
+use Paloma\Shop\Security\TestUserProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
@@ -412,7 +414,7 @@ class CheckoutTest extends TestCase
         $order = json_decode(file_get_contents(__DIR__ . '/checkout_order.json'), true);
         $order['paymentMethod']['type'] = 'invoice';
 
-        $checkout = new Checkout((new PalomaTestClient())->withCheckout(new CheckoutTestClient($order)), $this->validator());
+        $checkout = new Checkout((new PalomaTestClient())->withCheckout(new CheckoutTestClient($order)), new TestUserProvider(), $this->validator());
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $checkout->initializePayment(new PaymentInitParameters('url1', 'url2', 'url3'));
@@ -451,7 +453,7 @@ class CheckoutTest extends TestCase
 
         $validator = $this->validator();
 
-        return new Checkout((new PalomaTestClient())->withCheckout(new CheckoutTestClient($order, $exception)), $validator);
+        return new Checkout((new PalomaTestClient())->withCheckout(new CheckoutTestClient($order, $exception)), new TestUserProvider(), $validator);
     }
 
     private function validator(): ValidatorInterface
@@ -462,14 +464,12 @@ class CheckoutTest extends TestCase
     }
 
     /**
-     * @return ServerException
+     * @return TransferException
      */
-    private function createServerException(): ServerException
+    private function createServerException(): TransferException
     {
-        return new ServerException(
-            'test',
-            new Request('GET', 'https://example.org'),
-            new Response(503)
+        return new TransferException(
+            'test'
         );
     }
 

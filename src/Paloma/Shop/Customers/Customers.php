@@ -7,7 +7,9 @@ use Egulias\EmailValidator\Validation\RFCValidation;
 use Exception;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\TransferException;
 use Paloma\Shop\Checkout\Cart;
+use Paloma\Shop\Checkout\CheckoutOrder;
 use Paloma\Shop\Common\Address;
 use Paloma\Shop\Common\AddressInterface;
 use Paloma\Shop\Error\BackendUnavailable;
@@ -97,10 +99,10 @@ class Customers implements CustomersInterface
 
             return new Customer($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bre) {
             throw InvalidInput::ofHttpResponse($bre->getResponse());
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -108,12 +110,16 @@ class Customers implements CustomersInterface
     {
         try {
 
-            $data = $this->client->customers()->getCustomer($this->getCustomerId());
+            $customer = $this->userProvider->getCustomer();
 
-            return new Customer($data);
+            if ($customer == null) {
+                throw new NotAuthenticated();
+            }
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+            return $customer;
+
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -138,10 +144,10 @@ class Customers implements CustomersInterface
 
             return new Customer($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bre) {
             throw InvalidInput::ofHttpResponse($bre->getResponse());
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -160,10 +166,10 @@ class Customers implements CustomersInterface
                 Address::toAddressArray($update)
             );
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bre) {
             throw InvalidInput::ofHttpResponse($bre->getResponse());
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
 
         $customer = new Customer($data);
@@ -188,10 +194,10 @@ class Customers implements CustomersInterface
 
             return $this->userProvider->getUser();
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $se) {
             throw new InvalidConfirmationToken();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -203,10 +209,10 @@ class Customers implements CustomersInterface
 
             return true;
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $se) {
             return false;
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -218,10 +224,10 @@ class Customers implements CustomersInterface
 
             return new UserDetails($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $se) {
             throw new BadCredentials();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -247,13 +253,13 @@ class Customers implements CustomersInterface
 
             return new UserDetails($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bre) {
             if ($bre->getCode() === 403) {
                 throw new BadCredentials();
             }
             throw InvalidInput::ofHttpResponse($bre->getResponse());
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -270,10 +276,10 @@ class Customers implements CustomersInterface
                 $this->config->getPasswordResetConfirmationBaseUrl()
             );
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bre) {
             throw InvalidInput::ofHttpResponse($bre->getResponse());
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -285,10 +291,10 @@ class Customers implements CustomersInterface
 
             return true;
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bre) {
             return false;
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -307,10 +313,10 @@ class Customers implements CustomersInterface
 
             return new UserDetails($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bre) {
             throw new InvalidConfirmationToken();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -327,10 +333,10 @@ class Customers implements CustomersInterface
 
             return new OrderPage($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bre) {
             throw InvalidInput::ofHttpResponse($bre->getResponse());
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -345,10 +351,10 @@ class Customers implements CustomersInterface
 
             return new Order($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bre) {
             throw new OrderNotFound();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -362,7 +368,7 @@ class Customers implements CustomersInterface
 
             try {
 
-                $data = $this->client->checkout()->checkoutOrder()->addItem(
+                $data = $this->getCheckoutOrder()->addItem(
                     $orderItem->getSku(),
                     $orderItem->getQuantity()
                 );
@@ -389,5 +395,15 @@ class Customers implements CustomersInterface
         }
 
         return new OrderRepetitionResult($itemResults);
+    }
+
+    /**
+     * @return CheckoutOrder
+     * @throws BackendUnavailable
+     * @throws NotAuthenticated
+     */
+    private function getCheckoutOrder(): CheckoutOrder
+    {
+        return $this->client->checkout()->checkoutOrder($this->getCustomer(), $this->userProvider->getUser());
     }
 }

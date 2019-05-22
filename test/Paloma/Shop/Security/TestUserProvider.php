@@ -2,9 +2,14 @@
 
 namespace Paloma\Shop\Security;
 
+use Paloma\Shop\Customers\Customer;
+use Paloma\Shop\Customers\CustomerInterface;
+
 class TestUserProvider implements UserProviderInterface
 {
     private $user;
+
+    private $customer;
 
     public function __construct(string $customerId = '1')
     {
@@ -17,10 +22,20 @@ class TestUserProvider implements UserProviderInterface
                 'emailAddress' => 'test@astina.io',
             ]
         ]);
+
+        $this->customer = new Customer([
+            'id' => $customerId,
+            'emailAddress' => 'test@astina.io'
+        ]);
     }
 
     function getUser(): ?UserDetailsInterface
     {
         return $this->user;
+    }
+
+    function getCustomer(): ?CustomerInterface
+    {
+        return $this->customer;
     }
 }

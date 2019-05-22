@@ -3,6 +3,8 @@
 namespace Paloma\Shop\Checkout;
 
 use Paloma\Shop\BaseClient;
+use Paloma\Shop\Customers\CustomerInterface;
+use Paloma\Shop\Security\UserDetailsInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -32,9 +34,9 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
         $this->session = empty($options['session']) ? new Session() : $options['session'];
     }
 
-    function checkoutOrder()
+    function checkoutOrder(CustomerInterface $customer = null, UserDetailsInterface $user = null)
     {
-        return new CheckoutOrder($this->channel, $this->locale, $this, $this->session);
+        return new CheckoutOrder($this->channel, $this->locale, $this, $this->session, $customer, $user);
     }
 
     function createOrder($order)

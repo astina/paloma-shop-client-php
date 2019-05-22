@@ -5,6 +5,11 @@ namespace Paloma\Shop\Customers;
 interface CustomerBasicsInterface
 {
     /**
+     * @return string Paloma customer ID
+     */
+    function getId(): string;
+
+    /**
      * @return string
      */
     function getEmailAddress(): string;

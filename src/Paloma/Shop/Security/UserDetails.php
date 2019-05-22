@@ -27,6 +27,11 @@ class UserDetails implements UserDetailsInterface
         return $this->data['user']['username'];
     }
 
+    function getUserId(): string
+    {
+        return $this->data['user']['id'];
+    }
+
     function getCustomerId(): string
     {
         return $this->data['customer']['id'];

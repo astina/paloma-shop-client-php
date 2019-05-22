@@ -5,9 +5,13 @@ namespace Paloma\Shop\Checkout;
 use DateTime;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\TransferException;
 use Paloma\Shop\Common\Address;
 use Paloma\Shop\Common\AddressInterface;
+use Paloma\Shop\Customers\Customer;
+use Paloma\Shop\Customers\CustomerInterface;
 use Paloma\Shop\Error\BackendUnavailable;
+use Paloma\Shop\Error\CartIsEmpty;
 use Paloma\Shop\Error\CartItemNotFound;
 use Paloma\Shop\Error\InvalidCouponCode;
 use Paloma\Shop\Error\InvalidInput;
@@ -20,6 +24,8 @@ use Paloma\Shop\Error\ProductVariantUnavailable;
 use Paloma\Shop\Error\UnknownPaymentMethod;
 use Paloma\Shop\Error\UnknownShippingMethod;
 use Paloma\Shop\PalomaClientInterface;
+use Paloma\Shop\Security\UserDetailsInterface;
+use Paloma\Shop\Security\UserProviderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class Checkout implements CheckoutInterface
@@ -30,13 +36,21 @@ class Checkout implements CheckoutInterface
     private $client;
 
     /**
+     * @var UserProviderInterface
+     */
+    private $userProvider;
+
+    /**
      * @var ValidatorInterface
      */
     private $validator;
 
-    public function __construct(PalomaClientInterface $client, ValidatorInterface $validator)
+    public function __construct(PalomaClientInterface $client,
+                                UserProviderInterface $userProvider,
+                                ValidatorInterface $validator)
     {
         $this->client = $client;
+        $this->userProvider = $userProvider;
         $this->validator = $validator;
     }
 
@@ -50,8 +64,8 @@ class Checkout implements CheckoutInterface
                 ? new Cart($checkoutOrder->get())
                 : Cart::createEmpty();
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -63,13 +77,13 @@ class Checkout implements CheckoutInterface
 
             return new Cart($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bse) {
             if ($bse->getCode() === 404) {
                 throw new ProductVariantNotFound();
             }
             throw new ProductVariantUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -85,13 +99,13 @@ class Checkout implements CheckoutInterface
 
             return new Cart($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bse) {
             if ($bse->getCode() === 404) {
                 throw new CartItemNotFound();
             }
             throw new ProductVariantUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -108,8 +122,40 @@ class Checkout implements CheckoutInterface
 
             return new Cart($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
+
+    function getOrderDraft(): OrderDraftInterface
+    {
+        try {
+
+            $checkoutOrder = $this->getCheckoutOrder();
+
+            if ($checkoutOrder->itemsCount() === 0) {
+                throw new CartIsEmpty();
+            }
+
+            $data = $checkoutOrder->get();
+
+            return new OrderDraft($data);
+
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
+
+    function setCustomer(CustomerInterface $customer, UserDetailsInterface $user = null): OrderDraftInterface
+    {
+        try {
+
+            $data = $this->getCheckoutOrder()->setCustomer(Customer::toBackendData($customer, $user));
+
+            return new OrderDraft($data);
+
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -133,8 +179,8 @@ class Checkout implements CheckoutInterface
 
             return new OrderDraft($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -159,8 +205,8 @@ class Checkout implements CheckoutInterface
                 return ShippingMethod::ofDataAndOrder($elem, $orderData);
             }, $data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -181,13 +227,13 @@ class Checkout implements CheckoutInterface
 
             return new ShippingMethodOptions($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $be) {
             if ($be->getCode() === 404) {
                 throw new UnknownShippingMethod();
             }
             throw new InvalidInput(); // TODO more info
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -206,13 +252,13 @@ class Checkout implements CheckoutInterface
 
             return new OrderDraft($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $be) {
             if ($be->getCode() === 404 || $targetDate == null) {
                 throw new UnknownShippingMethod();
             }
             throw new InvalidShippingTargetDate();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -230,8 +276,8 @@ class Checkout implements CheckoutInterface
                 return new PaymentMethod($elem);
             }, $data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -243,10 +289,10 @@ class Checkout implements CheckoutInterface
 
             return new OrderDraft($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $be) {
             throw new UnknownPaymentMethod();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -260,10 +306,10 @@ class Checkout implements CheckoutInterface
 
             return new OrderDraft($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $be) {
             throw new InvalidCouponCode($be);
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -277,8 +323,8 @@ class Checkout implements CheckoutInterface
 
             return new OrderDraft($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -289,8 +335,8 @@ class Checkout implements CheckoutInterface
             if (!$checkoutOrder->existsInSession()) {
                 throw new OrderNotReadyForPayment();
             }
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
 
         $orderData = $checkoutOrder->get();
@@ -303,6 +349,8 @@ class Checkout implements CheckoutInterface
                 $this->getCheckout()->finalizeOrder($orderData['id']);
             } catch (BadResponseException $bre) {
                 throw new OrderNotReadyForPayment(); // TODO add error details
+            } catch (TransferException $se) {
+                throw BackendUnavailable::ofException($se);
             }
         }
 
@@ -316,8 +364,8 @@ class Checkout implements CheckoutInterface
 
             return new PaymentDraft($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -328,8 +376,8 @@ class Checkout implements CheckoutInterface
             if (!$checkoutOrder->existsInSession()) {
                 throw new OrderNotReadyForPurchase();
             }
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
 
         $orderData = $checkoutOrder->get();
@@ -339,6 +387,8 @@ class Checkout implements CheckoutInterface
                 $this->getCheckout()->finalizeOrder($orderData['id']);
             } catch (BadResponseException $bre) {
                 throw new OrderNotReadyForPurchase(); // TODO add error details
+            } catch (TransferException $se) {
+                throw BackendUnavailable::ofException($se);
             }
         }
 
@@ -348,8 +398,8 @@ class Checkout implements CheckoutInterface
 
             return new OrderPurchase($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -360,7 +410,10 @@ class Checkout implements CheckoutInterface
 
     private function getCheckoutOrder(): CheckoutOrder
     {
-        return $this->getCheckout()->checkoutOrder();
+        $customer = $this->userProvider->getCustomer();
+        $user = $this->userProvider->getUser();
+
+        return $this->getCheckout()->checkoutOrder($customer, $user);
     }
 
     private function getCheckout(): CheckoutClientInterface

@@ -4,6 +4,8 @@ namespace Paloma\Shop\Checkout;
 
 interface OrderDraftInterface
 {
+    function getCustomer(): ?OrderCustomerInterface;
+
     function getBilling(): OrderBillingInterface;
 
     function getShipping(): OrderShippingInterface;

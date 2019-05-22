@@ -6,6 +6,7 @@ use DateTime;
 use Exception;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Paloma\Shop\Common\AddressInterface;
@@ -580,14 +581,12 @@ class CustomersTest extends TestCase
     }
 
     /**
-     * @return ServerException
+     * @return TransferException
      */
-    private function createServerException(): ServerException
+    private function createServerException(): TransferException
     {
-        return new ServerException(
-            'test',
-            new Request('GET', 'https://example.org'),
-            new Response(503)
+        return new TransferException(
+            'test'
         );
     }
 

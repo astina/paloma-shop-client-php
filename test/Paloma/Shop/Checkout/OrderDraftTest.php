@@ -36,7 +36,7 @@ class OrderDraftTest extends TestCase
         $this->assertEquals('Very nice', $item1->getDescription());
         $this->assertEquals('CHF 199.00', $item1->getItemPrice());
         $this->assertEquals('CHF 199.00', $item1->getUnitPrice());
-        $this->assertEquals('CHF 199.00', $item1->getOriginalPrice());
+        $this->assertEquals('299.00', $item1->getOriginalPrice());
         $this->assertEquals(1, $item1->getQuantity());
         $this->assertEquals(3, $item1->getAvailableQuantity());
         $this->assertEquals('00013580_000_4_49', $item1->getProductVariant()->getSku());

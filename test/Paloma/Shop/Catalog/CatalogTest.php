@@ -4,6 +4,7 @@ namespace Paloma\Shop\Catalog;
 
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Paloma\Shop\Checkout\CheckoutTestClient;
@@ -278,12 +279,10 @@ class CatalogTest extends TestCase
     /**
      * @return ServerException
      */
-    private function createServerException(): ServerException
+    private function createServerException(): TransferException
     {
-        return new ServerException(
-            'test',
-            new Request('GET', 'https://example.org'),
-            new Response(503)
+        return new TransferException(
+            'test'
         );
     }
 

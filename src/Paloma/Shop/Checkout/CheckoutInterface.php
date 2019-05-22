@@ -3,11 +3,11 @@
 namespace Paloma\Shop\Checkout;
 
 use DateTime;
-use Paloma\Shop\Api\CartIsEmpty;
 use Paloma\Shop\Common\AddressInterface;
+use Paloma\Shop\Customers\CustomerInterface;
 use Paloma\Shop\Error\BackendUnavailable;
+use Paloma\Shop\Error\CartIsEmpty;
 use Paloma\Shop\Error\CartItemNotFound;
-use Paloma\Shop\Error\CartUnavailable;
 use Paloma\Shop\Error\InsufficientStock;
 use Paloma\Shop\Error\InvalidCouponCode;
 use Paloma\Shop\Error\InvalidInput;
@@ -19,6 +19,7 @@ use Paloma\Shop\Error\ProductVariantNotFound;
 use Paloma\Shop\Error\ProductVariantUnavailable;
 use Paloma\Shop\Error\UnknownPaymentMethod;
 use Paloma\Shop\Error\UnknownShippingMethod;
+use Paloma\Shop\Security\UserDetailsInterface;
 
 interface CheckoutInterface
 {
@@ -65,6 +66,21 @@ interface CheckoutInterface
      * @throws BackendUnavailable
      */
     function removeCartItem(string $itemId): CartInterface;
+
+    /**
+     * @return OrderDraftInterface
+     * @throws CartIsEmpty
+     * @throws BackendUnavailable
+     */
+    function getOrderDraft(): OrderDraftInterface;
+
+    /**
+     * @param CustomerInterface $customer
+     * @param UserDetailsInterface|null $user
+     * @return OrderDraftInterface
+     * @throws BackendUnavailable
+     */
+    function setCustomer(CustomerInterface $customer, UserDetailsInterface $user = null): OrderDraftInterface;
 
     /**
      * Update the current order's shipping and billing address. If only the billing address is provided, it will be

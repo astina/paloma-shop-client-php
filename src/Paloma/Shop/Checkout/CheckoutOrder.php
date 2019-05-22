@@ -3,6 +3,9 @@
 namespace Paloma\Shop\Checkout;
 
 use GuzzleHttp\Exception\ClientException;
+use Paloma\Shop\Customers\Customer;
+use Paloma\Shop\Customers\CustomerInterface;
+use Paloma\Shop\Security\UserDetailsInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class CheckoutOrder
@@ -22,25 +25,43 @@ class CheckoutOrder
     private $session;
 
     /**
+     * @var CustomerInterface
+     */
+    private $customer;
+
+    /**
+     * @var UserDetailsInterface
+     */
+    private $user;
+
+    /**
      * @var array
      */
     private $order;
-
-    private static $CART_ID_VAR = 'paloma-cart-id';
 
     /**
      * @param $channel string Each channel keeps its own cart
      * @param $locale string Used to initialize the cart order
      * @param CheckoutClientInterface $checkoutClient
+     * @param CustomerInterface $customer
      * @param SessionInterface $session
      */
-    public function __construct($channel, $locale, CheckoutClientInterface $checkoutClient, SessionInterface $session)
+    public function __construct($channel,
+                                $locale,
+                                CheckoutClientInterface $checkoutClient,
+                                SessionInterface $session,
+                                CustomerInterface $customer = null,
+                                UserDetailsInterface $user = null)
     {
         $this->channel = $channel;
         $this->locale = $locale;
         $this->checkoutClient = $checkoutClient;
         $this->session = $session;
+        $this->customer = $customer;
+        $this->user = $user;
     }
+
+    private static $CART_ID_VAR = 'paloma-cart-id';
 
     public function get()
     {
@@ -123,7 +144,7 @@ class CheckoutOrder
 
         return $this->checkedCall(function () use ($customer) {
             $this->order = $this->checkoutClient->setCustomer($this->getCartId(), $customer);
-            $this->order;
+            return $this->order;
         });
     }
 
@@ -217,10 +238,17 @@ class CheckoutOrder
     private function createCartOrder()
     {
         return $this->checkedCall(function () {
+
+            $customer = $this->customer
+                ? Customer::toBackendData($this->customer, $this->user)
+                : null;
+
             $this->order = $this->checkoutClient->createOrder([
                 'channel' => $this->channel,
                 'locale' => $this->locale,
+                'customer' => $customer,
             ]);
+
             return $this->order;
         });
     }

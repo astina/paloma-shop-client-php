@@ -3,6 +3,8 @@
 namespace Paloma\Shop\Checkout;
 
 use Exception;
+use Paloma\Shop\Customers\CustomerInterface;
+use Paloma\Shop\Security\UserDetailsInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
@@ -29,15 +31,18 @@ class CheckoutTestClient implements CheckoutClientInterface
     }
 
     /**
+     * @param CustomerInterface|null $customer
+     * @param UserDetailsInterface|null $user
      * @return CheckoutOrder
+     * @throws Exception
      */
-    function checkoutOrder()
+    function checkoutOrder(CustomerInterface $customer = null, UserDetailsInterface $user = null)
     {
         if ($this->exception) {
             throw $this->exception;
         }
 
-        return new CheckoutOrder('test', 'de_CH', $this, $this->session);
+        return new CheckoutOrder('test', 'de_CH', $this, $this->session, $customer, $user);
     }
 
     function createOrder($order)

@@ -13,6 +13,15 @@ class OrderDraft implements OrderDraftInterface
         $this->data = $data;
     }
 
+    function getCustomer(): ?OrderCustomerInterface
+    {
+        if ($this->data['customer'] === null) {
+            return null;
+        }
+
+        return new OrderCustomer($this->data['customer'], $this->data['locale']);
+    }
+
     function getBilling(): OrderBillingInterface
     {
         return OrderBilling::ofCartData($this->data);

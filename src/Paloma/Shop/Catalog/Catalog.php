@@ -4,6 +4,7 @@ namespace Paloma\Shop\Catalog;
 
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\TransferException;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\CategoryNotFound;
 use Paloma\Shop\Error\InvalidInput;
@@ -47,10 +48,10 @@ class Catalog implements CatalogInterface
 
             return new ProductPage($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bse) {
             throw new InvalidInput();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -62,8 +63,8 @@ class Catalog implements CatalogInterface
 
             return new SearchSuggestions($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -75,13 +76,13 @@ class Catalog implements CatalogInterface
 
             return new Product($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         }  catch (BadResponseException $bre) {
             if ($bre->getCode() === 404) {
                 throw new ProductNotFound();
             }
             throw $bre;
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -93,13 +94,13 @@ class Catalog implements CatalogInterface
 
             return new ProductPage($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         }  catch (BadResponseException $bre) {
             if ($bre->getCode() === 404) {
                 throw new ProductNotFound();
             }
             throw $bre;
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -111,13 +112,13 @@ class Catalog implements CatalogInterface
 
             return new ProductPage($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         }  catch (BadResponseException $bre) {
             if ($bre->getCode() === 404) {
                 throw new ProductNotFound();
             }
             throw $bre;
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -179,8 +180,8 @@ class Catalog implements CatalogInterface
 
             return new ProductPage($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -199,8 +200,8 @@ class Catalog implements CatalogInterface
                 return new Category($elem);
             }, $data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 
@@ -212,10 +213,10 @@ class Catalog implements CatalogInterface
 
             return new Category($data);
 
-        } catch (ServerException $se) {
-            throw new BackendUnavailable();
         } catch (BadResponseException $bre) {
             throw new CategoryNotFound();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
         }
     }
 }

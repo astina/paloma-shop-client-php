@@ -2,12 +2,17 @@
 
 namespace Paloma\Shop\Checkout;
 
+use Paloma\Shop\Customers\CustomerInterface;
+use Paloma\Shop\Security\UserDetailsInterface;
+
 interface CheckoutClientInterface
 {
     /**
+     * @param CustomerInterface|null $customer
+     * @param UserDetailsInterface|null $user
      * @return CheckoutOrder
      */
-    function checkoutOrder();
+    function checkoutOrder(CustomerInterface $customer = null, UserDetailsInterface $user = null);
 
     function createOrder($order);
 
