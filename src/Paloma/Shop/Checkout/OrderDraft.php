@@ -65,7 +65,15 @@ class OrderDraft implements OrderDraftInterface
             }
         }
 
-        return null;
+        // HACK get currency and formatting from total price
+
+        $currency = $this->data['orderPricing']['currency'];
+        $amount = $this->data['orderPricing']['grossPriceFormatted'];
+
+        return sprintf('%s %s',
+            $currency,
+            preg_replace('/^0+/', '0', // replace leading zeroes with one zero
+                preg_replace('/[0-9]/', '0', $amount))); // replace all numbers with zero
     }
 
     /**
