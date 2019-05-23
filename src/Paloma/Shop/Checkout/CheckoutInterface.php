@@ -89,10 +89,28 @@ interface CheckoutInterface
      * @param AddressInterface $billingAddress
      * @param AddressInterface|null $shippingAddress
      * @return OrderDraftInterface
+     */
+    function setAddresses(AddressInterface $billingAddress, AddressInterface $shippingAddress = null): OrderDraftInterface;
+
+    /**
+     * Update the current order's billing address
+     *
+     * @param AddressInterface $address
+     * @return OrderDraftInterface
      * @throws InvalidInput
      * @throws BackendUnavailable
      */
-    function setAddresses(AddressInterface $billingAddress, AddressInterface $shippingAddress = null): OrderDraftInterface;
+    function setBillingAddress(AddressInterface $address): OrderDraftInterface;
+
+    /**
+     * Update the current order's shipping address
+     *
+     * @param AddressInterface $shippingAddress
+     * @return OrderDraftInterface
+     * @throws InvalidInput
+     * @throws BackendUnavailable
+     */
+    function setShippingAddress(AddressInterface $shippingAddress): OrderDraftInterface;
 
     /**
      * Returns a list of available shipping methods for the current order.

@@ -184,6 +184,50 @@ class Checkout implements CheckoutInterface
         }
     }
 
+    function setBillingAddress(AddressInterface $address): OrderDraftInterface
+    {
+        $validation = $this->validator->validate($address);
+
+        if ($validation->count() > 0) {
+            throw InvalidInput::ofValidation($validation);
+        }
+
+        try {
+
+            $data = $this->getCheckoutOrder()->setAddresses(
+                $this->toAddressArray($address),
+                null
+            );
+
+            return new OrderDraft($data);
+
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
+
+    function setShippingAddress(AddressInterface $address): OrderDraftInterface
+    {
+        $validation = $this->validator->validate($address);
+
+        if ($validation->count() > 0) {
+            throw InvalidInput::ofValidation($validation);
+        }
+
+        try {
+
+            $data = $this->getCheckoutOrder()->setAddresses(
+                null,
+                $this->toAddressArray($address)
+            );
+
+            return new OrderDraft($data);
+
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
+
     /**
      * @return ShippingMethodInterface[]
      * @throws BackendUnavailable

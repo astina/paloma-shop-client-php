@@ -57,6 +57,7 @@ class Address implements AddressInterface
             'company' => $address->getCompany(),
             'street' => $address->getStreet(),
             'zipCode' => $address->getZipCode(),
+            'city'=> $address->getCity(),
             'country' => $address->getCountry(),
             'phoneNumber' => $address->getPhoneNumber(),
             'emailAddress' => $address->getEmailAddress(),
