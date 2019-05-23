@@ -22,7 +22,7 @@ use Paloma\Shop\PalomaClientInterface;
 use Paloma\Shop\PalomaConfigInterface;
 use Paloma\Shop\Security\UserDetails;
 use Paloma\Shop\Security\UserDetailsInterface;
-use Paloma\Shop\Security\UserProviderInterface;
+use Paloma\Shop\Security\PalomaSecurityInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class Customers implements CustomersInterface
@@ -33,7 +33,7 @@ class Customers implements CustomersInterface
     private $client;
 
     /**
-     * @var UserProviderInterface
+     * @var PalomaSecurityInterface
      */
     private $userProvider;
 
@@ -48,7 +48,7 @@ class Customers implements CustomersInterface
     private $validator;
 
     public function __construct(PalomaClientInterface $client,
-                                UserProviderInterface $userProvider,
+                                PalomaSecurityInterface $userProvider,
                                 PalomaConfigInterface $config,
                                 ValidatorInterface $validator)
     {

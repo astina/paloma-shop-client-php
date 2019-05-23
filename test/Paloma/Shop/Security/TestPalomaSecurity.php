@@ -5,7 +5,7 @@ namespace Paloma\Shop\Security;
 use Paloma\Shop\Customers\Customer;
 use Paloma\Shop\Customers\CustomerInterface;
 
-class TestUserProvider implements UserProviderInterface
+class TestPalomaSecurity implements PalomaSecurityInterface
 {
     private $user;
 

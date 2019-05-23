@@ -4,7 +4,7 @@ namespace Paloma\Shop\Security;
 
 use Paloma\Shop\Customers\CustomerInterface;
 
-interface UserProviderInterface
+interface PalomaSecurityInterface
 {
     /**
      * @return UserDetailsInterface The currently logged in user (if any)

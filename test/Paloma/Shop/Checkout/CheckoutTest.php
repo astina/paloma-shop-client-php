@@ -22,7 +22,7 @@ use Paloma\Shop\Error\ProductVariantUnavailable;
 use Paloma\Shop\Error\UnknownPaymentMethod;
 use Paloma\Shop\Error\UnknownShippingMethod;
 use Paloma\Shop\PalomaTestClient;
-use Paloma\Shop\Security\TestUserProvider;
+use Paloma\Shop\Security\TestPalomaSecurity;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
@@ -414,7 +414,7 @@ class CheckoutTest extends TestCase
         $order = json_decode(file_get_contents(__DIR__ . '/checkout_order.json'), true);
         $order['paymentMethod']['type'] = 'invoice';
 
-        $checkout = new Checkout((new PalomaTestClient())->withCheckout(new CheckoutTestClient($order)), new TestUserProvider(), $this->validator());
+        $checkout = new Checkout((new PalomaTestClient())->withCheckout(new CheckoutTestClient($order)), new TestPalomaSecurity(), $this->validator());
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $checkout->initializePayment(new PaymentInitParameters('url1', 'url2', 'url3'));
@@ -453,7 +453,7 @@ class CheckoutTest extends TestCase
 
         $validator = $this->validator();
 
-        return new Checkout((new PalomaTestClient())->withCheckout(new CheckoutTestClient($order, $exception)), new TestUserProvider(), $validator);
+        return new Checkout((new PalomaTestClient())->withCheckout(new CheckoutTestClient($order, $exception)), new TestPalomaSecurity(), $validator);
     }
 
     private function validator(): ValidatorInterface

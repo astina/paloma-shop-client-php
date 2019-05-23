@@ -17,7 +17,7 @@ use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\OrderNotFound;
 use Paloma\Shop\PalomaTestClient;
 use Paloma\Shop\PalomaTestConfig;
-use Paloma\Shop\Security\TestUserProvider;
+use Paloma\Shop\Security\TestPalomaSecurity;
 use Paloma\Shop\Security\UserDetailsInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
@@ -574,7 +574,7 @@ class CustomersTest extends TestCase
     {
         return new Customers(
             (new PalomaTestClient())->withCustomers(new CustomersTestClient($exception)),
-            new TestUserProvider(),
+            new TestPalomaSecurity(),
             new PalomaTestConfig(),
             $this->validator()
         );

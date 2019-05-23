@@ -8,7 +8,7 @@ use Paloma\Shop\Checkout\Checkout;
 use Paloma\Shop\Checkout\CheckoutInterface;
 use Paloma\Shop\Customers\Customers;
 use Paloma\Shop\Customers\CustomersInterface;
-use Paloma\Shop\Security\UserProviderInterface;
+use Paloma\Shop\Security\PalomaSecurityInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class Paloma
