@@ -6,6 +6,7 @@ use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Exception;
 use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TransferException;
 use Paloma\Shop\Checkout\Cart;
@@ -14,6 +15,8 @@ use Paloma\Shop\Common\Address;
 use Paloma\Shop\Common\AddressInterface;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\BadCredentials;
+use Paloma\Shop\Error\CategoryNotFound;
+use Paloma\Shop\Error\CustomerNotFound;
 use Paloma\Shop\Error\InvalidConfirmationToken;
 use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\NotAuthenticated;
@@ -121,6 +124,11 @@ class Customers implements CustomersInterface
 
             return $customer;
 
+        } catch (ClientException $e) {
+            if ($e->getResponse()->getStatusCode() === 404) {
+                throw new CustomerNotFound();
+            }
+            throw BackendUnavailable::ofException($e);
         } catch (TransferException $se) {
             throw BackendUnavailable::ofException($se);
         }

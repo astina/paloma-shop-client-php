@@ -5,6 +5,7 @@ namespace Paloma\Shop\Customers;
 use Paloma\Shop\Common\AddressInterface;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\BadCredentials;
+use Paloma\Shop\Error\CustomerNotFound;
 use Paloma\Shop\Error\InvalidConfirmationToken;
 use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\NotAuthenticated;
@@ -26,6 +27,7 @@ interface CustomersInterface
     /**
      * @return CustomerInterface The customer for the current user
      * @throws NotAuthenticated
+     * @throws CustomerNotFound
      * @throws BackendUnavailable
      */
     function getCustomer(): CustomerInterface;

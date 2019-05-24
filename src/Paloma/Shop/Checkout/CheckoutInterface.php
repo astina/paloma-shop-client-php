@@ -78,6 +78,7 @@ interface CheckoutInterface
      * @param CustomerInterface $customer
      * @param UserDetailsInterface|null $user
      * @return OrderDraftInterface
+     * @throws InvalidInput
      * @throws BackendUnavailable
      */
     function setCustomer(CustomerInterface $customer, UserDetailsInterface $user = null): OrderDraftInterface;
@@ -89,6 +90,8 @@ interface CheckoutInterface
      * @param AddressInterface $billingAddress
      * @param AddressInterface|null $shippingAddress
      * @return OrderDraftInterface
+     * @throws InvalidInput
+     * @throws BackendUnavailable
      */
     function setAddresses(AddressInterface $billingAddress, AddressInterface $shippingAddress = null): OrderDraftInterface;
 

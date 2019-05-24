@@ -20,4 +20,15 @@ class ArrayUtils
 
         return false;
     }
+
+    public static function allNull($array)
+    {
+        foreach ($array as $elem) {
+            if ($elem !== null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

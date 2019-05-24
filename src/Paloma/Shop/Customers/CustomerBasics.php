@@ -11,16 +11,16 @@ class CustomerBasics implements CustomerBasicsInterface
         $this->data = $data;
     }
 
-    function getId(): string
+    function getId(): ?string
     {
         if (isset($this->data['customerId'])) {
             return $this->data['customerId'];
         }
 
-        return $this->data['id'];
+        return $this->data['id'] ?? null;
     }
 
-    function getEmailAddress(): string
+    function getEmailAddress(): ?string
     {
         return $this->data['emailAddress'];
     }

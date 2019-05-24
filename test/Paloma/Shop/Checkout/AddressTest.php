@@ -11,7 +11,7 @@ class AddressTest extends TestCase
 {
     public function testValidateEmpty()
     {
-        $validation = $this->validator()->validate(Address::ofData([]));
+        $validation = $this->validator()->validate(Address::ofData(['title' => 'mr']));
 
         $this->assertEquals(1, $validation->count());
     }

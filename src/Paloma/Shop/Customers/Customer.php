@@ -36,17 +36,17 @@ class Customer extends CustomerBasics implements CustomerInterface
             : null;
     }
 
-    function getContactAddress(): AddressInterface
+    function getContactAddress(): ?AddressInterface
     {
         return Address::ofData($this->data['contactAddress']);
     }
 
-    function getBillingAddress(): AddressInterface
+    function getBillingAddress(): ?AddressInterface
     {
         return Address::ofData($this->data['billingAddress']);
     }
 
-    function getShippingAddress(): AddressInterface
+    function getShippingAddress(): ?AddressInterface
     {
         return Address::ofData($this->data['shippingAddress']);
     }

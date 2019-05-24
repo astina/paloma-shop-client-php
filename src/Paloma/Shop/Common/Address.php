@@ -2,6 +2,8 @@
 
 namespace Paloma\Shop\Common;
 
+use Paloma\Shop\Utils\ArrayUtils;
+
 class Address implements AddressInterface
 {
     protected $title;
@@ -28,6 +30,10 @@ class Address implements AddressInterface
 
     public static function ofData($data)
     {
+        if (ArrayUtils::allNull($data)) {
+            return null;
+        }
+
         return new Address(
             $data['title'] ?? null,
             $data['firstName'] ?? null,
@@ -42,7 +48,6 @@ class Address implements AddressInterface
             $data['remarks'] ?? null
         );
     }
-
 
     public static function toAddressArray(?AddressInterface $address)
     {
@@ -65,9 +70,9 @@ class Address implements AddressInterface
         ];
     }
 
-    public function __construct(?string $title, ?string $firstName, ?string $lastName, ?string $company,
-                                ?string $street, ?string $zipCode, ?string $city, ?string $country,
-                                ?string $phoneNumber, ?string $emailAddress, ?string $remarks)
+    public function __construct(?string $title = null, ?string $firstName = null, ?string $lastName = null, ?string $company = null,
+                                ?string $street = null, ?string $zipCode = null, ?string $city = null, ?string $country = null,
+                                ?string $phoneNumber = null, ?string $emailAddress = null, ?string $remarks = null)
     {
         $this->title = $title;
         $this->firstName = $firstName;

@@ -7,12 +7,12 @@ interface CustomerBasicsInterface
     /**
      * @return string Paloma customer ID
      */
-    function getId(): string;
+    function getId(): ?string;
 
     /**
      * @return string
      */
-    function getEmailAddress(): string;
+    function getEmailAddress(): ?string;
 
     /**
      * @return string Customer number

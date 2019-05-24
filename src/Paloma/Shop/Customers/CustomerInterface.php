@@ -15,15 +15,15 @@ interface CustomerInterface extends CustomerBasicsInterface
     /**
      * @return AddressInterface The customer's default contact address
      */
-    function getContactAddress(): AddressInterface;
+    function getContactAddress(): ?AddressInterface;
 
     /**
      * @return AddressInterface The customer's default billing address
      */
-    function getBillingAddress(): AddressInterface;
+    function getBillingAddress(): ?AddressInterface;
 
     /**
      * @return AddressInterface The customer's default shipping address
      */
-    function getShippingAddress(): AddressInterface;
+    function getShippingAddress(): ?AddressInterface;
 }

@@ -9,13 +9,13 @@ class CustomersTestClient implements CustomersClientInterface
     private $customer = [
         'id' => '2',
         'contactAddress' => [
-
+            'title' => 'mr',
         ],
         'billingAddress' => [
-
+            'title' => 'mr',
         ],
         'shippingAddress' => [
-
+            'title' => 'mr',
         ],
         'users' => [
             [
