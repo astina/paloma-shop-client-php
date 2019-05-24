@@ -22,4 +22,9 @@ interface PaymentMethodInterface
      *                     One of 'datatrans', 'saferpay', 'computop', 'paypal', 'swiss_postfinance'.
      */
     function getProvider(): ?string;
+
+    /**
+     * @return bool True, if this payment method is set for the current order
+     */
+    function isSelected(): bool;
 }

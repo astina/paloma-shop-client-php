@@ -38,7 +38,7 @@ class OrderDraft implements OrderDraftInterface
     function isSameShippingAndBillingAddress(): bool
     {
         /** @noinspection PhpNonStrictObjectEqualityInspection */
-        return $this->getBilling()->getAddress() == $this->getShipping()->getAddress();
+        return $this->getBilling()->getAddress() !=  null && $this->getBilling()->getAddress() == $this->getShipping()->getAddress();
     }
 
     /**

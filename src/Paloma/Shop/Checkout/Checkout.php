@@ -314,10 +314,14 @@ class Checkout implements CheckoutInterface
     {
         try {
 
-            $data = $this->getCheckoutOrder()->getPaymentMethods();
+            $checkoutOrder = $this->getCheckoutOrder();
 
-            return array_map(function($elem) {
-                return new PaymentMethod($elem);
+            $orderData = $checkoutOrder->get();
+
+            $data = $checkoutOrder->getPaymentMethods();
+
+            return array_map(function($elem) use ($orderData) {
+                return PaymentMethod::ofDataAndOrder($elem, $orderData);
             }, $data);
 
         } catch (TransferException $se) {
