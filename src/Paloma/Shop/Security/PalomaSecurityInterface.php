@@ -12,6 +12,12 @@ interface PalomaSecurityInterface
     function getUser(): ?UserDetailsInterface;
 
     /**
+     * @param UserDetailsInterface $user Set given user as logged in
+     * @return void
+     */
+    function setUser(UserDetailsInterface $user): void;
+
+    /**
      * Use this method if you need the full customer data (e.g. addresses).
      * Use getUser()->getCustomer() for basic customer data.
      *

@@ -73,7 +73,7 @@ class Customers implements CustomersInterface
         return $user->getCustomerId();
     }
 
-    function registerCustomer(CustomerDraftInterface $draft): CustomerInterface
+    function registerCustomer(CustomerDraftInterface $draft): UserDetailsInterface
     {
         $validation = $this->validator->validate($draft);
         if ($validation->count() > 0) {
@@ -97,7 +97,10 @@ class Customers implements CustomersInterface
                 'dateOfBirth' => $draft->getDateOfBirth() ? $draft->getDateOfBirth()->format('Y-m-d') : null,
             ]);
 
-            return new Customer($data);
+            return new UserDetails([
+                'user' => $data['users'][0],
+                'customer' => $data,
+            ]);
 
         } catch (BadResponseException $bre) {
             throw InvalidInput::ofHttpResponse($bre->getResponse());

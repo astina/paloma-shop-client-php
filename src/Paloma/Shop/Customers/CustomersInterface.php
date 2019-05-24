@@ -17,11 +17,11 @@ interface CustomersInterface
      * Create a new customer and user account. The email address will be used as identifier within the current channel.
      *
      * @param CustomerDraftInterface $draft
-     * @return CustomerInterface The created customer
+     * @return UserDetailsInterface The created user and customer basics
      * @throws InvalidInput
      * @throws BackendUnavailable
      */
-    function registerCustomer(CustomerDraftInterface $draft): CustomerInterface;
+    function registerCustomer(CustomerDraftInterface $draft): UserDetailsInterface;
 
     /**
      * @return CustomerInterface The customer for the current user

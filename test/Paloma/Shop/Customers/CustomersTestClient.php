@@ -17,6 +17,13 @@ class CustomersTestClient implements CustomersClientInterface
         'shippingAddress' => [
 
         ],
+        'users' => [
+            [
+
+                'id' => '1',
+                'username' => 'user',
+            ]
+        ]
     ];
 
     private $user = [
@@ -214,11 +221,11 @@ class CustomersTestClient implements CustomersClientInterface
     function getItemCodesPurchasedTogether($itemCode, $max = 5)
     {
         return [
-            [ 'itemCode' => '111', 'count' => 15 ],
-            [ 'itemCode' => '222', 'count' => 14 ],
-            [ 'itemCode' => '333', 'count' => 13 ],
-            [ 'itemCode' => '444', 'count' => 12 ],
-            [ 'itemCode' => '555', 'count' => 11 ],
+            ['itemCode' => '111', 'count' => 15],
+            ['itemCode' => '222', 'count' => 14],
+            ['itemCode' => '333', 'count' => 13],
+            ['itemCode' => '444', 'count' => 12],
+            ['itemCode' => '555', 'count' => 11],
         ];
     }
 

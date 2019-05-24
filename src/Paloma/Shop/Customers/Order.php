@@ -6,6 +6,8 @@ use DateTime;
 use Paloma\Shop\Checkout\OrderAdjustmentInterface;
 use Paloma\Shop\Checkout\OrderBilling;
 use Paloma\Shop\Checkout\OrderBillingInterface;
+use Paloma\Shop\Checkout\OrderCustomer;
+use Paloma\Shop\Checkout\OrderCustomerInterface;
 use Paloma\Shop\Checkout\OrderShipping;
 use Paloma\Shop\Checkout\OrderShippingInterface;
 use Paloma\Shop\Common\Price;
@@ -17,6 +19,15 @@ class Order implements OrderInterface
     public function __construct(array $data)
     {
         $this->data = $data;
+    }
+
+    function getCustomer(): ?OrderCustomerInterface
+    {
+        if ($this->data['customer'] === null) {
+            return null;
+        }
+
+        return new OrderCustomer($this->data['customer'], $this->data['locale']);
     }
 
     function getOrderNumber(): string

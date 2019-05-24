@@ -34,6 +34,11 @@ class TestPalomaSecurity implements PalomaSecurityInterface
         return $this->user;
     }
 
+    function setUser(UserDetailsInterface $user): void
+    {
+        $this->user = $user;
+    }
+
     function getCustomer(): ?CustomerInterface
     {
         return $this->customer;

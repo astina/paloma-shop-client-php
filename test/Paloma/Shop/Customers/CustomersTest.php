@@ -28,7 +28,7 @@ class CustomersTest extends TestCase
     public function testRegisterCustomer()
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        $customer = $this->customers()->registerCustomer(new CustomerDraft(
+        $userDetails = $this->customers()->registerCustomer(new CustomerDraft(
             'test@astina.io',
             '123456',
             'de_CH',
@@ -39,7 +39,7 @@ class CustomersTest extends TestCase
             DateTime::createFromFormat('Y-m-d', '1980-01-01')
         ));
 
-        $this->assertInstanceOf(CustomerInterface::class, $customer);
+        $this->assertInstanceOf(UserDetailsInterface::class, $userDetails);
     }
 
     public function testRegisterCustomerInvalid()
