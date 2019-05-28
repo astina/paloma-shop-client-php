@@ -7,9 +7,9 @@ use Paloma\Shop\Common\AddressInterface;
 interface OrderBillingInterface
 {
     /**
-     * @return string Payment method name
+     * @return OrderPaymentMethodInterface Payment method
      */
-    function getPaymentMethod(): string;
+    function getPaymentMethod(): ?OrderPaymentMethodInterface;
 
     /**
      * @return AddressInterface|null Billing address

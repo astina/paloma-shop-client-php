@@ -14,6 +14,7 @@ use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\InvalidShippingTargetDate;
 use Paloma\Shop\Error\NonElectronicPaymentMethod;
 use Paloma\Shop\Error\OrderNotReadyForCouponCodes;
+use Paloma\Shop\Error\OrderNotReadyForFinalization;
 use Paloma\Shop\Error\OrderNotReadyForPayment;
 use Paloma\Shop\Error\OrderNotReadyForPurchase;
 use Paloma\Shop\Error\ProductVariantNotFound;
@@ -164,6 +165,15 @@ interface CheckoutInterface
      * @throws BackendUnavailable
      */
     function setPaymentMethod(string $paymentMethod): OrderDraftInterface;
+
+    /**
+     * Prepare the current order for purchase.
+     *
+     * @return OrderDraftInterface
+     * @throws OrderNotReadyForFinalization
+     * @throws BackendUnavailable
+     */
+    function finalize(): OrderDraftInterface;
 
     /**
      * @param string $couponCode

@@ -17,6 +17,7 @@ use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\InvalidShippingTargetDate;
 use Paloma\Shop\Error\NonElectronicPaymentMethod;
 use Paloma\Shop\Error\OrderNotReadyForCouponCodes;
+use Paloma\Shop\Error\OrderNotReadyForFinalization;
 use Paloma\Shop\Error\OrderNotReadyForPayment;
 use Paloma\Shop\Error\OrderNotReadyForPurchase;
 use Paloma\Shop\Error\ProductVariantNotFound;
@@ -26,6 +27,7 @@ use Paloma\Shop\Error\UnknownShippingMethod;
 use Paloma\Shop\PalomaClientInterface;
 use Paloma\Shop\Security\UserDetailsInterface;
 use Paloma\Shop\Security\PalomaSecurityInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class Checkout implements CheckoutInterface
@@ -45,13 +47,20 @@ class Checkout implements CheckoutInterface
      */
     private $validator;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $log;
+
     public function __construct(PalomaClientInterface $client,
                                 PalomaSecurityInterface $userProvider,
-                                ValidatorInterface $validator)
+                                ValidatorInterface $validator,
+                                LoggerInterface $log)
     {
         $this->client = $client;
         $this->userProvider = $userProvider;
         $this->validator = $validator;
+        $this->log = $log;
     }
 
     function getCart(): CartInterface
@@ -66,6 +75,9 @@ class Checkout implements CheckoutInterface
 
         } catch (BadResponseException $bre) {
             if ($bre->getCode() === 404) {
+
+                $this->log->warning('Cart order not found');
+
                 return Cart::createEmpty();
             }
             throw BackendUnavailable::ofException($bre);
@@ -344,6 +356,28 @@ class Checkout implements CheckoutInterface
 
         } catch (BadResponseException $be) {
             throw new UnknownPaymentMethod();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
+
+    function finalize(): OrderDraftInterface
+    {
+        try {
+            $checkoutOrder = $this->getCheckoutOrder();
+            if (!$checkoutOrder->existsInSession()) {
+                throw new OrderNotReadyForFinalization();
+            }
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+
+        $orderData = $checkoutOrder->get();
+
+        try {
+            $this->getCheckout()->finalizeOrder($orderData['id']);
+        } catch (BadResponseException $bre) {
+            throw new OrderNotReadyForFinalization(); // TODO add error details
         } catch (TransferException $se) {
             throw BackendUnavailable::ofException($se);
         }

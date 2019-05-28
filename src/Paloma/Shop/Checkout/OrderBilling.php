@@ -13,7 +13,7 @@ class OrderBilling implements OrderBillingInterface
     {
         return new OrderBilling([
             'address' => $data['billingAddress'],
-            'paymentMethod' => $data['paymentMethod']['name'],
+            'paymentMethod' => $data['paymentMethod'],
         ]);
     }
 
@@ -22,9 +22,11 @@ class OrderBilling implements OrderBillingInterface
         $this->data = $data;
     }
 
-    function getPaymentMethod(): string
+    function getPaymentMethod(): OrderPaymentMethodInterface
     {
-        return $this->data['paymentMethod'];
+        return isset($this->data['paymentMethod']['name'])
+            ? new OrderPaymentMethod($this->data['paymentMethod'])
+            : null;
     }
 
     function getAddress(): ?AddressInterface

@@ -23,7 +23,12 @@ class PaymentDraft implements PaymentDraftInterface
 
     function getAmount(): string
     {
-        return (string) $this->data['amount'];
+        return (string)$this->data['amount'];
+    }
+
+    function getProvider(): string
+    {
+        return $this->data['paymentProviderType'];
     }
 
     function getProviderParams(): array
@@ -37,5 +42,12 @@ class PaymentDraft implements PaymentDraftInterface
         }
 
         return $params;
+    }
+
+    function getPaymentUrl(): ?string
+    {
+        return isset($this->data['providerRequest']['url'])
+            ? $this->data['providerRequest']['url']
+            : null;
     }
 }
