@@ -4,7 +4,6 @@ namespace Paloma\Shop\Checkout;
 
 use DateTime;
 use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TransferException;
 use Paloma\Shop\Common\Address;
 use Paloma\Shop\Common\AddressInterface;
@@ -17,6 +16,7 @@ use Paloma\Shop\Error\InvalidCouponCode;
 use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\InvalidShippingTargetDate;
 use Paloma\Shop\Error\NonElectronicPaymentMethod;
+use Paloma\Shop\Error\OrderNotReadyForCouponCodes;
 use Paloma\Shop\Error\OrderNotReadyForPayment;
 use Paloma\Shop\Error\OrderNotReadyForPurchase;
 use Paloma\Shop\Error\ProductVariantNotFound;
@@ -347,15 +347,34 @@ class Checkout implements CheckoutInterface
     function addCouponCode(string $couponCode): OrderDraftInterface
     {
         try {
+            $checkoutOrder = $this->getCheckoutOrder();
+            if (!$checkoutOrder->existsInSession()) {
+                throw new OrderNotReadyForCouponCodes();
+            }
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
 
-            $orderData = $this->getCheckoutOrder()->get();
+        $orderData = $checkoutOrder->get();
 
-            $data = $this->getCheckout()->addCoupon($orderData['id'], $couponCode);
+        if ($orderData['status'] !== 'finalized') {
+            try {
+                $this->getCheckout()->finalizeOrder($orderData['id']);
+            } catch (BadResponseException $bre) {
+                throw new OrderNotReadyForCouponCodes(); // TODO add error details
+            } catch (TransferException $se) {
+                throw BackendUnavailable::ofException($se);
+            }
+        }
+
+        try {
+
+            $data = $this->getCheckout()->addCoupon($orderData['id'], ['code' => $couponCode]);
 
             return new OrderDraft($data);
 
         } catch (BadResponseException $be) {
-            throw new InvalidCouponCode($be);
+            throw InvalidCouponCode::ofHttpResponse($be->getResponse());
         } catch (TransferException $se) {
             throw BackendUnavailable::ofException($se);
         }

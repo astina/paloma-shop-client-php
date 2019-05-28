@@ -55,4 +55,11 @@ interface OrderDraftInterface
      * @return OrderAdjustmentInterface[]
      */
     function getIncludedTaxes(): array;
+
+    /**
+     * List of active promotions on this order
+     *
+     * @return OrderCouponInterface[]
+     */
+    function getCoupons(): array;
 }

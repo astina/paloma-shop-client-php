@@ -6,6 +6,7 @@ use DateTime;
 use Paloma\Shop\Checkout\OrderAdjustmentInterface;
 use Paloma\Shop\Checkout\OrderBilling;
 use Paloma\Shop\Checkout\OrderBillingInterface;
+use Paloma\Shop\Checkout\OrderCouponInterface;
 use Paloma\Shop\Checkout\OrderCustomer;
 use Paloma\Shop\Checkout\OrderCustomerInterface;
 use Paloma\Shop\Checkout\OrderShipping;
@@ -137,6 +138,16 @@ class Order implements OrderInterface
 
     function getModifications(): array
     {
+        return [];
+    }
+
+    /**
+     * @return OrderCouponInterface[]
+     */
+    function getCoupons(): array
+    {
+        // TODO get from adjustments?
+
         return [];
     }
 }

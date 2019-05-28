@@ -12,7 +12,7 @@ class InvalidInput extends AbstractPalomaException
     /**
      * @var ValidationError[]
      */
-    private $errors;
+    protected $errors;
 
     public static function ofValidation(ConstraintViolationListInterface $validation)
     {
@@ -28,6 +28,17 @@ class InvalidInput extends AbstractPalomaException
 
     public static function ofHttpResponse(ResponseInterface $response)
     {
+        $errors = self::collectErrors($response);
+
+        return new InvalidInput($errors);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @return array
+     */
+    protected static function collectErrors(ResponseInterface $response): array
+    {
         $errors = [];
 
         try {
@@ -37,9 +48,9 @@ class InvalidInput extends AbstractPalomaException
                 $errors = $data['errors'];
             }
 
-        } catch (Exception $ignore) {}
-
-        return new InvalidInput($errors);
+        } catch (Exception $ignore) {
+        }
+        return $errors;
     }
 
     public function __construct(array $errors = [])
@@ -55,6 +66,7 @@ class InvalidInput extends AbstractPalomaException
     {
         return [
             'errors' => $this->errors,
+            'valid' => count($this->errors) === 0,
         ];
     }
 

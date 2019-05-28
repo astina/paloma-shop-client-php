@@ -13,6 +13,7 @@ use Paloma\Shop\Error\InvalidCouponCode;
 use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\InvalidShippingTargetDate;
 use Paloma\Shop\Error\NonElectronicPaymentMethod;
+use Paloma\Shop\Error\OrderNotReadyForCouponCodes;
 use Paloma\Shop\Error\OrderNotReadyForPayment;
 use Paloma\Shop\Error\OrderNotReadyForPurchase;
 use Paloma\Shop\Error\ProductVariantNotFound;
@@ -167,6 +168,7 @@ interface CheckoutInterface
     /**
      * @param string $couponCode
      * @return OrderDraftInterface
+     * @throws OrderNotReadyForCouponCodes
      * @throws InvalidCouponCode
      * @throws BackendUnavailable
      */

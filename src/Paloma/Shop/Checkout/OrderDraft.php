@@ -135,4 +135,14 @@ class OrderDraft implements OrderDraftInterface
 
         return $adjustments;
     }
+
+    /**
+     * @return OrderCouponInterface[]
+     */
+    function getCoupons(): array
+    {
+        return array_map(function($elem) {
+            return new OrderCoupon($elem);
+        }, $this->data['coupons']);
+    }
 }

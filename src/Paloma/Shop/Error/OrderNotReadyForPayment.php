@@ -2,10 +2,6 @@
 
 namespace Paloma\Shop\Error;
 
-class OrderNotReadyForPayment extends AbstractPalomaException
+class OrderNotReadyForPayment extends OrderNotFinalized
 {
-    function getHttpStatus(): int
-    {
-        return 400;
-    }
 }

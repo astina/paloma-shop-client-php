@@ -2,18 +2,15 @@
 
 namespace Paloma\Shop\Error;
 
-use GuzzleHttp\Exception\BadResponseException;
+use Psr\Http\Message\ResponseInterface;
 
-class InvalidCouponCode extends AbstractPalomaException
+class InvalidCouponCode extends InvalidInput
 {
-    public function __construct(BadResponseException $bae)
+    public static function ofHttpResponse(ResponseInterface $response)
     {
-        // TODO implement
-    }
+        $errors = self::collectErrors($response);
 
-    public function getErrors()
-    {
-        return []; // TODO
+        return new InvalidCouponCode($errors);
     }
 
     function getHttpStatus(): int
