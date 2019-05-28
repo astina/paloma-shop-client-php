@@ -64,6 +64,11 @@ class Checkout implements CheckoutInterface
                 ? new Cart($checkoutOrder->get())
                 : Cart::createEmpty();
 
+        } catch (BadResponseException $bre) {
+            if ($bre->getCode() === 404) {
+                return Cart::createEmpty();
+            }
+            throw BackendUnavailable::ofException($bre);
         } catch (TransferException $se) {
             throw BackendUnavailable::ofException($se);
         }
@@ -77,8 +82,8 @@ class Checkout implements CheckoutInterface
 
             return new Cart($data);
 
-        } catch (BadResponseException $bse) {
-            if ($bse->getCode() === 404) {
+        } catch (BadResponseException $bre) {
+            if ($bre->getCode() === 404) {
                 throw new ProductVariantNotFound();
             }
             throw new ProductVariantUnavailable();
@@ -99,8 +104,8 @@ class Checkout implements CheckoutInterface
 
             return new Cart($data);
 
-        } catch (BadResponseException $bse) {
-            if ($bse->getCode() === 404) {
+        } catch (BadResponseException $bre) {
+            if ($bre->getCode() === 404) {
                 throw new CartItemNotFound();
             }
             throw new ProductVariantUnavailable();
