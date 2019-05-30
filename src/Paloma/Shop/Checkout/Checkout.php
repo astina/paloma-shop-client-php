@@ -375,7 +375,11 @@ class Checkout implements CheckoutInterface
         $orderData = $checkoutOrder->get();
 
         try {
-            $this->getCheckout()->finalizeOrder($orderData['id']);
+
+            $data = $this->getCheckout()->finalizeOrder($orderData['id']);
+
+            return new OrderDraft($data);
+
         } catch (BadResponseException $bre) {
             throw new OrderNotReadyForFinalization(); // TODO add error details
         } catch (TransferException $se) {

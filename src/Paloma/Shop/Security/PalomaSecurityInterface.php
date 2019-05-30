@@ -3,6 +3,7 @@
 namespace Paloma\Shop\Security;
 
 use Paloma\Shop\Customers\CustomerInterface;
+use Paloma\Shop\Error\BackendUnavailable;
 
 interface PalomaSecurityInterface
 {
@@ -22,6 +23,7 @@ interface PalomaSecurityInterface
      * Use getUser()->getCustomer() for basic customer data.
      *
      * @return CustomerInterface|null The full customer for the currently logged in user (if any)
+     * @throws BackendUnavailable
      */
     function getCustomer(): ?CustomerInterface;
 }

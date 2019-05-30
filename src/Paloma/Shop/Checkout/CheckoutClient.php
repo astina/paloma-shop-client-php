@@ -44,12 +44,12 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
         $order = $order ?: [];
         $order['locale'] = isset($order['locale']) ? $order['locale'] : $this->locale;
 
-        return $this->post($this->channel . '/' . self::ORDERS_PATH, null, $order);
+        return $this->post($this->channel . '/' . self::ORDERS_PATH, ['_meta' => 'validation'], $order);
     }
 
     function getOrder($id, $locale = null)
     {
-        return $this->get($this->channel . '/' . self::ORDERS_PATH . '/' . $id, $locale ? ['locale' => $locale] : null);
+        return $this->get($this->channel . '/' . self::ORDERS_PATH . '/' . $id, ['locale' => $locale, '_meta' => 'validation']);
     }
 
     function deleteOrder($id)
@@ -59,12 +59,12 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
 
     function addOrderItem($orderId, $item)
     {
-        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/items', null, $item);
+        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/items', ['_meta' => 'validation'], $item);
     }
 
     function updateOrderItem($orderId, $itemId, $item)
     {
-        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/items/' . $itemId, null, $item);
+        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/items/' . $itemId, ['_meta' => 'validation'], $item);
     }
 
     function deleteOrderItem($orderId, $itemId)
@@ -74,22 +74,22 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
 
     function setCustomer($orderId, $customer)
     {
-        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/customer', null, $customer);
+        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/customer', ['_meta' => 'validation'], $customer);
     }
 
     function setAddresses($orderId, $addresses)
     {
-        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/addresses', null, $addresses);
+        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/addresses', ['_meta' => 'validation'], $addresses);
     }
 
     function getShippingMethods($orderId)
     {
-        return $this->get($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/shipping-methods');
+        return $this->get($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/shipping-methods', ['_meta' => 'validation']);
     }
 
     function getShippingMethodOptions($orderId, $methodName, $from = null, $until = null)
     {
-        $query = [];
+        $query = ['_meta' => 'validation'];
         if ($from !== null) {
             $query['from'] = $from;
         }
@@ -101,22 +101,22 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
 
     function setShippingMethod($orderId, $method)
     {
-        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/shipping-method', null, $method);
+        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/shipping-method', ['_meta' => 'validation'], $method);
     }
 
     function getPaymentMethods($orderId)
     {
-        return $this->get($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/payment-methods');
+        return $this->get($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/payment-methods', ['_meta' => 'validation']);
     }
 
     function setPaymentMethod($orderId, $method)
     {
-        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/payment-method', null, $method);
+        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/payment-method', ['_meta' => 'validation'], $method);
     }
 
     function addCoupon($orderId, $coupon)
     {
-        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/coupons', null, $coupon);
+        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/coupons', ['_meta' => 'validation'], $coupon);
     }
 
     function deleteCoupon($orderId, $code)
@@ -126,21 +126,21 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
 
     function finalizeOrder($id)
     {
-        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $id . '/finalize');
+        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $id . '/finalize', ['_meta' => 'validation']);
     }
 
     function initPayment($orderId, $payment)
     {
-        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/payments', null, $payment);
+        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/payments', ['_meta' => 'validation'], $payment);
     }
 
     function purchaseOrder($id)
     {
-        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $id . '/purchase');
+        return $this->post($this->channel . '/' . self::ORDERS_PATH . '/' . $id . '/purchase', ['_meta' => 'validation']);
     }
 
     function setBroker($orderId, $broker)
     {
-        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/broker', null, $broker);
+        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/broker', ['_meta' => 'validation'], $broker);
     }
 }

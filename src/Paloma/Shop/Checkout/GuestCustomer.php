@@ -3,7 +3,6 @@
 namespace Paloma\Shop\Checkout;
 
 use DateTime;
-use Paloma\Shop\Common\Address;
 use Paloma\Shop\Common\AddressInterface;
 use Paloma\Shop\Customers\CustomerInterface;
 
@@ -29,7 +28,7 @@ class GuestCustomer implements CustomerInterface
         string $firstName = null,
         string $lastName = null,
         string $company = null,
-        string $gender = null,
+        string $gender = 'unknown',
         string $dateOfBirth = null)
     {
         $this->emailAddress = $emailAddress;

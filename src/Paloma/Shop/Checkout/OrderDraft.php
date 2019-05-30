@@ -3,8 +3,9 @@
 namespace Paloma\Shop\Checkout;
 
 use Paloma\Shop\Catalog\Price;
+use Paloma\Shop\Common\MetadataContainingObject;
 
-class OrderDraft implements OrderDraftInterface
+class OrderDraft implements OrderDraftInterface, MetadataContainingObject
 {
     private $data;
 
@@ -144,5 +145,27 @@ class OrderDraft implements OrderDraftInterface
         return array_map(function($elem) {
             return new OrderCoupon($elem);
         }, $this->data['coupons']);
+    }
+
+    function getMetaValidation()
+    {
+        if (!isset($this->data['_validation'])) {
+            return null;
+        }
+
+        $validation = [];
+
+        // Map shipping and billing address validations to our model
+
+        foreach (['shipping', 'billing'] as $prop) {
+            if (isset($this->data['_validation']['properties'][$prop. 'Address']['properties'])) {
+                $address = $this->data['_validation']['properties'][$prop . 'Address']['properties'];
+                $validation[$prop] = [
+                    'address' => $address,
+                ];
+            }
+        }
+
+        return $validation;
     }
 }

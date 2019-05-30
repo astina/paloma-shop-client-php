@@ -8,6 +8,8 @@ class Address implements AddressInterface
 {
     protected $title;
 
+    protected $titleCode;
+
     protected $firstName;
 
     protected $lastName;
@@ -36,6 +38,7 @@ class Address implements AddressInterface
 
         return new Address(
             $data['title'] ?? null,
+            $data['titleCode'] ?? null,
             $data['firstName'] ?? null,
             $data['lastName'] ?? null,
             $data['company'] ?? null,
@@ -57,6 +60,7 @@ class Address implements AddressInterface
 
         return [
             'title' => $address->getTitle(),
+            'titleCode' => $address->getTitleCode(),
             'firstName' => $address->getFirstName(),
             'lastName' => $address->getLastName(),
             'company' => $address->getCompany(),
@@ -70,11 +74,12 @@ class Address implements AddressInterface
         ];
     }
 
-    public function __construct(?string $title = null, ?string $firstName = null, ?string $lastName = null, ?string $company = null,
+    public function __construct(?string $title = null, ?string $titleCode = null, ?string $firstName = null, ?string $lastName = null, ?string $company = null,
                                 ?string $street = null, ?string $zipCode = null, ?string $city = null, ?string $country = null,
                                 ?string $phoneNumber = null, ?string $emailAddress = null, ?string $remarks = null)
     {
         $this->title = $title;
+        $this->titleCode = $titleCode;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->company = $company;
@@ -90,6 +95,11 @@ class Address implements AddressInterface
     function getTitle(): ?string
     {
         return $this->title;
+    }
+
+    function getTitleCode(): ?string
+    {
+        return $this->titleCode;
     }
 
     function getFirstName(): ?string

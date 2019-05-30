@@ -5,9 +5,14 @@ namespace Paloma\Shop\Common;
 interface AddressInterface
 {
     /**
-     * @return string Address title code, one of 'mr', 'ms'
+     * @return string Localized address title, e.g. "Herr", "Ms"
      */
     function getTitle(): ?string;
+
+    /**
+     * @return string Address title code, one of 'mr', 'ms'
+     */
+    function getTitleCode(): ?string;
 
     function getFirstName(): ?string;
 

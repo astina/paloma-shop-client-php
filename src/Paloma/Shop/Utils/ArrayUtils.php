@@ -23,6 +23,10 @@ class ArrayUtils
 
     public static function allNull($array)
     {
+        if ($array === null) {
+            return true;
+        }
+
         foreach ($array as $elem) {
             if ($elem !== null) {
                 return false;
