@@ -104,8 +104,9 @@ class Product implements ProductInterface, SelfNormalizing
         }
 
         $options = [];
+        $variants = $this->getVariants();
 
-        foreach ($this->getVariants() as $variant) {
+        foreach ($variants as $variant) {
 
             /**  @var ProductVariantOptionInterface $option */
             foreach ($variant->getOptions() as $type => $option) {
@@ -129,6 +130,25 @@ class Product implements ProductInterface, SelfNormalizing
                 }
 
                 $options[$type]['values'][$value]['variants'][] = $variant->getSku();
+            }
+        }
+
+        // Do we have variants but are not using options?
+        if (count($variants) > 0 && count($options) === 0) {
+            $options['_variant'] = [
+                'type' => '_variant',
+                'label' => 'Variants',
+                'values' => [],
+            ];
+            foreach ($variants as $variant) {
+
+                $options['_variant']['values'][$variant->getSku()] = [
+                    'value' => $variant->getSku(),
+                    'label' => $variant->getName(),
+                    'variants' => [
+                        $variant->getSku(),
+                    ],
+                ];
             }
         }
 
@@ -188,6 +208,15 @@ class Product implements ProductInterface, SelfNormalizing
         }, $this->data['categories'] ?? []);
     }
 
+    function getMainCategory(): ?CategoryReferenceInterface
+    {
+        $categories = $this->getCategories();
+
+        return count($categories) === 0
+            ? null
+            : $categories[0];
+    }
+
     public function _normalize(): array
     {
         $data = NormalizationUtils::copyKeys([
@@ -222,6 +251,13 @@ class Product implements ProductInterface, SelfNormalizing
         $data['firstImage'] = count($data['images']) === 0
             ? null
             : $data['images'][0];
+
+        $data['categories'] = array_map(function($elem) {
+            return $elem->_normalize();
+        }, $this->getCategories());
+
+        $mainCategory = $this->getMainCategory();
+        $data['mainCategory'] = $mainCategory ? $mainCategory->_normalize() : null;
 
         return $data;
     }

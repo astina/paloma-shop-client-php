@@ -88,4 +88,9 @@ interface ProductInterface
      * @return CategoryReferenceInterface[]
      */
     function getCategories(): array;
+
+    /**
+     * @return CategoryReferenceInterface|null
+     */
+    function getMainCategory(): ?CategoryReferenceInterface;
 }

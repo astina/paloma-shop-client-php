@@ -26,6 +26,12 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
 
     function getName(): string
     {
+        // Prefer name attribute over variant name because by default
+        // the variant name contains the product item number
+        if (isset($this->data['attributes']['name'])) {
+            return (new ProductAttribute($this->data['attributes']['name']))->getValue();
+        }
+
         return $this->data['name'];
     }
 

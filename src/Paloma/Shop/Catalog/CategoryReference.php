@@ -2,7 +2,9 @@
 
 namespace Paloma\Shop\Catalog;
 
-class CategoryReference implements CategoryReferenceInterface
+use Paloma\Shop\Common\SelfNormalizing;
+
+class CategoryReference implements CategoryReferenceInterface, SelfNormalizing
 {
     private $data;
 
@@ -24,5 +26,10 @@ class CategoryReference implements CategoryReferenceInterface
     function getSlug(): string
     {
         return $this->data['slug'] ?? '';
+    }
+
+    public function _normalize(): array
+    {
+        return $this->data;
     }
 }
