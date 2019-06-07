@@ -38,7 +38,7 @@ class Customers implements CustomersInterface
     /**
      * @var PalomaSecurityInterface
      */
-    private $userProvider;
+    private $security;
 
     /**
      * @var PalomaConfigInterface
@@ -51,12 +51,12 @@ class Customers implements CustomersInterface
     private $validator;
 
     public function __construct(PalomaClientInterface $client,
-                                PalomaSecurityInterface $userProvider,
+                                PalomaSecurityInterface $security,
                                 PalomaConfigInterface $config,
                                 ValidatorInterface $validator)
     {
         $this->client = $client;
-        $this->userProvider = $userProvider;
+        $this->security = $security;
         $this->config = $config;
         $this->validator = $validator;
     }
@@ -67,7 +67,7 @@ class Customers implements CustomersInterface
      */
     protected function getCustomerId(): string
     {
-        $user = $this->userProvider->getUser();
+        $user = $this->security->getUser();
 
         if ($user === null) {
             throw new NotAuthenticated();
@@ -116,7 +116,7 @@ class Customers implements CustomersInterface
     {
         try {
 
-            $customer = $this->userProvider->getCustomer();
+            $customer = $this->security->getCustomer();
 
             if ($customer == null) {
                 throw new NotAuthenticated();
@@ -211,13 +211,11 @@ class Customers implements CustomersInterface
         return $this->updateCustomer($update);
     }
 
-    function confirmEmailAddress(string $confirmationToken): UserDetailsInterface
+    function confirmEmailAddress(string $confirmationToken): void
     {
         try {
 
             $this->client->customers()->confirmEmailAddress($confirmationToken);
-
-            return $this->userProvider->getUser();
 
         } catch (BadResponseException $se) {
             throw new InvalidConfirmationToken();
@@ -258,7 +256,7 @@ class Customers implements CustomersInterface
 
     function updatePassword(PasswordUpdateInterface $update): UserDetailsInterface
     {
-        $user = $this->userProvider->getUser();
+        $user = $this->security->getUser();
         if ($user === null) {
             throw new NotAuthenticated();
         }
@@ -429,6 +427,6 @@ class Customers implements CustomersInterface
      */
     private function getCheckoutOrder(): CheckoutOrder
     {
-        return $this->client->checkout()->checkoutOrder($this->getCustomer(), $this->userProvider->getUser());
+        return $this->client->checkout()->checkoutOrder($this->getCustomer(), $this->security->getUser());
     }
 }

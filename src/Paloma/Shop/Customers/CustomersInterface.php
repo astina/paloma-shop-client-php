@@ -69,7 +69,7 @@ interface CustomersInterface
      * @throws InvalidConfirmationToken
      * @throws BackendUnavailable
      */
-    function confirmEmailAddress(string $confirmationToken): UserDetailsInterface;
+    function confirmEmailAddress(string $confirmationToken): void;
 
     /**
      * @param string $emailAddress
