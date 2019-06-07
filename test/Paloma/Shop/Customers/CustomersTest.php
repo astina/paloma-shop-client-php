@@ -177,6 +177,7 @@ class CustomersTest extends TestCase
         /** @noinspection PhpUnhandledExceptionInspection */
         $address = $this->customers()->updateAddress(new AddressUpdate(
             'billing',
+            'Herr',
             'mr',
             'Hans',
             'Muster',
@@ -198,6 +199,7 @@ class CustomersTest extends TestCase
         /** @noinspection PhpUnhandledExceptionInspection */
         $address = $this->customers()->updateAddress(new AddressUpdate(
             'shipping',
+            'Herr',
             'mr',
             'Hans',
             'Muster',
@@ -219,6 +221,7 @@ class CustomersTest extends TestCase
         /** @noinspection PhpUnhandledExceptionInspection */
         $address = $this->customers()->updateAddress(new AddressUpdate(
             'contact',
+            'Herr',
             'mr',
             'Hans',
             'Muster',
@@ -242,6 +245,7 @@ class CustomersTest extends TestCase
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->customers()->updateAddress(new AddressUpdate(
             'invalid',
+            'Herr',
             'mr',
             'Hans',
             'Muster',
@@ -263,6 +267,7 @@ class CustomersTest extends TestCase
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->customers($this->createServerException())->updateAddress(new AddressUpdate(
             'billing',
+            'Herr',
             'mr',
             'Hans',
             'Muster',
@@ -284,6 +289,7 @@ class CustomersTest extends TestCase
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->customers($this->createBadRequestException())->updateAddress(new AddressUpdate(
             'billing',
+            'Herr',
             'mr',
             'Hans',
             'Muster',

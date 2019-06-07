@@ -47,7 +47,7 @@ class CustomerBasics implements CustomerBasicsInterface
 
     function getCompany(): ?string
     {
-        return $this->data['company'];
+        return $this->data['company'] ?? null;
     }
 
     function getGender(): string

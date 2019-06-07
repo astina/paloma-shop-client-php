@@ -42,6 +42,24 @@ class CustomerUpdate implements CustomerUpdateInterface
         $this->dateOfBirth = $dateOfBirth;
     }
 
+    public static function ofCustomer(CustomerInterface $customer): CustomerUpdate
+    {
+        return new CustomerUpdate(
+            $customer->getEmailAddress(),
+            $customer->getLocale(),
+            $customer->getFirstName(),
+            $customer->getLastName(),
+            $customer->getCompany(),
+            $customer->getGender(),
+            $customer->getDateOfBirth()
+        );
+    }
+
+    public function withEmailAddress($emailAddress): CustomerUpdate
+    {
+        return new CustomerUpdate($emailAddress, $this->locale, $this->firstName, $this->lastName, $this->company, $this->gender, $this->dateOfBirth);
+    }
+
     /**
      * @return string
      */

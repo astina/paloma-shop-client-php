@@ -5,9 +5,10 @@ namespace Paloma\Shop\Customers;
 use DateTime;
 use Paloma\Shop\Common\Address;
 use Paloma\Shop\Common\AddressInterface;
+use Paloma\Shop\Common\MetadataContainingObject;
 use Paloma\Shop\Security\UserDetailsInterface;
 
-class Customer extends CustomerBasics implements CustomerInterface
+class Customer extends CustomerBasics implements CustomerInterface, MetadataContainingObject
 {
     public static function toBackendData(CustomerInterface $customer, UserDetailsInterface $user = null)
     {
@@ -49,5 +50,14 @@ class Customer extends CustomerBasics implements CustomerInterface
     function getShippingAddress(): ?AddressInterface
     {
         return Address::ofData($this->data['shippingAddress']);
+    }
+
+    function getMetaValidation()
+    {
+        if (!isset($this->data['_validation'])) {
+            return null;
+        }
+
+        return $this->data['_validation'];
     }
 }

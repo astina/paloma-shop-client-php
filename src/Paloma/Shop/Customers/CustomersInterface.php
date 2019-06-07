@@ -55,6 +55,15 @@ interface CustomersInterface
     function updateAddress(AddressUpdateInterface $update): AddressInterface;
 
     /**
+     * @param string $emailAddress
+     * @return CustomerInterface
+     * @throws NotAuthenticated
+     * @throws InvalidInput
+     * @throws BackendUnavailable
+     */
+    function updateEmailAddress(string $emailAddress): CustomerInterface;
+
+    /**
      * @param string $confirmationToken
      * @return UserDetailsInterface
      * @throws InvalidConfirmationToken

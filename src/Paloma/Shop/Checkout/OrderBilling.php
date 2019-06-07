@@ -24,9 +24,16 @@ class OrderBilling implements OrderBillingInterface
 
     function getPaymentMethod(): OrderPaymentMethodInterface
     {
-        return isset($this->data['paymentMethod']['name'])
-            ? new OrderPaymentMethod($this->data['paymentMethod'])
-            : null;
+        if (!isset($this->data['paymentMethod'])) {
+            return new OrderPaymentMethod(['name' => 'unknown']);
+        }
+
+        if (isset($this->data['paymentMethod']['name'])) {
+            return new OrderPaymentMethod($this->data['paymentMethod']);
+        }
+
+        // customer order just has string in 'paymentMethod'
+        return new OrderPaymentMethod(['name' => $this->data['paymentMethod']]);
     }
 
     function getAddress(): ?AddressInterface

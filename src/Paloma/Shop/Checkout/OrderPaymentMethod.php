@@ -18,7 +18,7 @@ class OrderPaymentMethod implements OrderPaymentMethodInterface
 
     function getType(): string
     {
-        return $this->data['type'];
+        return $this->data['type'] ?? '';
     }
 
     /**

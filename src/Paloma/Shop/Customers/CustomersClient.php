@@ -37,7 +37,7 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
 
     function getCustomer($customerId)
     {
-        return $this->get($this->channel . '/customers/' . $customerId);
+        return $this->get($this->channel . '/customers/' . $customerId, ['_meta' => 'validation']);
     }
 
     function updateCustomer($customerId, $customer)

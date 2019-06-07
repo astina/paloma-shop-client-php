@@ -145,6 +145,7 @@ class Customers implements CustomersInterface
 
             $data = $this->client->customers()->updateCustomer($this->getCustomerId(), [
                 'emailAddress' => $update->getEmailAddress(),
+                'confirmationBaseUrl' => $this->config->getRegistrationConfirmationBaseUrl(),
                 'firstName' => $update->getFirstName(),
                 'lastName' => $update->getLastName(),
                 'company' => $update->getCompany(),
@@ -195,6 +196,19 @@ class Customers implements CustomersInterface
         }
 
         throw new InvalidInput(['property' => 'addressType', 'message' => 'Unknown address type']);
+    }
+
+    function updateEmailAddress(string $emailAddress): CustomerInterface
+    {
+        try {
+            $customer = $this->getCustomer();
+        } catch (CustomerNotFound $e) {
+            throw new NotAuthenticated();
+        }
+
+        $update = CustomerUpdate::ofCustomer($customer)->withEmailAddress($emailAddress);
+
+        return $this->updateCustomer($update);
     }
 
     function confirmEmailAddress(string $confirmationToken): UserDetailsInterface

@@ -48,9 +48,12 @@ class OrderItem implements OrderItemInterface
         return (new Price($this->currency, $this->data['unitPrice']))->getPrice();
     }
 
-    function getOriginalPrice(): string
+    function getOriginalPrice(): ?string
     {
-        return (new Price($this->currency, $this->data['originalPrice']))->getPrice();
+        $unitPrice = $this->getUnitPrice();
+        $originalPrice = (new Price($this->currency, $this->data['originalPrice']))->getPrice();
+
+        return $unitPrice === $originalPrice ? null : $originalPrice;
     }
 
     function getItemPrice(): string

@@ -13,9 +13,9 @@ class OrderDraftTest extends TestCase
         $order = new OrderDraft($data);
 
         $this->assertEquals('Muster', $order->getBilling()->getAddress()->getLastName());
-        $this->assertEquals('default', $order->getBilling()->getPaymentMethod());
+        $this->assertEquals('default', $order->getBilling()->getPaymentMethod()->getName());
         $this->assertEquals('Muster', $order->getShipping()->getAddress()->getLastName());
-        $this->assertEquals('default', $order->getShipping()->getShippingMethod());
+        $this->assertEquals('default', $order->getShipping()->getShippingMethod()->getName());
 
         $this->assertEquals(2, count($order->getItems()));
         $this->assertEquals(1, count($order->getModifications()));

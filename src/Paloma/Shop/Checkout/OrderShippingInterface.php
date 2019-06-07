@@ -7,9 +7,9 @@ use Paloma\Shop\Common\AddressInterface;
 interface OrderShippingInterface
 {
     /**
-     * @return string Shipping method name
+     * @return OrderShippingMethodInterface Shipping method
      */
-    function getShippingMethod(): string;
+    function getShippingMethod(): OrderShippingMethodInterface;
 
     /**
      * @return AddressInterface|null Shipping address

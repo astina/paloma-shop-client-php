@@ -22,9 +22,12 @@ class OrderShipping implements OrderShippingInterface
         $this->data = $data;
     }
 
-    function getShippingMethod(): string
+    function getShippingMethod(): OrderShippingMethodInterface
     {
-        return $this->data['deliveryMethod'];
+        return new OrderShippingMethod([
+            'name' => $this->data['deliveryMethod'],
+            'targetDate' => $this->data['targetDate'] ?? null,
+        ]);
     }
 
     function getAddress(): ?AddressInterface

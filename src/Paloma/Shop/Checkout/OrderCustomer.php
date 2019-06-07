@@ -14,6 +14,6 @@ class OrderCustomer extends CustomerBasics implements OrderCustomerInterface
 
     function getUserId(): ?string
     {
-        return $this->data['userId'];
+        return $this->data['userId'] ?? null;
     }
 }

@@ -39,7 +39,7 @@ interface OrderItemInterface
     /**
      * @return string If the unit price is reduced, this property holds the original unit price.
      */
-    function getOriginalPrice(): string;
+    function getOriginalPrice(): ?string;
 
     /**
      * @return string Price for this cart item as formatted string including currency symbol (e.g. "CHF 12.80")

@@ -16,9 +16,9 @@ class OrderTest extends TestCase
         $this->assertEquals('purchased', $order->getStatus());
         $this->assertEquals(1554491651, $order->getOrderDate()->getTimestamp());
         $this->assertEquals('Hans', $order->getBilling()->getAddress()->getFirstName());
-        $this->assertEquals('invoice', $order->getBilling()->getPaymentMethod());
+        $this->assertEquals('invoice', $order->getBilling()->getPaymentMethod()->getName());
         $this->assertEquals('Hans2', $order->getShipping()->getAddress()->getFirstName());
-        $this->assertEquals('swisspost_priority', $order->getShipping()->getShippingMethod());
+        $this->assertEquals('swisspost_priority', $order->getShipping()->getShippingMethod()->getName());
         $this->assertEquals(10, count($order->getItems()));
         $this->assertEquals('CHF 10.00', $order->getItemsPrice());
         $this->assertEquals('CHF 10.00', $order->getShippingPrice());

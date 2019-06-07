@@ -28,6 +28,7 @@ use Paloma\Shop\PalomaClientInterface;
 use Paloma\Shop\Security\UserDetailsInterface;
 use Paloma\Shop\Security\PalomaSecurityInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class Checkout implements CheckoutInterface
@@ -55,12 +56,12 @@ class Checkout implements CheckoutInterface
     public function __construct(PalomaClientInterface $client,
                                 PalomaSecurityInterface $userProvider,
                                 ValidatorInterface $validator,
-                                LoggerInterface $log)
+                                LoggerInterface $log = null)
     {
         $this->client = $client;
         $this->userProvider = $userProvider;
         $this->validator = $validator;
-        $this->log = $log;
+        $this->log = $log === null ? new NullLogger() : $log;
     }
 
     function getCart(): CartInterface
