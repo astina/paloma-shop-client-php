@@ -35,7 +35,7 @@ class OrderTest extends TestCase
         $this->assertEquals(1, $item1->getQuantity());
         $this->assertEquals('CHF 1.00', $item1->getUnitPrice());
         $this->assertEquals('CHF 1.00', $item1->getItemPrice());
-        $this->assertEquals('CHF 1.00', $item1->getOriginalPrice());
+        $this->assertNull($item1->getOriginalPrice());
         $this->assertEquals('Daily Adult Häppchen mit Pute & Ente', $item1->getTitle());
         $this->assertEquals(
             'https://demo.paloma.one/images/small/f/9/1/4/f914fdfee99354ddda53ea1aca15e0399b20b329_d1ec8de4e67a8fcd7d0e8e1bb067cc2fad26574ad4734ce907d357bb.jpg',

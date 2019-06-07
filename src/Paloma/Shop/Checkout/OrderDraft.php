@@ -34,6 +34,20 @@ class OrderDraft implements OrderDraftInterface, MetadataContainingObject
     }
 
     /**
+     * @return bool Returns true if this payment method requires payment during the checkout process.
+     */
+    function isRequiresPaymentDuringCheckout(): bool
+    {
+        if ($this->data['orderPricing']['grossPrice'] == 0) {
+            return false;
+        }
+
+        $paymentMethod = $this->getBilling()->getPaymentMethod();
+
+        return $paymentMethod && $paymentMethod->getType() === 'electronic';
+    }
+
+    /**
      * @return bool True, if billing and shipping address are identical
      */
     function isSameShippingAndBillingAddress(): bool

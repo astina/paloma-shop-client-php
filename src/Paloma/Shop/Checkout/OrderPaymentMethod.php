@@ -20,12 +20,4 @@ class OrderPaymentMethod implements OrderPaymentMethodInterface
     {
         return $this->data['type'] ?? '';
     }
-
-    /**
-     * @return bool Returns true if this payment method requires payment during the checkout process.
-     */
-    function isRequiresPaymentDuringCheckout(): bool
-    {
-        return $this->getType() === 'electronic';
-    }
 }
