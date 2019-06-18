@@ -46,7 +46,7 @@ interface CartItemInterface
     /**
      * @return ImageInterface Optional: product image
      */
-    function getImage(): ImageInterface;
+    function getImage(): ?ImageInterface;
 
     /**
      * @return string Price for one unit as formatted string including currency symbol (e.g. "CHF 12.80")

@@ -63,7 +63,7 @@ class CartItem implements CartItemInterface
         return $this->data['itemNumber'];
     }
 
-    function getImage(): ImageInterface
+    function getImage(): ?ImageInterface
     {
         return $this->variant->getFirstImage();
     }
