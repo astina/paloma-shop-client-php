@@ -8,9 +8,11 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Psr7;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
 
 abstract class BaseClient
@@ -105,9 +107,9 @@ abstract class BaseClient
         return $this->req('GET', $path, $query, null, false);
     }
 
-    protected function post($path, $query = null, $body = null)
+    protected function post($path, $query = null, $body = null, $bodyContentType = null)
     {
-        return $this->req('POST', $path, $query, $body, false);
+        return $this->req('POST', $path, $query, $body, false, $bodyContentType);
     }
 
     protected function postFormData($path, $query = null, $body = null)
@@ -115,22 +117,22 @@ abstract class BaseClient
         return $this->req('POST', $path, $query, $body, true);
     }
 
-    protected function put($path, $query = null, $body = null)
+    protected function put($path, $query = null, $body = null, $bodyContentType = null)
     {
-        return $this->req('PUT', $path, $query, $body, false);
+        return $this->req('PUT', $path, $query, $body, false, $bodyContentType);
     }
 
-    protected function delete($path, $query = null, $body = null)
+    protected function delete($path, $query = null, $body = null, $bodyContentType = null)
     {
-        return $this->req('DELETE', $path, $query, $body);
+        return $this->req('DELETE', $path, $query, $body, $bodyContentType);
     }
 
-    protected function patch($path, $query = null, $body = null)
+    protected function patch($path, $query = null, $body = null, $bodyContentType = null)
     {
-        return $this->req('PATCH', $path, $query, $body);
+        return $this->req('PATCH', $path, $query, $body, $bodyContentType);
     }
 
-    private function req($method, $path, $query = null, $body = null, $formEncoding = false)
+    private function req($method, $path, $query = null, $body = null, $formEncoding = false, $bodyContentType = null)
     {
         $cacheItem = null;
         if ($this->cache !== null && $this->useCache) {
@@ -147,24 +149,34 @@ abstract class BaseClient
             $path,
             [
                 'headers' => [
-                    'content-type' => $formEncoding ? 'application/x-www-form-urlencoded' : 'application/json'
+                    'content-type' => $bodyContentType !== null ? $bodyContentType :
+                        ($formEncoding ? 'application/x-www-form-urlencoded' : 'application/json')
                 ],
                 'query' => $query,
                 'form_params' => $body && $formEncoding ? $body : null,
-                'body' => $body && !$formEncoding ? json_encode($body, JSON_UNESCAPED_SLASHES) : null
+                'body' => $body instanceof StreamInterface ? $body :
+                    (is_array($body) && !$formEncoding ? json_encode($body, JSON_UNESCAPED_SLASHES) : null)
             ]);
 
-        $data = json_decode($res->getBody(), true);
+        $contentType = $res->hasHeader('Content-type') ? Psr7\parse_header($res->getHeader('Content-type'))[0][0] : null;
+        $hasContentDisposition = $res->hasHeader('Content-disposition');
+        if ($contentType == 'application/json') {
+            $result = json_decode($res->getBody(), true);
+        } elseif ($hasContentDisposition) {
+            $result = FileResponse::createFromResponse($res);
+        } else {
+            $result = $res->getBody();
+        }
 
         if ($cacheItem !== null) {
-            $cacheItem->set($data);
+            $cacheItem->set($result);
             if ($this->defaultCacheTtl !== null) {
                 $cacheItem->expiresAfter($this->defaultCacheTtl);
             }
             $this->cache->save($cacheItem);
         }
 
-        return $data;
+        return $result;
     }
 
     private function cacheKeyForArray($arr, $base = true)

@@ -3,6 +3,8 @@
 namespace Paloma\Shop\Customers;
 
 use Paloma\Shop\BaseClient;
+use Paloma\Shop\FileResponse;
+use Psr\Http\Message\StreamInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -181,5 +183,74 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
     function addressValidate($address)
     {
         return $this->post($this->channel . '/address/validate', null, $address);
+    }
+
+    function getWatchlists($userId)
+    {
+        return $this->get($this->channel . '/users/' . $userId . '/watchlists');
+    }
+
+    function createWatchlist($userId, $watchlistName = null)
+    {
+        $query = null;
+        if ($watchlistName !== null) {
+            $query = ['watchlistName' => $watchlistName];
+        }
+        return $this->post($this->channel . '/users/' . $userId . '/watchlists', $query);
+    }
+
+    function deleteWatchlist($userId, $watchlistId)
+    {
+        return $this->delete($this->channel . '/users/' . $userId . '/watchlists/' . $watchlistId);
+    }
+
+    function getWatchlist($userId, $watchlistId, $locale = null)
+    {
+        return $this->get($this->channel . '/users/' . $userId . '/watchlists/' . $watchlistId);
+    }
+
+    function updateWatchlist($userId, $watchlistId, $watchlist)
+    {
+        return $this->put($this->channel . '/users/' . $userId . '/watchlists/' . $watchlistId, null, $watchlist);
+    }
+
+    function removeWatchlistArticle($userId, $watchlistId, $sku)
+    {
+        return $this->delete($this->channel . '/users/' . $userId . '/watchlists/' . $watchlistId . '/items/' . $sku);
+    }
+
+    function addWatchlistArticle($userId, $watchlistId, $sku, $quantity = null)
+    {
+        $query = null;
+        if ($quantity !== null) {
+            $query = ['quantity' => $quantity];
+        }
+        return $this->put($this->channel . '/users/' . $userId . '/watchlists/' . $watchlistId . '/items/' . $sku, $query);
+    }
+
+    function replaceWatchlistArticle($userId, $watchlistId, $oldSku, $newSku)
+    {
+        return $this->post($this->channel . '/users/' . $userId . '/watchlists/' . $watchlistId . '/items/' . $oldSku . '/replace-with/' . $newSku);
+    }
+
+    /**
+     * @return FileResponse
+     */
+    function exportWatchlists($userId)
+    {
+        return $this->get($this->channel . '/users/' . $userId . '/watchlists/export');
+    }
+
+    function importWatchlists($userId, StreamInterface $watchlist, $watchlistContentType)
+    {
+        return $this->post($this->channel . '/users/' . $userId . '/watchlists/import', null, $watchlist, $watchlistContentType);
+    }
+
+    /**
+     * @return FileResponse
+     */
+    function exportWatchlist($userId, $watchlistId)
+    {
+        return $this->get($this->channel . '/users/' . $userId . '/watchlists/' . $watchlistId . '/export');
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Paloma\Shop\Customers;
 
+use Paloma\Shop\FileResponse;
+use Psr\Http\Message\StreamInterface;
+
 interface CustomersClientInterface
 {
     function register($customer);
@@ -53,4 +56,32 @@ interface CustomersClientInterface
     function addressCompleteStreetAndHouse($country, $zipCode, $streetAndHouse);
 
     function addressValidate($address);
+
+    function getWatchlists($userId);
+
+    function createWatchlist($userId, $watchlistName = null);
+
+    function deleteWatchlist($userId, $watchlistId);
+
+    function getWatchlist($userId, $watchlistId, $locale = null);
+
+    function updateWatchlist($userId, $watchlistId, $watchlist);
+
+    function removeWatchlistArticle($userId, $watchlistId, $sku);
+
+    function addWatchlistArticle($userId, $watchlistId, $sku, $quantity = null);
+
+    function replaceWatchlistArticle($userId, $watchlistId, $oldSku, $newSku);
+
+    /**
+     * @return FileResponse
+     */
+    function exportWatchlists($userId);
+
+    function importWatchlists($userId, StreamInterface $watchlist, $watchlistContentType);
+
+    /**
+     * @return FileResponse
+     */
+    function exportWatchlist($userId, $watchlistId);
 }
