@@ -206,7 +206,8 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
 
     function getWatchlist($userId, $watchlistId, $locale = null)
     {
-        return $this->get($this->channel . '/users/' . $userId . '/watchlists/' . $watchlistId);
+        $query = ['locale' => ($locale !== null ? $locale : $this->locale)];
+        return $this->get($this->channel . '/users/' . $userId . '/watchlists/' . $watchlistId, $query);
     }
 
     function updateWatchlist($userId, $watchlistId, $watchlist)
