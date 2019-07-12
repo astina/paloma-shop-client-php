@@ -129,8 +129,9 @@ abstract class BaseClient
         foreach ($parts as $name => $values) {
             $multipart[] = [
                 'name' => $name,
+                'filename' => 'upload', // Paloma seems to need the filename field
                 'contents' => $values['contents'],
-                'headers' => ['Content-type' => $values['contentType']]
+                'headers' => ['content-type' => $values['contentType']]
             ];
         }
 
@@ -138,7 +139,6 @@ abstract class BaseClient
             'POST',
             $path,
             [
-                'headers' => ['content-type' => 'multipart/form-data'],
                 'query' => $query,
                 'multipart' => $multipart,
             ]);
