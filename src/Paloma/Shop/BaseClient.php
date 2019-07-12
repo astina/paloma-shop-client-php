@@ -117,6 +117,35 @@ abstract class BaseClient
         return $this->req('POST', $path, $query, $body, true);
     }
 
+    /**
+     * @param array|null $parts An array of
+     * [<part name> => ['contents' => <content stream>,
+     *   'contentType' => <contents content-type>]]
+     */
+    protected function postMultipart($path, $query = null, array $parts = null)
+    {
+        $parts = $parts !== null ? $parts : [];
+        $multipart = [];
+        foreach ($parts as $name => $values) {
+            $multipart[] = [
+                'name' => $name,
+                'contents' => $values['contents'],
+                'headers' => ['Content-type' => $values['contentType']]
+            ];
+        }
+
+        $res = $this->http->request(
+            'POST',
+            $path,
+            [
+                'headers' => ['content-type' => 'multipart/form-data'],
+                'query' => $query,
+                'multipart' => $multipart,
+            ]);
+
+        return $this->responseGetResult($res);
+    }
+
     protected function put($path, $query = null, $body = null, $bodyContentType = null)
     {
         return $this->req('PUT', $path, $query, $body, false, $bodyContentType);
@@ -158,15 +187,7 @@ abstract class BaseClient
                     (is_array($body) && !$formEncoding ? json_encode($body, JSON_UNESCAPED_SLASHES) : null)
             ]);
 
-        $contentType = $res->hasHeader('Content-type') ? Psr7\parse_header($res->getHeader('Content-type'))[0][0] : null;
-        $hasContentDisposition = $res->hasHeader('Content-disposition');
-        if ($contentType == 'application/json') {
-            $result = json_decode($res->getBody(), true);
-        } elseif ($hasContentDisposition) {
-            $result = FileResponse::createFromResponse($res);
-        } else {
-            $result = $res->getBody();
-        }
+        $result = $this->responseGetResult($res);
 
         if ($cacheItem !== null) {
             $cacheItem->set($result);
@@ -177,6 +198,20 @@ abstract class BaseClient
         }
 
         return $result;
+    }
+
+    private function responseGetResult(Psr7\Response $response)
+    {
+        $contentType = $response->hasHeader('Content-type') ? Psr7\parse_header(
+            $response->getHeader('Content-type'))[0][0] : null;
+        $hasContentDisposition = $response->hasHeader('Content-disposition');
+        if ($contentType == 'application/json') {
+            return json_decode($response->getBody(), true);
+        } elseif ($hasContentDisposition) {
+            return FileResponse::createFromResponse($response);
+        } else {
+            return $response->getBody();
+        }
     }
 
     private function cacheKeyForArray($arr, $base = true)

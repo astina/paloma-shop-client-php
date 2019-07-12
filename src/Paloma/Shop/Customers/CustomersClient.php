@@ -244,7 +244,13 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
 
     function importWatchlists($userId, StreamInterface $watchlist, $watchlistContentType)
     {
-        return $this->post($this->channel . '/users/' . $userId . '/watchlists/import', null, $watchlist, $watchlistContentType);
+        $parts = [
+            'file' => [
+                'contents' => $watchlist,
+                'contentType' => $watchlistContentType,
+            ],
+        ];
+        return $this->postMultipart($this->channel . '/users/' . $userId . '/watchlists/import', null, $parts);
     }
 
     /**
