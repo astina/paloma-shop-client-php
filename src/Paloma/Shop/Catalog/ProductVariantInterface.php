@@ -29,6 +29,11 @@ interface ProductVariantInterface
     function getOriginalPrice(): ?string;
 
     /**
+     * @return string Reduction from original price to price, formatted with percent sign (e.g. "-12 %")
+     */
+    function getReductionPercent(): ?string;
+
+    /**
      * @return string Tax rate, formatted with percent sign (e.g. "7.7 %")
      */
     function getTaxRate(): string;

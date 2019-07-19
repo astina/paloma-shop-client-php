@@ -44,6 +44,11 @@ interface ProductInterface
     function getOriginalBasePrice(): ?string;
 
     /**
+     * @return string Reduction from original base price to base price, formatted with percent sign (e.g. "-12 %")
+     */
+    function getReductionPercent(): ?string;
+
+    /**
      * @return string Tax rate, formatted with percent sign (e.g. "7.7 %")
      */
     function getTaxRate(): string;

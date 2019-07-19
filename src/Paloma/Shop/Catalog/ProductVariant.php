@@ -3,6 +3,7 @@
 namespace Paloma\Shop\Catalog;
 
 use Paloma\Shop\Common\SelfNormalizing;
+use Paloma\Shop\Utils\PriceUtils;
 
 class ProductVariant implements ProductVariantInterface, SelfNormalizing
 {
@@ -16,7 +17,7 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
     public function __construct(array $data)
     {
         $this->data = $data;
-        $this->price = new Price($data['pricing']);
+        $this->price = new Price($data['price'] ?? $data['pricing']);
     }
 
     function getSku(): string
@@ -43,6 +44,21 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
     function getOriginalPrice(): ?string
     {
         return $this->data['pricing']['originalGrossPriceFormatted'];
+    }
+
+    function getReductionPercent(): ?string
+    {
+        if ($this->getOriginalPrice() === null) {
+            return null;
+        }
+
+        if (!isset($this->data['price'])) {
+            return null;
+        }
+
+        return PriceUtils::calculateReduction(
+            $this->data['price']['unitPrice'],
+            $this->data['price']['originalUnitPrice']);
     }
 
     function getTaxRate(): string

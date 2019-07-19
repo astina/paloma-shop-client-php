@@ -60,6 +60,11 @@ class Product implements ProductInterface, SelfNormalizing
         return $this->getMasterVariant()->getOriginalPrice();
     }
 
+    function getReductionPercent(): ?string
+    {
+        return $this->getMasterVariant()->getReductionPercent();
+    }
+
     function getTaxRate(): string
     {
         return $this->getMasterVariant()->getTaxRate();
@@ -229,6 +234,7 @@ class Product implements ProductInterface, SelfNormalizing
 
         $data['basePrice'] = $this->getBasePrice();
         $data['originalBasePrice'] = $this->getOriginalBasePrice();
+        $data['reductionPercent'] = $this->getReductionPercent();
         $data['taxRate'] = $this->getTaxRate();
         $data['taxIncluded'] = $this->isTaxIncluded();
 
