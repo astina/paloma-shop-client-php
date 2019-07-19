@@ -20,7 +20,7 @@ Paloma\Shop\Common\Address:
     phoneNumber:
       - Length: { max: 30 }
       - Regex:
-          pattern: '/^[+0-9 -]$/'
+          pattern: '/^[+0-9 -]+$/'
           message: 'This value is not a valid phone number.'
     emailAddress:
       - Email: ~

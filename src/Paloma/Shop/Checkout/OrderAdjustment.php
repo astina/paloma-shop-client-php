@@ -28,7 +28,7 @@ class OrderAdjustment implements OrderAdjustmentInterface
 
     function getDescription(): string
     {
-        return $this->data['description'];
+        return $this->data['description'] ?? $this->data['type'];
     }
 
     function getPrice(): string
