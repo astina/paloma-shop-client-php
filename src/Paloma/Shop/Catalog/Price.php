@@ -18,19 +18,20 @@ class Price implements PriceInterface
         if (isset($data['grossPriceFormatted'])) {
 
             $this->price = sprintf('%s %s',
-                $this->data['currency'],
-                $this->isTaxIncluded()
-                    ? $this->data['grossPriceFormatted']
-                    : $this->data['netPriceFormatted']);
+                $data['currency'],
+                $data['grossPriceFormatted']);
 
-            $this->taxRate = $this->data['taxes']['vat']['rateFormatted'];
+            $this->taxRate = $data['taxes']['vat']['rateFormatted'];
             $this->taxIncluded = true;
             $this->currency = $data['currency'];
 
         // new 'price' object
         } else if (isset($data['unitPrice'])) {
 
-            $this->price = $data['unitPrice'];
+            $this->price = sprintf('%s %s',
+                $data['currency'],
+                $data['unitPrice']);
+
             $this->taxRate = $data['tax'];
             $this->taxIncluded = $data['taxIncluded'];
             $this->currency = $data['currency'];

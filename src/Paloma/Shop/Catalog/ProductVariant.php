@@ -43,7 +43,24 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
 
     function getOriginalPrice(): ?string
     {
-        return $this->data['pricing']['originalGrossPriceFormatted'];
+        return isset($this->data['price'])
+            ? $this->data['price']['originalUnitPrice']
+            : $this->data['pricing']['originalGrossPriceFormatted'];
+    }
+
+    function getReductionPercent(): ?string
+    {
+        if ($this->getOriginalPrice() === null) {
+            return null;
+        }
+
+        if (!isset($this->data['price'])) {
+            return null;
+        }
+
+        return PriceUtils::calculateReduction(
+            $this->data['price']['unitPrice'],
+            $this->data['price']['originalUnitPrice']);
     }
 
     function getReductionPercent(): ?string
