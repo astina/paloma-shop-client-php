@@ -45,9 +45,9 @@ abstract class Page implements PageInterface
 
     function getSort(): ?string
     {
-        return (!isset($this->data['sort']) || count($this->data['sort']) === 0)
-            ? null
-            : $this->data['sort'][0]['property'];
+        return (isset($this->data['sort']) && count($this->data['sort']) > 0 && $this->data['sort'][0] !== [])
+            ? $this->data['sort'][0]['property']
+            : null;
     }
 
     function isOrderDesc(): bool

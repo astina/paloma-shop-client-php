@@ -215,11 +215,18 @@ class Product implements ProductInterface, SelfNormalizing
 
     function getMainCategory(): ?CategoryReferenceInterface
     {
-        $categories = $this->getCategories();
+        if (!$this->data['categories'] || count($this->data['categories']) === 0) {
+            return null;
+        }
 
-        return count($categories) === 0
-            ? null
-            : $categories[0];
+        $mainCat = $this->data['categories'][0];
+        foreach ($this->data['categories'] as $cat) {
+            if ($cat['level'] > $mainCat['level']) {
+                $mainCat = $cat;
+            }
+        }
+
+        return new CategoryReference($mainCat);
     }
 
     public function _normalize(): array

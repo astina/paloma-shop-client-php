@@ -55,4 +55,6 @@ interface CustomersClientInterface
     function addressCompleteStreetAndHouse($country, $zipCode, $streetAndHouse);
 
     function addressValidate($address);
+
+    function getProducts($customerId, $pageNr = null, $pageSize = null);
 }

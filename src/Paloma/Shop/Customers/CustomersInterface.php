@@ -157,4 +157,15 @@ interface CustomersInterface
      * @throws BackendUnavailable
      */
     function addOrderItemsToCart(string $orderNumber): OrderRepetitionResultInterface;
+
+    /**
+     * Returns all products the customer has purchased.
+     *
+     * @param int $page
+     * @param int $size
+     * @return CustomerProductPageInterface
+     * @throws NotAuthenticated
+     * @throws BackendUnavailable
+     */
+    function listProducts(int $page = 0, int $size = 20): CustomerProductPageInterface;
 }

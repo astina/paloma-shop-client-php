@@ -80,4 +80,13 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
     {
         return $this->get($this->channel . '/' . $this->locale . '/categories/' . $code . '/filter-aggregates');
     }
+
+    function listBySkus(array $skus, $omitOtherVariants = false, $includeInactiveProducts = false)
+    {
+        return $this->post($this->channel . '/' . $this->locale . '/products/by-sku', null, [
+            'skus' => $skus,
+            'omitOtherVariants' => $omitOtherVariants,
+            'includeInactiveProducts' => $includeInactiveProducts,
+        ]);
+    }
 }

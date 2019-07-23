@@ -191,4 +191,19 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
     {
         return $this->post($this->channel . '/address/validate', null, $address);
     }
+
+    function getProducts($customerId, $page = null, $size = null)
+    {
+        $query = [
+            'customerId' => $customerId,
+        ];
+        if ($page !== null) {
+            $query['page'] = $page;
+        }
+        if ($size !== null) {
+            $query['size'] = $size;
+        }
+
+        return $this->get($this->channel . '/' . $this->locale . '/products', $query);
+    }
 }

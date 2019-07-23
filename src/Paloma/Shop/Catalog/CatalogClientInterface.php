@@ -21,4 +21,6 @@ interface CatalogClientInterface
     function category($code, $depth = null, $filterAggregates = null);
 
     function categoryFilters($code);
+
+    function listBySkus(array $skus, $omitOtherVariants = false, $includeInactiveProducts = false);
 }

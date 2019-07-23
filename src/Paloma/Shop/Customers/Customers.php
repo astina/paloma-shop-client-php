@@ -429,4 +429,21 @@ class Customers implements CustomersInterface
     {
         return $this->client->checkout()->checkoutOrder($this->getCustomer(), $this->security->getUser());
     }
+
+    function listProducts(int $page = 0, int $size = 20): CustomerProductPageInterface
+    {
+        try {
+
+            $data = $this->client->customers()->getProducts(
+                $this->getCustomerId(),
+                $page,
+                $size
+            );
+
+            return new CustomerProductPage($data);
+
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
 }
