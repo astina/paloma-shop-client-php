@@ -6,6 +6,8 @@ interface CatalogClientInterface
 {
     function search($search);
 
+    function searchFilterAggregates();
+
     function searchSuggestions($query);
 
     function product($itemNumber);

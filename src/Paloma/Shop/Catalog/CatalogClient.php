@@ -26,6 +26,11 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         return $this->post($this->channel . '/' . $this->locale . '/search', null, $search);
     }
 
+    public function searchFilterAggregates()
+    {
+        return $this->get($this->channel . '/' . $this->locale . '/search/filter-aggregates');
+    }
+
     function searchSuggestions($query)
     {
         return $this->get($this->channel . '/' . $this->locale . '/search/suggestions', ['query' => $query]);
