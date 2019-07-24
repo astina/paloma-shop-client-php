@@ -27,6 +27,11 @@ class PalomaProfiler
 
         $this->totalTime += $duration;
 
+        $responseBody = null;
+        if (strpos($response->getHeaderLine('content-type'), 'application/json') === 0) {
+            $responseBody = ($response->getBody() . '') ? json_encode(json_decode($response->getBody()), JSON_PRETTY_PRINT) : null;
+        }
+
         $this->exchanges[] = [
             'request' => [
                 'method' => $request->getMethod(),
@@ -35,7 +40,7 @@ class PalomaProfiler
             ],
             'response' => [
                 'status' => sprintf('%d %s', $response->getStatusCode(), $response->getReasonPhrase()),
-                'body' => ($response->getBody() . '') ? json_encode(json_decode($response->getBody()), JSON_PRETTY_PRINT) : null,
+                'body' => $responseBody,
             ],
             'duration' => round($duration),
             'call_stack' => $this->callStack,

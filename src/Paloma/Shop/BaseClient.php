@@ -3,6 +3,7 @@
 namespace Paloma\Shop;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
@@ -165,6 +166,14 @@ abstract class BaseClient
         }
 
         return $data;
+    }
+
+    /**
+     * @return ClientInterface
+     */
+    public function http()
+    {
+        return $this->http;
     }
 
     private function cacheKeyForArray($arr, $base = true)
