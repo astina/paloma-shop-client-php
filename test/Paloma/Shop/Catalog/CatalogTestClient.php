@@ -105,4 +105,9 @@ class CatalogTestClient implements CatalogClientInterface
         }
         // TODO: Implement categoryFilters() method.
     }
+
+    function listBySkus(array $skus, $omitOtherVariants = false, $includeInactiveProducts = false)
+    {
+        // TODO: Implement listBySkus() method.
+    }
 }

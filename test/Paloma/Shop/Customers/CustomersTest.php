@@ -307,9 +307,9 @@ class CustomersTest extends TestCase
     public function testConfirmEmailAddress()
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        $user = $this->customers()->confirmEmailAddress('token');
+        $result = $this->customers()->confirmEmailAddress('token');
 
-        $this->assertInstanceOf(UserDetailsInterface::class, $user);
+        $this->assertNull($result);
     }
 
     public function testConfirmEmailAddressWith503Response()

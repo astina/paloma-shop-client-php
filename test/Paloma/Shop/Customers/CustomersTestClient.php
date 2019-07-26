@@ -253,4 +253,9 @@ class CustomersTestClient implements CustomersClientInterface
     {
         // TODO: Implement addressValidate() method.
     }
+
+    function getProducts($customerId, $pageNr = null, $pageSize = null)
+    {
+        // TODO: Implement getProducts() method.
+    }
 }

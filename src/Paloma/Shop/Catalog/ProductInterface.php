@@ -14,6 +14,14 @@ interface ProductInterface
     function getItemNumber(): string;
 
     /**
+     * All products found over standard catalog API calls will have status 'active'.
+     * Status 'inactive' means that the product is not available (anymore).
+     *
+     * @return string 'active' or 'inactive'
+     */
+    function getStatus(): string;
+
+    /**
      * @return string Product name
      */
     function getName(): string;

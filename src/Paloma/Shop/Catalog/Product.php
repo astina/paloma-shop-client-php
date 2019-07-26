@@ -30,6 +30,11 @@ class Product implements ProductInterface, SelfNormalizing
         return $this->data['itemNumber'];
     }
 
+    function getStatus(): string
+    {
+        return $this->data['status'] ?? 'active';
+    }
+
     function getName(): string
     {
         return $this->data['name'];
@@ -215,7 +220,7 @@ class Product implements ProductInterface, SelfNormalizing
 
     function getMainCategory(): ?CategoryReferenceInterface
     {
-        if (!$this->data['categories'] || count($this->data['categories']) === 0) {
+        if (!isset($this->data['categories']) || count($this->data['categories']) === 0) {
             return null;
         }
 
@@ -238,6 +243,8 @@ class Product implements ProductInterface, SelfNormalizing
             'description',
             'shortDescription',
         ], $this->data);
+
+        $data['status'] = $this->getStatus();
 
         $data['basePrice'] = $this->getBasePrice();
         $data['originalBasePrice'] = $this->getOriginalBasePrice();
