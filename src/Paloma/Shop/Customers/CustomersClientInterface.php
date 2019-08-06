@@ -73,6 +73,8 @@ interface CustomersClientInterface
 
     function replaceWatchlistArticle($userId, $watchlistId, $oldSku, $newSku);
 
+    function setWatchlistQuantitiesToZero($userId, $watchlistId);
+
     /**
      * @return FileResponse
      */

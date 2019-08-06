@@ -234,6 +234,10 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
         return $this->post($this->channel . '/users/' . $userId . '/watchlists/' . $watchlistId . '/items/' . $oldSku . '/replace-with/' . $newSku);
     }
 
+    function setWatchlistQuantitiesToZero($userId, $watchlistId) {
+        return $this->post($this->channel . '/users/' . $userId . '/watchlists/' . $watchlistId . '/set-quantities-to-zero');
+    }
+
     /**
      * @return FileResponse
      */
