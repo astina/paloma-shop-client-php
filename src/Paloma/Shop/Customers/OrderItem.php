@@ -38,7 +38,7 @@ class OrderItem implements OrderItemInterface
         return $this->data['name'];
     }
 
-    function getImage(): ImageInterface
+    function getImage(): ?ImageInterface
     {
         return isset($this->data['image']) ? new Image($this->data['image']) : null;
     }
