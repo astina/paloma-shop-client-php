@@ -2,6 +2,8 @@
 
 namespace Paloma\Shop\Catalog;
 
+use DateTime;
+
 class Category implements CategoryInterface
 {
     private $data;
@@ -78,5 +80,15 @@ class Category implements CategoryInterface
         return array_map(function($elem) {
             return new CategoryReference($elem);
         }, $this->data['ancestors'] ?? []);
+    }
+
+    function getCreated(): DateTime
+    {
+        return new DateTime($this->data['created']);
+    }
+
+    function getModified(): DateTime
+    {
+        return new DateTime($this->data['modified']);
     }
 }

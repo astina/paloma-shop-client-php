@@ -16,7 +16,7 @@ interface ImageInterface
     function getSource(string $size): ?ImageSourceInterface;
 
     /**
-     * @return array Map of image sources (using size as key)
+     * @return ImageSourceInterface[] Map of image sources (using size as key)
      */
     function getSources(): array;
 }

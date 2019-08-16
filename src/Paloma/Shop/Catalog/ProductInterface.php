@@ -106,4 +106,8 @@ interface ProductInterface
      * @return CategoryReferenceInterface|null
      */
     function getMainCategory(): ?CategoryReferenceInterface;
+
+    function getCreated(): ?\DateTime;
+
+    function getModified(): ?\DateTime;
 }

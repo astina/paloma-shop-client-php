@@ -38,4 +38,8 @@ interface CategoryInterface extends CategoryReferenceInterface
      * @return CategoryReferenceInterface[]
      */
     function getAncestors(): array;
+
+    function getCreated(): \DateTime;
+
+    function getModified(): \DateTime;
 }

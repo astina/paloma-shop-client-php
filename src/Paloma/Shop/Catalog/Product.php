@@ -2,6 +2,7 @@
 
 namespace Paloma\Shop\Catalog;
 
+use DateTime;
 use InvalidArgumentException;
 use Paloma\Shop\Common\SelfNormalizing;
 use Paloma\Shop\Utils\NormalizationUtils;
@@ -234,6 +235,20 @@ class Product implements ProductInterface, SelfNormalizing
         return new CategoryReference($mainCat);
     }
 
+    function getCreated(): ?DateTime
+    {
+        return isset($this->data['created'])
+            ? new DateTime($this->data['created'])
+            : null;
+    }
+
+    function getModified(): ?DateTime
+    {
+        return isset($this->data['modified'])
+            ? new DateTime($this->data['modified'])
+            : null;
+    }
+
     public function _normalize(): array
     {
         $data = NormalizationUtils::copyKeys([
@@ -242,6 +257,8 @@ class Product implements ProductInterface, SelfNormalizing
             'slug',
             'description',
             'shortDescription',
+            'created',
+            'modified',
         ], $this->data);
 
         $data['status'] = $this->getStatus();
