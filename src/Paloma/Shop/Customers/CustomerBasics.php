@@ -52,6 +52,6 @@ class CustomerBasics implements CustomerBasicsInterface
 
     function getGender(): string
     {
-        return $this->data['gender'];
+        return $this->data['gender'] ?? 'unknown';
     }
 }
