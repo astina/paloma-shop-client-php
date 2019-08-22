@@ -100,14 +100,6 @@ class CustomersTest extends TestCase
         $this->assertInstanceOf(CustomerInterface::class, $customer);
     }
 
-    public function testGetCustomerWith503Response()
-    {
-        $this->expectException(BackendUnavailable::class);
-
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $this->customers($this->createServerException())->getCustomer();
-    }
-
     public function testUpdateCustomer()
     {
         /** @noinspection PhpUnhandledExceptionInspection */

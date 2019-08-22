@@ -372,7 +372,7 @@ class CheckoutTest extends TestCase
         $this->expectException(InvalidCouponCode::class);
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $this->checkout(true, $this->createBadRequestException())->addCouponCode('123');
+        $this->checkout(true, null, ['addCoupon' => $this->createBadRequestException()])->addCouponCode('123');
     }
 
     public function testRemoveCouponCode()
@@ -444,7 +444,7 @@ class CheckoutTest extends TestCase
         $this->checkout(true, $this->createServerException())->purchase();
     }
 
-    private function checkout(bool $withCart = true, Exception $exception = null): Checkout
+    private function checkout(bool $withCart = true, Exception $exception = null, array $exceptionForMethods = []): Checkout
     {
         $order = null;
         if ($withCart) {
@@ -453,7 +453,10 @@ class CheckoutTest extends TestCase
 
         $validator = $this->validator();
 
-        return new Checkout((new PalomaTestClient())->withCheckout(new CheckoutTestClient($order, $exception)), new TestPalomaSecurity(), $validator);
+        return new Checkout(
+            (new PalomaTestClient())->withCheckout(new CheckoutTestClient($order, $exception, $exceptionForMethods)),
+            new TestPalomaSecurity(),
+            $validator);
     }
 
     private function validator(): ValidatorInterface

@@ -34,7 +34,7 @@ class AddressTest extends TestCase
                        . '000000000000000',
         ]));
 
-        $this->assertEquals(12, $validation->count());
+        $this->assertEquals(11, $validation->count());
     }
 
     public function testValidateEmail()

@@ -172,6 +172,8 @@ class ProductTest extends TestCase
                     'availableFrom' => null,
                 ],
             ],
+            'created' => '2019-07-18T14:54:40.036+0000',
+            'modified' => '2019-07-18T14:54:40.036+0000',
         ]);
     }
 }

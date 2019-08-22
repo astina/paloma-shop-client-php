@@ -33,71 +33,64 @@ class CustomersTestClient implements CustomersClientInterface
 
     private $exception;
 
-    public function __construct(Exception $exception = null)
+    private $exceptionForMethods;
+
+    public function __construct(Exception $exception = null, array $exceptionForMethods = [])
     {
         $this->exception = $exception;
+        $this->exceptionForMethods = $exceptionForMethods;
     }
 
-    function register($customer)
+    private function throwException($method)
     {
         if ($this->exception) {
             throw $this->exception;
         }
 
+        if (isset($this->exceptionForMethods[$method])) {
+            throw $this->exceptionForMethods[$method];
+        }
+    }
+
+    function register($customer)
+    {
+        $this->throwException(__FUNCTION__);
         return $this->customer;
     }
 
     function getCustomer($customerId)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
-
+        $this->throwException(__FUNCTION__);
         return $this->customer;
     }
 
     function updateCustomer($customerId, $customer)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
-
+        $this->throwException(__FUNCTION__);
         return $this->customer;
     }
 
     function updateAddress($customerId, $addressType, $address)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
-
+        $this->throwException(__FUNCTION__);
         return $this->customer;
     }
 
     function confirmEmailAddress($token)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
-
+        $this->throwException(__FUNCTION__);
         return $this->customer;
     }
 
     function exists($emailAddress)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
-
+        $this->throwException(__FUNCTION__);
         return true;
     }
 
     function authenticateUser($username, $password)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
-
+        $this->throwException(__FUNCTION__);
         return [
             'user' => $this->user,
             'customer' => $this->customer,
@@ -106,10 +99,7 @@ class CustomersTestClient implements CustomersClientInterface
 
     function updateUserPassword($password)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
-
+        $this->throwException(__FUNCTION__);
         return [
             'user' => $this->user,
             'customer' => $this->customer,
@@ -118,17 +108,12 @@ class CustomersTestClient implements CustomersClientInterface
 
     function startUserPasswordReset($emailAddress, $confirmationBaseUrl)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
+        $this->throwException(__FUNCTION__);
     }
 
     function getUserPasswordResetToken($token)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
-
+        $this->throwException(__FUNCTION__);
         return [
             'user' => '1',
             'emailAddress' => 'test@astina.io',
@@ -140,10 +125,7 @@ class CustomersTestClient implements CustomersClientInterface
 
     function finishUserPasswordReset($token, $password)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
-
+        $this->throwException(__FUNCTION__);
         return [
             'user' => $this->user,
             'customer' => $this->customer,
@@ -152,38 +134,32 @@ class CustomersTestClient implements CustomersClientInterface
 
     function updateAdvertisingPreferences($customerId, $advertisingPrefs)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
-        // TODO: Implement updateAdvertisingPreferences() method.
+        $this->throwException(__FUNCTION__);
     }
 
     function createAdvertisingPrefs($advertisingPrefs)
     {
-        // TODO: Implement createAdvertisingPrefs() method.
+        $this->throwException(__FUNCTION__);
     }
 
     function confirmAdvertisingPrefs($token)
     {
-        // TODO: Implement confirmAdvertisingPrefs() method.
+        $this->throwException(__FUNCTION__);
     }
 
     function getLoyaltyPrograms($customerId)
     {
-        // TODO: Implement getLoyaltyPrograms() method.
+        $this->throwException(__FUNCTION__);
     }
 
     function updateLoyaltyPrograms($customerId, $program)
     {
-        // TODO: Implement updateLoyaltyPrograms() method.
+        $this->throwException(__FUNCTION__);
     }
 
     function getOrders($customerId, $pageNr = null, $pageSize = null, $sortOrder = null)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
-
+        $this->throwException(__FUNCTION__);
         return [
             'content' => [],
         ];
@@ -191,10 +167,7 @@ class CustomersTestClient implements CustomersClientInterface
 
     function getOrder($customerId, $orderNr)
     {
-        if ($this->exception) {
-            throw $this->exception;
-        }
-
+        $this->throwException(__FUNCTION__);
         return [
             'id' => '123',
             'orderNumber' => 'order1',
@@ -210,16 +183,17 @@ class CustomersTestClient implements CustomersClientInterface
 
     function getOrderReceipt($customerId, $orderNr)
     {
-        // TODO: Implement getOrderReceipt() method.
+        $this->throwException(__FUNCTION__);
     }
 
     function getOrderStatus($orderNr)
     {
-        // TODO: Implement getOrderStatus() method.
+        $this->throwException(__FUNCTION__);
     }
 
     function getItemCodesPurchasedTogether($itemCode, $max = 5)
     {
+        $this->throwException(__FUNCTION__);
         return [
             ['itemCode' => '111', 'count' => 15],
             ['itemCode' => '222', 'count' => 14],
@@ -231,31 +205,31 @@ class CustomersTestClient implements CustomersClientInterface
 
     function addressCompleteHouse($country, $zipCode, $street, $house)
     {
-        // TODO: Implement addressCompleteHouse() method.
+        $this->throwException(__FUNCTION__);
     }
 
     function addressCompleteStreet($country, $zipCode, $street)
     {
-        // TODO: Implement addressCompleteStreet() method.
+        $this->throwException(__FUNCTION__);
     }
 
     function addressCompleteZip($country, $zipCity)
     {
-        // TODO: Implement addressCompleteZip() method.
+        $this->throwException(__FUNCTION__);
     }
 
     function addressCompleteStreetAndHouse($country, $zipCode, $streetAndHouse)
     {
-        // TODO: Implement addressCompleteStreetAndHouse() method.
+        $this->throwException(__FUNCTION__);
     }
 
     function addressValidate($address)
     {
-        // TODO: Implement addressValidate() method.
+        $this->throwException(__FUNCTION__);
     }
 
     function getProducts($customerId, $pageNr = null, $pageSize = null)
     {
-        // TODO: Implement getProducts() method.
+        $this->throwException(__FUNCTION__);
     }
 }
