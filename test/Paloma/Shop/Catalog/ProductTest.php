@@ -47,7 +47,8 @@ class ProductTest extends TestCase
 
         $this->assertEquals(1, count($product->getAttributes()));
         $this->assertEquals('label', $product->getAttribute('type')->getLabel());
-        $this->assertNull($product->getAttribute('hidden'));
+        $this->assertNotNull($product->getAttribute('hidden'));
+        $this->assertEquals(1, count($product->getAttributes('none')));
 
         $this->assertEquals(1, count($product->getImages()));
         $this->assertEquals('name', $product->getFirstImage()->getName());
