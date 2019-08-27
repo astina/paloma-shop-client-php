@@ -16,6 +16,7 @@ use Paloma\Shop\Error\InvalidCouponCode;
 use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\InvalidShippingTargetDate;
 use Paloma\Shop\Error\NonElectronicPaymentMethod;
+use Paloma\Shop\Error\OrderNotReadyForCouponCodes;
 use Paloma\Shop\Error\OrderNotReadyForPayment;
 use Paloma\Shop\Error\ProductVariantNotFound;
 use Paloma\Shop\Error\ProductVariantUnavailable;
@@ -353,6 +354,21 @@ class CheckoutTest extends TestCase
 
     public function testAddCouponCode()
     {
+        $checkout = $this->checkout();
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $checkout->finalize();
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $cart = $checkout->addCouponCode('123');
+
+        $this->assertInstanceOf(OrderDraftInterface::class, $cart);
+    }
+
+    public function testAddCouponCodeWithOrderNotFinalized()
+    {
+        $this->expectException(OrderNotReadyForCouponCodes::class);
+
         /** @noinspection PhpUnhandledExceptionInspection */
         $cart = $this->checkout()->addCouponCode('123');
 
@@ -371,8 +387,13 @@ class CheckoutTest extends TestCase
     {
         $this->expectException(InvalidCouponCode::class);
 
+        $checkout = $this->checkout(true, null, ['addCoupon' => $this->createBadRequestException()]);
+
         /** @noinspection PhpUnhandledExceptionInspection */
-        $this->checkout(true, null, ['addCoupon' => $this->createBadRequestException()])->addCouponCode('123');
+        $checkout->finalize();
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $checkout->addCouponCode('123');
     }
 
     public function testRemoveCouponCode()
@@ -393,8 +414,13 @@ class CheckoutTest extends TestCase
 
     public function testInitializePayment()
     {
+        $checkout = $this->checkout();
+
         /** @noinspection PhpUnhandledExceptionInspection */
-        $payment = $this->checkout()->initializePayment(new PaymentInitParameters('url1', 'url2', 'url3'));
+        $checkout->finalize();
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $payment = $checkout->initializePayment(new PaymentInitParameters('url1', 'url2', 'url3'));
 
         $this->assertInstanceOf(PaymentDraftInterface::class, $payment);
     }
@@ -430,8 +456,13 @@ class CheckoutTest extends TestCase
 
     public function testPurchase()
     {
+        $checkout = $this->checkout();
+
         /** @noinspection PhpUnhandledExceptionInspection */
-        $orderPurchase = $this->checkout()->purchase();
+        $checkout->finalize();
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $orderPurchase = $checkout->purchase();
 
         $this->assertInstanceOf(OrderPurchaseInterface::class, $orderPurchase);
     }

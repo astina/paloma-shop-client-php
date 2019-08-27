@@ -382,7 +382,7 @@ class Checkout implements CheckoutInterface
             return new OrderDraft($data);
 
         } catch (BadResponseException $bre) {
-            throw new OrderNotReadyForFinalization(); // TODO add error details
+            throw new OrderNotReadyForFinalization();
         } catch (TransferException $se) {
             throw BackendUnavailable::ofException($se);
         }
@@ -402,13 +402,7 @@ class Checkout implements CheckoutInterface
         $orderData = $checkoutOrder->get();
 
         if ($orderData['status'] !== 'finalized') {
-            try {
-                $this->getCheckout()->finalizeOrder($orderData['id']);
-            } catch (BadResponseException $bre) {
-                throw new OrderNotReadyForCouponCodes(); // TODO add error details
-            } catch (TransferException $se) {
-                throw BackendUnavailable::ofException($se);
-            }
+            throw new OrderNotReadyForCouponCodes();
         }
 
         try {
@@ -456,13 +450,7 @@ class Checkout implements CheckoutInterface
         }
 
         if ($orderData['status'] !== 'finalized') {
-            try {
-                $this->getCheckout()->finalizeOrder($orderData['id']);
-            } catch (BadResponseException $bre) {
-                throw new OrderNotReadyForPayment(); // TODO add error details
-            } catch (TransferException $se) {
-                throw BackendUnavailable::ofException($se);
-            }
+            throw new OrderNotReadyForPayment();
         }
 
         try {
@@ -494,13 +482,7 @@ class Checkout implements CheckoutInterface
         $orderData = $checkoutOrder->get();
 
         if ($orderData['status'] !== 'finalized') {
-            try {
-                $this->getCheckout()->finalizeOrder($orderData['id']);
-            } catch (BadResponseException $bre) {
-                throw new OrderNotReadyForPurchase(); // TODO add error details
-            } catch (TransferException $se) {
-                throw BackendUnavailable::ofException($se);
-            }
+            throw new OrderNotReadyForPurchase();
         }
 
         try {
