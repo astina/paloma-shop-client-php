@@ -2,6 +2,8 @@
 
 namespace Paloma\Shop\Customers;
 
+use DateTime;
+
 interface CustomerBasicsInterface
 {
     /**
@@ -43,4 +45,9 @@ interface CustomerBasicsInterface
      * @return string Gender, one of 'male', 'female', 'unknown'
      */
     function getGender(): string;
+
+    /**
+     * @return DateTime|null Date without time component
+     */
+    function getDateOfBirth(): ?DateTime;
 }

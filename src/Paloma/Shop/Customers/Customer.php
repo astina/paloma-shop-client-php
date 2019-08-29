@@ -21,6 +21,7 @@ class Customer extends CustomerBasics implements CustomerInterface, MetadataCont
             'lastName' => $customer->getLastName(),
             'company' => $customer->getCompany(),
             'gender' => $customer->getGender(),
+            'dateOfBirth' => $customer->getDateOfBirth() == null ? null : $customer->getDateOfBirth()->format('Y-m-d'),
             'contactAddress' => Address::toAddressArray($customer->getContactAddress()),
             'billingAddress' => Address::toAddressArray($customer->getBillingAddress()),
             'shippingAddress' => Address::toAddressArray($customer->getShippingAddress()),
@@ -28,13 +29,6 @@ class Customer extends CustomerBasics implements CustomerInterface, MetadataCont
                 ? ['id' => $user->getUserId()]
                 : null,
         ];
-    }
-
-    function getDateOfBirth(): ?DateTime
-    {
-        return isset($this->data['dateOfBirth'])
-            ? DateTime::createFromFormat('Y-m-d', $this->data['dateOfBirth'])
-            : null;
     }
 
     function getContactAddress(): ?AddressInterface

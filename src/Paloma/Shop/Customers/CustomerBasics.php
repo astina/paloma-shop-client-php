@@ -2,6 +2,8 @@
 
 namespace Paloma\Shop\Customers;
 
+use DateTime;
+
 class CustomerBasics implements CustomerBasicsInterface
 {
     protected $data;
@@ -53,5 +55,12 @@ class CustomerBasics implements CustomerBasicsInterface
     function getGender(): string
     {
         return $this->data['gender'] ?? 'unknown';
+    }
+
+    function getDateOfBirth(): ?DateTime
+    {
+        return isset($this->data['dateOfBirth'])
+            ? DateTime::createFromFormat('Y-m-d', $this->data['dateOfBirth'])
+            : null;
     }
 }

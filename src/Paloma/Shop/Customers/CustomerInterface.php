@@ -2,16 +2,10 @@
 
 namespace Paloma\Shop\Customers;
 
-use DateTime;
 use Paloma\Shop\Common\AddressInterface;
 
 interface CustomerInterface extends CustomerBasicsInterface
 {
-    /**
-     * @return DateTime|null Date without time component
-     */
-    function getDateOfBirth(): ?DateTime;
-
     /**
      * @return AddressInterface The customer's default contact address
      */
