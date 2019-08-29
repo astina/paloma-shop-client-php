@@ -77,15 +77,15 @@ interface ProductInterface
     function getOptions(): array;
 
     /**
-     * The 'display' parameter knows the following values:
+     * The 'displays' parameter knows the following values:
      * - 'product': Intended to be displayed on the product detail page
      * - 'category': Intended to be displayed on the product listing on a category page
      * - 'none': Not intended to be displayed, usually used for internal purposes / business logic
      *
-     * @param string $display Product display value
+     * @param array $displays Product display values
      * @return array Map of attributes valid for all variants of this product
      */
-    function getAttributes(string $display = 'product'): array;
+    function getAttributes(array $displays = ['overview', 'product']): array;
 
     /**
      * @param string $type Product attribute type

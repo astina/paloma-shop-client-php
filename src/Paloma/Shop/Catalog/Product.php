@@ -170,11 +170,11 @@ class Product implements ProductInterface, SelfNormalizing
         return $this->_options;
     }
 
-    function getAttributes(string $display = 'product'): array
+    function getAttributes(array $displays = ['overview', 'product']): array
     {
         $attributes = [];
         foreach (array_values($this->data['master']['attributes'] ?? []) as $attr) {
-            if ($attr['display'] === $display) {
+            if (in_array($attr['display'], $displays)) {
                 $attributes[$attr['type']] = new ProductAttribute($attr);
             }
         }
