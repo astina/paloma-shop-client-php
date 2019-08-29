@@ -33,6 +33,10 @@ class ProductAttribute implements ProductAttributeInterface, SelfNormalizing
     {
         $values = [];
 
+        if (!isset($this->data['values'])) {
+            return $values;
+        }
+
         for ($i = 0; $i < count($this->data['values']); $i++) {
             $value = $this->data['values'][$i];
             $code = $this->data['valueCodes'][$i] ?? null;
