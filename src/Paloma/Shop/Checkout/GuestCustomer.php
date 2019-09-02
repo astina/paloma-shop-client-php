@@ -29,7 +29,7 @@ class GuestCustomer implements CustomerInterface
         string $lastName = null,
         string $company = null,
         string $gender = 'unknown',
-        string $dateOfBirth = null)
+        DateTime $dateOfBirth = null)
     {
         $this->emailAddress = $emailAddress;
         $this->locale = $locale;
