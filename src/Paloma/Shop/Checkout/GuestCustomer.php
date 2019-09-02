@@ -95,9 +95,7 @@ class GuestCustomer implements CustomerInterface
 
     function getDateOfBirth(): ?DateTime
     {
-        return isset($this->dateOfBirth)
-            ? DateTime::createFromFormat('Y-m-d', $this->dateOfBirth)
-            : null;
+        return $this->dateOfBirth;
     }
 
     function getContactAddress(): ?AddressInterface
