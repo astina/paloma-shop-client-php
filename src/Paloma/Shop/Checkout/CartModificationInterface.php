@@ -12,7 +12,7 @@ interface CartModificationInterface
     /**
      * @return string ID of the affected order item (may be null)
      */
-    function getItemId(): string;
+    function getItemId(): ?string;
 
     /**
      * @return array Arbitrary key-value pairs with information about the modification

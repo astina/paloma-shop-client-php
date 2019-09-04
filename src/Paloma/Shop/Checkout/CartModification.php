@@ -16,13 +16,13 @@ class CartModification implements CartModificationInterface
         return $this->data['code'];
     }
 
-    function getItemId(): string
+    function getItemId(): ?string
     {
-        return $this->data['itemId'];
+        return $this->data['itemId'] ?? null;
     }
 
     function getParams(): array
     {
-        return $this->data['params'];
+        return $this->data['params'] ?? [];
     }
 }
