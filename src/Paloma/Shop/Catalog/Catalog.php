@@ -5,11 +5,14 @@ namespace Paloma\Shop\Catalog;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TransferException;
+use Paloma\Shop\Common\PricingContextProviderInterface;
+use Paloma\Shop\Customers\CustomersInterface;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\CategoryNotFound;
 use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\ProductNotFound;
 use Paloma\Shop\PalomaClientInterface;
+use Paloma\Shop\Security\PalomaSecurityInterface;
 
 class Catalog implements CatalogInterface
 {
@@ -18,9 +21,15 @@ class Catalog implements CatalogInterface
      */
     private $client;
 
-    public function __construct(PalomaClientInterface $client)
+    /**
+     * @var PricingContextProviderInterface
+     */
+    private $contextProvider;
+
+    public function __construct(PalomaClientInterface $client, PricingContextProviderInterface $contextProvider)
     {
         $this->client = $client;
+        $this->contextProvider = $contextProvider;
     }
 
     function search(SearchRequestInterface $searchRequest): ProductPageInterface
@@ -43,7 +52,7 @@ class Catalog implements CatalogInterface
                 'filterAggregates' => $searchRequest->isIncludeFilterAggregates(),
                 'sort' => $searchRequest->getSort(),
                 'order' => $searchRequest->isOrderDesc() ? 'desc' : 'asc',
-                // TODO context
+                'context' => $this->createContext(),
             ]);
 
             return new ProductPage($data);
@@ -72,7 +81,7 @@ class Catalog implements CatalogInterface
     {
         try {
 
-            $data = $this->client->catalog()->product($itemNumber);
+            $data = $this->client->catalog()->product($itemNumber, $this->createContext());
 
             return new Product($data);
 
@@ -90,7 +99,7 @@ class Catalog implements CatalogInterface
     {
         try {
 
-            $data = $this->client->catalog()->similarProducts($itemNumber);
+            $data = $this->client->catalog()->similarProducts($itemNumber, $this->createContext());
 
             return new ProductPage($data);
 
@@ -108,7 +117,7 @@ class Catalog implements CatalogInterface
     {
         try {
 
-            $data = $this->client->catalog()->recommendedProducts($itemNumber);
+            $data = $this->client->catalog()->recommendedProducts($itemNumber, $this->createContext());
 
             return new ProductPage($data);
 
@@ -176,7 +185,7 @@ class Catalog implements CatalogInterface
 
         try {
 
-            $data = $this->client->catalog()->recommendations($cart->get(), $size);
+            $data = $this->client->catalog()->recommendations($cart->get(), $size, $this->createContext());
 
             return new ProductPage($data);
 
@@ -218,5 +227,12 @@ class Catalog implements CatalogInterface
         } catch (TransferException $se) {
             throw BackendUnavailable::ofException($se);
         }
+    }
+
+    private function createContext()
+    {
+        $context = $this->contextProvider->provide();
+
+        return $context ? $context->toArray() : null;
     }
 }

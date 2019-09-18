@@ -28,6 +28,7 @@ class Customer extends CustomerBasics implements CustomerInterface, MetadataCont
             'users' => $user
                 ? ['id' => $user->getUserId()]
                 : null,
+            'priceGroups' => $customer->getPriceGroups(),
         ];
     }
 
@@ -53,5 +54,10 @@ class Customer extends CustomerBasics implements CustomerInterface, MetadataCont
         }
 
         return $this->data['_validation'];
+    }
+
+    function getPriceGroups(): array
+    {
+        return $this->data['priceGroups'] ?? [];
     }
 }

@@ -390,7 +390,7 @@
     "includedTaxes": [
       {
         "type": "vat",
-        "name": "MWSt.",
+        "name": "MwSt.",
         "rate": "7.7 %",
         "amount": "1.52"
       }

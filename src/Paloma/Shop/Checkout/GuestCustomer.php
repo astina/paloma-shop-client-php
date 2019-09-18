@@ -112,4 +112,9 @@ class GuestCustomer implements CustomerInterface
     {
         return null;
     }
+
+    function getPriceGroups(): array
+    {
+        return [];
+    }
 }

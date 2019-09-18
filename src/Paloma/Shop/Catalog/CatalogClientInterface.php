@@ -8,13 +8,13 @@ interface CatalogClientInterface
 
     function searchSuggestions($query);
 
-    function product($itemNumber);
+    function product($itemNumber, array $context = null);
 
-    function similarProducts($itemNumber);
+    function similarProducts($itemNumber, array $context = null);
 
-    function recommendedProducts($itemNumber);
+    function recommendedProducts($itemNumber, array $context = null);
 
-    function recommendations($order, $size = null);
+    function recommendations($order, $size = null, array $context = null);
 
     function categories($depth = null, $products = true);
 
@@ -22,5 +22,5 @@ interface CatalogClientInterface
 
     function categoryFilters($code);
 
-    function listBySkus(array $skus, $omitOtherVariants = false, $includeInactiveProducts = false);
+    function listBySkus(array $skus, $omitOtherVariants = false, $includeInactiveProducts = false, array $context = null);
 }

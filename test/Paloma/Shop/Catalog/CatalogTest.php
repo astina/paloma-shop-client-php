@@ -8,17 +8,20 @@ use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Paloma\Shop\Checkout\CheckoutTestClient;
+use Paloma\Shop\Common\PricingContextProvider;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\CategoryNotFound;
 use Paloma\Shop\Error\ProductNotFound;
+use Paloma\Shop\PalomaClientInterface;
 use Paloma\Shop\PalomaTestClient;
+use Paloma\Shop\Security\TestPalomaSecurity;
 use PHPUnit\Framework\TestCase;
 
 class CatalogTest extends TestCase
 {
     public function testSearch()
     {
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
             [['itemNumber' => '123', 'variants' => [['sku' => 'sku1']]]]
         )));
 
@@ -38,7 +41,7 @@ class CatalogTest extends TestCase
     {
         $this->expectException(BackendUnavailable::class);
 
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $catalog->search(new SearchRequest());
@@ -46,7 +49,7 @@ class CatalogTest extends TestCase
 
     public function testGetSearchSuggestions()
     {
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
             [['itemNumber' => 'prod1', 'variants' => [['sku' => 'sku1']] ]],
             [['code' => 'cat1',]]
         )));
@@ -62,7 +65,7 @@ class CatalogTest extends TestCase
     {
         $this->expectException(BackendUnavailable::class);
 
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $catalog->getSearchSuggestions('test');
@@ -70,7 +73,7 @@ class CatalogTest extends TestCase
 
     public function testGetProduct()
     {
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
             [['itemNumber' => '123', 'variants' => [['sku' => 'sku1']] ]]
         )));
 
@@ -84,7 +87,7 @@ class CatalogTest extends TestCase
     {
         $this->expectException(ProductNotFound::class);
 
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createNotFoundException())));
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createNotFoundException())));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $catalog->getProduct('test');
@@ -94,7 +97,7 @@ class CatalogTest extends TestCase
     {
         $this->expectException(BackendUnavailable::class);
 
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $catalog->getProduct('test');
@@ -102,7 +105,7 @@ class CatalogTest extends TestCase
 
     public function testGetSimilarProducts()
     {
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
             [['itemNumber' => '123', 'variants' => [['sku' => 'sku1']] ]]
         )));
 
@@ -116,7 +119,7 @@ class CatalogTest extends TestCase
     {
         $this->expectException(ProductNotFound::class);
 
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createNotFoundException())));
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createNotFoundException())));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $catalog->getSimilarProducts('test');
@@ -126,7 +129,7 @@ class CatalogTest extends TestCase
     {
         $this->expectException(BackendUnavailable::class);
 
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $catalog->getSimilarProducts('test');
@@ -134,7 +137,7 @@ class CatalogTest extends TestCase
 
     public function testGetRecommendedProducts()
     {
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
             [['itemNumber' => '123', 'variants' => [['sku' => 'sku1']] ]]
         )));
 
@@ -148,7 +151,7 @@ class CatalogTest extends TestCase
     {
         $this->expectException(ProductNotFound::class);
 
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createNotFoundException())));
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createNotFoundException())));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $catalog->getRecommendedProducts('test');
@@ -158,7 +161,7 @@ class CatalogTest extends TestCase
     {
         $this->expectException(BackendUnavailable::class);
 
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $catalog->getRecommendedProducts('test');
@@ -166,7 +169,7 @@ class CatalogTest extends TestCase
 
     public function testGetPurchasedTogether()
     {
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient()));
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient()));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $products = $catalog->getPurchasedTogether('123');
@@ -176,7 +179,7 @@ class CatalogTest extends TestCase
 
     public function testGetProductsForCartEmpty()
     {
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
             [['itemNumber' => '123', 'variants' => [['sku' => 'sku1']] ]]
         )));
 
@@ -188,7 +191,7 @@ class CatalogTest extends TestCase
 
     public function testGetProductsForCartNotEmpty()
     {
-        $catalog = new Catalog((new PalomaTestClient())
+        $catalog = $this->catalog((new PalomaTestClient())
             ->withCatalog(new CatalogTestClient(
                 [['itemNumber' => '123', 'variants' => [['sku' => 'sku1']] ]]
             ))
@@ -208,7 +211,7 @@ class CatalogTest extends TestCase
     {
         $this->expectException(BackendUnavailable::class);
 
-        $catalog = new Catalog((new PalomaTestClient())
+        $catalog = $this->catalog((new PalomaTestClient())
             ->withCatalog(new CatalogTestClient([], [], $this->createServerException()))
             ->withCheckout(new CheckoutTestClient(
                 [
@@ -222,7 +225,7 @@ class CatalogTest extends TestCase
 
     public function testGetCategories()
     {
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
             [],
             [['code' => 'cat1',]]
         )));
@@ -237,7 +240,7 @@ class CatalogTest extends TestCase
     {
         $this->expectException(BackendUnavailable::class);
 
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $catalog->getCategories();
@@ -245,7 +248,7 @@ class CatalogTest extends TestCase
 
     public function testGetCategory()
     {
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient(
             [],
             [['code' => 'cat1',]]
         )));
@@ -260,7 +263,7 @@ class CatalogTest extends TestCase
     {
         $this->expectException(CategoryNotFound::class);
 
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createNotFoundException())));
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createNotFoundException())));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $catalog->getCategory('cat1');
@@ -270,10 +273,15 @@ class CatalogTest extends TestCase
     {
         $this->expectException(BackendUnavailable::class);
 
-        $catalog = new Catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
+        $catalog = $this->catalog((new PalomaTestClient())->withCatalog(new CatalogTestClient([], [], $this->createServerException())));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $catalog->getCategory('cat1');
+    }
+
+    private function catalog(PalomaClientInterface $client): CatalogInterface
+    {
+        return new Catalog($client, new PricingContextProvider(new TestPalomaSecurity()));
     }
 
     /**

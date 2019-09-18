@@ -31,25 +31,30 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         return $this->get($this->channel . '/' . $this->locale . '/search/suggestions', ['query' => $query]);
     }
 
-    public function product($itemNumber)
+    public function product($itemNumber, array $context = null)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber);
+        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber, $this->createContextQuery($context));
     }
 
-    function similarProducts($itemNumber)
+    function similarProducts($itemNumber, array $context = null)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/similar');
+        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/similar', $this->createContextQuery($context));
     }
 
-    function recommendedProducts($itemNumber)
+    function recommendedProducts($itemNumber, array $context = null)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/recommended');
+        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/recommended', $this->createContextQuery($context));
     }
 
-    function recommendations($order, $size = null)
+    function recommendations($order, $size = null, array $context = null)
     {
+        $query = $this->createContextQuery() ?? [];
+        if ($size) {
+            $query['size'] = $size;
+        }
+
         return $this->post($this->channel . '/' . $this->locale . '/recommendations',
-            $size ? ['size' => $size] : null, $order);
+            $query, $order);
     }
 
     public function categories($depth = null, $products = true)
@@ -81,12 +86,35 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         return $this->get($this->channel . '/' . $this->locale . '/categories/' . $code . '/filter-aggregates');
     }
 
-    function listBySkus(array $skus, $omitOtherVariants = false, $includeInactiveProducts = false)
+    function listBySkus(array $skus, $omitOtherVariants = false, $includeInactiveProducts = false, array $context = null)
     {
-        return $this->post($this->channel . '/' . $this->locale . '/products/by-sku', null, [
+        return $this->post($this->channel . '/' . $this->locale . '/products/by-sku', $this->createContextQuery($context), [
             'skus' => $skus,
             'omitOtherVariants' => $omitOtherVariants,
             'includeInactiveProducts' => $includeInactiveProducts,
         ]);
+    }
+
+    private function createContextQuery(array $context = null)
+    {
+        if (!$context) {
+            return null;
+        }
+
+        $query = [];
+
+        if (isset($context['priceGroups'])) {
+            $query['context.priceGroups'] = $context['priceGroups'];
+        }
+
+        if (isset($context['date'])) {
+            $query['context.date'] = $context['date'];
+        }
+
+        if (isset($context['currency'])) {
+            $query['context.currency'] = $context['currency'];
+        }
+
+        return $query;
     }
 }

@@ -20,4 +20,9 @@ interface CustomerInterface extends CustomerBasicsInterface
      * @return AddressInterface The customer's default shipping address
      */
     function getShippingAddress(): ?AddressInterface;
+
+    /**
+     * @return string[] The customer's assigned price groups
+     */
+    function getPriceGroups(): array;
 }
