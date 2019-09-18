@@ -51,7 +51,7 @@ class CatalogTestClient implements CatalogClientInterface
         ];
     }
 
-    function product($itemNumber)
+    function product($itemNumber, array $context = null)
     {
         if ($this->exception) {
             throw $this->exception;
@@ -60,12 +60,12 @@ class CatalogTestClient implements CatalogClientInterface
         return count($this->products) === 0 ? null : $this->products[0];
     }
 
-    function similarProducts($itemNumber)
+    function similarProducts($itemNumber, array $context = null)
     {
         return $this->search([ 'query' => $itemNumber ]);
     }
 
-    function recommendedProducts($itemNumber)
+    function recommendedProducts($itemNumber, array $context = null)
     {
         return $this->search([ 'query' => $itemNumber ]);
     }
@@ -75,7 +75,7 @@ class CatalogTestClient implements CatalogClientInterface
         return $this->search([ 'query' => $itemNumber ]);
     }
 
-    function recommendations($order, $size = null)
+    function recommendations($order, $size = null, array $context = null)
     {
         return $this->search([]);
     }
@@ -106,7 +106,7 @@ class CatalogTestClient implements CatalogClientInterface
         // TODO: Implement categoryFilters() method.
     }
 
-    function listBySkus(array $skus, $omitOtherVariants = false, $includeInactiveProducts = false)
+    function listBySkus(array $skus, $omitOtherVariants = false, $includeInactiveProducts = false, array $context = null)
     {
         // TODO: Implement listBySkus() method.
     }
