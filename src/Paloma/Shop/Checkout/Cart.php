@@ -21,6 +21,8 @@ class Cart
      */
     private $session;
 
+    private $inputOrderId;
+
     /**
      * @var array
      */
@@ -33,13 +35,15 @@ class Cart
      * @param $locale string Used to initialize the cart order
      * @param CheckoutClientInterface $checkoutClient
      * @param SessionInterface $session
+     * @param $inputOrderId string The order ID which this cart shall use
      */
-    public function __construct($channel, $locale, CheckoutClientInterface $checkoutClient, SessionInterface $session)
+    public function __construct($channel, $locale, CheckoutClientInterface $checkoutClient, SessionInterface $session, $inputOrderId = null)
     {
         $this->channel = $channel;
         $this->locale = $locale;
         $this->checkoutClient = $checkoutClient;
         $this->session = $session;
+        $this->inputOrderId = $inputOrderId;
     }
 
     public function get()
@@ -188,6 +192,11 @@ class Cart
         return boolval($this->getCartId(false));
     }
 
+    /**
+     * @param bool $createOrder Whether to create an order if none exists.
+     * @param null $inputOrderId When creating an order, instead of creating a
+     * new order, use the order ID specified in this parameter.
+     */
     private function getCartId($createOrder = true)
     {
         // Do not force a session to be created unless needed
@@ -203,12 +212,25 @@ class Cart
                 return null;
             }
 
-            $cart = $this->createCartOrder();
-
             $cartIds = $cartIds ?: [];
-            $cartIds[$this->channel] = $cart['id'];
+            if ($this->inputOrderId === null) {
+                $cart = $this->createCartOrder();
+                $cartIds[$this->channel] = $cart['id'];
+            } else {
+                $cartIds[$this->channel] = $this->inputOrderId;
+            }
 
             $this->session->set(self::$CART_ID_VAR, $cartIds);
+        } else {
+            // Sanity check
+            if ($this->inputOrderId !== null && $cartIds[$this->channel] != $this->inputOrderId) {
+                throw new \LogicException('Attempt to use a cart ' .
+                    'with a specific order ID after a different cart was ' .
+                    'already set in the session. This indicates either a new ' .
+                    'usage pattern of the Cart or the need to be able to use ' .
+                    'multiple Carts at the same time. Both would need some ' .
+                    'thinking and redesign.');
+            }
         }
 
         return $cartIds[$this->channel];

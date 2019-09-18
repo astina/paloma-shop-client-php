@@ -32,9 +32,25 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
         $this->session = empty($options['session']) ? new Session() : $options['session'];
     }
 
-    function cart()
+    function cart($orderId = null)
     {
-        return new Cart($this->channel, $this->locale, $this, $this->session);
+        return new Cart($this->channel, $this->locale, $this, $this->session, $orderId);
+    }
+
+    function getOrders($userId = null, $customerId = null, $size = null, $locale = null)
+    {
+        $query = [];
+        if ($userId !== null) {
+            $query['userId'] = $userId;
+        }
+        if ($customerId !== null) {
+            $query['customerId'] = $customerId;
+        }
+        if ($size !== null) {
+            $query['size'] = $size;
+        }
+        $query['locale'] = $locale !== null ? $locale : $this->locale;
+        return $this->get($this->channel . '/' . self::ORDERS_PATH, $query);
     }
 
     function createOrder($order)

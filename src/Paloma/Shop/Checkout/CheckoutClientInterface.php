@@ -5,13 +5,18 @@ namespace Paloma\Shop\Checkout;
 interface CheckoutClientInterface
 {
     /**
+     * Create a new cart with a new order or use the one already known in the
+     * session. If an order ID is supplied then instead of creating a new cart
+     * with a new order the order specified will be used.
      * @return Cart
      */
-    function cart();
+    function cart($orderId = null);
+    
+    function getOrders($userId = null, $customerId = null, $size = null, $locale = null);
 
     function createOrder($order);
 
-    function getOrder($id, $languageCode = null);
+    function getOrder($id, $locale = null);
 
     function deleteOrder($id);
 
