@@ -51,4 +51,6 @@ interface CheckoutClientInterface
     function purchaseOrder($id);
 
     function setBroker($orderId, $broker);
+
+    function setComment($orderId, $comment);
 }

@@ -157,4 +157,9 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
     {
         return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/broker', null, $broker);
     }
+
+    function setComment($orderId, $comment)
+    {
+        return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/comment', null, $comment);
+    }
 }
