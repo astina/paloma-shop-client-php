@@ -34,7 +34,7 @@ class ProductTest extends TestCase
         $this->assertEquals(2, count($variant->getOptions()));
         $this->assertEquals(1, count($variant->getAttributes()));
         $this->assertEquals(1, count($variant->getImages()));
-        $this->assertEquals('name', $variant->getFirstImage()->getName());
+        $this->assertEquals('name2', $variant->getFirstImage()->getName());
         $this->assertEquals('url', $variant->getFirstImage()->getSource('size')->getUrl());
 
         $option = $variant->getOptions()['option1'];
@@ -51,6 +51,7 @@ class ProductTest extends TestCase
         $this->assertEquals(1, count($product->getAttributes(['none'])));
 
         $this->assertEquals(1, count($product->getImages()));
+        $this->assertEquals(2, count($product->getAllImages()));
         $this->assertEquals('name', $product->getFirstImage()->getName());
         $this->assertEquals('url', $product->getFirstImage()->getSource('size')->getUrl());
     }
@@ -115,7 +116,7 @@ class ProductTest extends TestCase
                     ],
                     'images' => [
                         [
-                            'name' => 'name',
+                            'name' => 'name2',
                             'sources' => [
                                 [
                                     'size' => 'size',

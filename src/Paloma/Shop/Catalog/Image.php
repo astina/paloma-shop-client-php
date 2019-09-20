@@ -8,11 +8,17 @@ class Image implements ImageInterface, SelfNormalizing
 {
     private $data;
 
+    private $scope;
+
+    private $variantSku;
+
     private $_sources = null; // cache
 
-    public function __construct(array $data)
+    public function __construct(array $data, string $scope = 'product', string $variantSku = null)
     {
         $this->data = $data;
+        $this->scope = $scope;
+        $this->variantSku = $variantSku;
     }
 
     function getName(): string
@@ -56,5 +62,15 @@ class Image implements ImageInterface, SelfNormalizing
             'name' => $this->data['name'],
             'sources' => $sources,
         ];
+    }
+
+    function getScope(): string
+    {
+        return $this->scope;
+    }
+
+    function getVariantSku(): ?string
+    {
+        return $this->variantSku;
     }
 }

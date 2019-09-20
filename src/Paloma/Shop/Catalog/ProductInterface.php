@@ -104,6 +104,11 @@ interface ProductInterface
     function getFirstImage(): ?ImageInterface;
 
     /**
+     * @return ImageInterface[] List of all variant images plus followed by product images
+     */
+    function getAllImages(): array;
+
+    /**
      * @return CategoryReferenceInterface[]
      */
     function getCategories(): array;

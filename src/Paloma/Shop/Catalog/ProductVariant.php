@@ -108,7 +108,7 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
     function getImages(): array
     {
         return array_map(function($elem) {
-            return new Image($elem);
+            return new Image($elem, 'variant', $this->data['sku']);
         }, $this->data['images'] ?? []);
     }
 
@@ -116,7 +116,7 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
     {
         return count($this->data['images'] ?? []) === 0
             ? null
-            : new Image($this->data['images'][0]);
+            : new Image($this->data['images'][0], 'variant', $this->data['sku']);
     }
 
     function getAvailability(): ProductAvailabilityInterface

@@ -197,15 +197,53 @@ class Product implements ProductInterface, SelfNormalizing
     function getImages(): array
     {
         return array_map(function($elem) {
-            return new Image($elem);
+            return new Image($elem, 'product');
         }, $this->data['master']['images'] ?? []);
     }
 
     function getFirstImage(): ?ImageInterface
     {
-        return count($this->data['master']['images'] ?? []) === 0
-            ? null
-            : new Image($this->data['master']['images'][0]);
+        $productImages = $this->data['master']['images'] ?? [];
+        if (count($productImages) > 0) {
+            return new Image($productImages[0], 'product');
+        }
+
+        if (count($this->data['variants'] ?? []) === 0) {
+            return null;
+        }
+
+        // use first variant image
+        foreach ($this->data['variants'] as $variant) {
+            if (count($variant['images'] ?? []) > 0) {
+                return new Image($variant['images'][0], 'variant', $variant['sku']);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return ImageInterface[]
+     */
+    function getAllImages(): array
+    {
+        $images = [];
+
+        foreach ($this->getVariants() as $variant) {
+            foreach ($variant->getImages() as $image) {
+                if (!isset($images[$image->getName()])) {
+                    $images[$image->getName()] = $image;
+                }
+            }
+        }
+
+        foreach ($this->getImages() as $image) {
+            if (!isset($images[$image->getName()])) {
+                $images[$image->getName()] = $image;
+            }
+        }
+
+        return $images;
     }
 
     /**
@@ -284,9 +322,8 @@ class Product implements ProductInterface, SelfNormalizing
             return $elem->_normalize();
         }, $this->getImages());
 
-        $data['firstImage'] = count($data['images']) === 0
-            ? null
-            : $data['images'][0];
+        $firstImage = $this->getFirstImage();
+        $data['firstImage'] = $firstImage ? $firstImage->_normalize() : null;
 
         $data['categories'] = array_map(function($elem) {
             return $elem->_normalize();
