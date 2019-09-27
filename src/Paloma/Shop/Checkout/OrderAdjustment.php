@@ -13,6 +13,19 @@ class OrderAdjustment implements OrderAdjustmentInterface
         $this->data = $data;
     }
 
+    public static function of(array $data, $currency)
+    {
+        return new OrderAdjustment([
+            'description' => $data['name'],
+            // TODO better
+            'pricing' => [
+                'currency' => $currency,
+                'grossPriceFormatted' => $data['grossItemTotal'],
+                'netPriceFormatted' => $data['netItemTotal'],
+            ]
+        ]);
+    }
+
     public static function ofTax($tax, $currency): OrderAdjustment
     {
         return new OrderAdjustment([

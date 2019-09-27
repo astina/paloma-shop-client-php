@@ -3,6 +3,7 @@
 namespace Paloma\Shop\Customers;
 
 use DateTime;
+use Paloma\Shop\Checkout\OrderAdjustment;
 use Paloma\Shop\Checkout\OrderAdjustmentInterface;
 use Paloma\Shop\Checkout\OrderBilling;
 use Paloma\Shop\Checkout\OrderBillingInterface;
@@ -91,7 +92,7 @@ class Order implements OrderInterface
 
         foreach (($this->data['adjustments'] ?? []) as $adj) {
             if ($adj['type'] === 'discount' || $adj['type'] === 'promotion') {
-                $adjustments[] = new OrderAdjustment($adj, $this->data['currency']);
+                $adjustments[] = OrderAdjustment::of($adj, $this->data['currency']);
             }
         }
 
@@ -106,8 +107,24 @@ class Order implements OrderInterface
         $adjustments = [];
 
         foreach (($this->data['adjustments'] ?? []) as $adj) {
-            if ($adj['type'] === 'tax' || $adj['type'] === 'surcharge') {
-                $adjustments[] = new OrderAdjustment($adj, $this->data['currency']);
+            if ($adj['type'] === 'surcharge') {
+                $adjustments[] = OrderAdjustment::of($adj, $this->data['currency']);
+            }
+        }
+
+        return $adjustments;
+    }
+
+    /**
+     * @return OrderAdjustmentInterface[]
+     */
+    function getTaxes(): array
+    {
+        $adjustments = [];
+
+        foreach (($this->data['adjustments'] ?? []) as $adj) {
+            if ($adj['type'] === 'tax') {
+                $adjustments[] = OrderAdjustment::of($adj, $this->data['currency']);
             }
         }
 
@@ -127,9 +144,10 @@ class Order implements OrderInterface
         $adjustments = [];
 
         foreach (($this->data['totals']['includedTaxes'] ?? []) as $tax) {
-            $adjustments[] = new OrderAdjustment([
+            $adjustments[] = OrderAdjustment::of([
                     'name' => sprintf('%s %s', $tax['rate'], $tax['name']),
                     'grossItemTotal' => $tax['amount'],
+                    'netItemTotal' => $tax['amount'],
                 ], $this->data['currency']);
         }
 

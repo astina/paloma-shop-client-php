@@ -124,7 +124,23 @@ class OrderDraft implements OrderDraftInterface, MetadataContainingObject
         $adjustments = [];
 
         foreach (($this->data['adjustments'] ?? []) as $adj) {
-            if ($adj['type'] === 'tax' || $adj['type'] === 'surcharge') {
+            if ($adj['type'] === 'surcharge') {
+                $adjustments[] = new OrderAdjustment($adj);
+            }
+        }
+
+        return $adjustments;
+    }
+
+    /**
+     * @return OrderAdjustmentInterface[]
+     */
+    function getTaxes(): array
+    {
+        $adjustments = [];
+
+        foreach (($this->data['adjustments'] ?? []) as $adj) {
+            if ($adj['type'] === 'tax') {
                 $adjustments[] = new OrderAdjustment($adj);
             }
         }
