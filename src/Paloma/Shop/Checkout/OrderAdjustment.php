@@ -21,7 +21,7 @@ class OrderAdjustment implements OrderAdjustmentInterface
             'pricing' => [
                 'currency' => $currency,
                 'grossPriceFormatted' => $data['grossItemTotal'],
-                'netPriceFormatted' => $data['netItemTotal'],
+                'netPriceFormatted' => $data['netItemTotal'] ?? null,
             ]
         ]);
     }
