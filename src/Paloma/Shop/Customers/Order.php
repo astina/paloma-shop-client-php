@@ -107,7 +107,7 @@ class Order implements OrderInterface
         $adjustments = [];
 
         foreach (($this->data['adjustments'] ?? []) as $adj) {
-            if ($adj['type'] === 'surcharge') {
+            if ($adj['type'] === 'tax' || $adj['type'] === 'surcharge') {
                 $adjustments[] = OrderAdjustment::of($adj, $this->data['currency']);
             }
         }
@@ -115,20 +115,9 @@ class Order implements OrderInterface
         return $adjustments;
     }
 
-    /**
-     * @return OrderAdjustmentInterface[]
-     */
-    function getTaxes(): array
+    function getNetTotalPrice(): string
     {
-        $adjustments = [];
-
-        foreach (($this->data['adjustments'] ?? []) as $adj) {
-            if ($adj['type'] === 'tax') {
-                $adjustments[] = OrderAdjustment::of($adj, $this->data['currency']);
-            }
-        }
-
-        return $adjustments;
+        return (new Price($this->data['currency'], $this->data['totals']['netOrderTotal']))->getPrice();
     }
 
     function getTotalPrice(): string

@@ -75,7 +75,7 @@ class CartItem implements CartItemInterface
 
     function getOriginalPrice(): ?string
     {
-        $originalPrice = $this->variant->getOriginalPrice() ?? $this->variant->getPrice();
+        $originalPrice = $this->variant->getOriginalPrice();
 
         if ($originalPrice === $this->getUnitPrice()) {
             return null;

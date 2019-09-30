@@ -24,7 +24,6 @@ class OrderTest extends TestCase
         $this->assertEquals('CHF 10.00', $order->getShippingPrice());
         $this->assertEquals('CHF -1.00', $order->getReductions()[0]->getPrice());
         $this->assertEquals('CHF 40.00', $order->getSurcharges()[0]->getPrice());
-        $this->assertEquals('CHF 1.00', $order->getTaxes()[0]->getPrice());
         $this->assertEquals('CHF 60.00', $order->getTotalPrice());
         $this->assertEquals('7.7 % MwSt.', $order->getIncludedTaxes()[0]->getDescription());
         $this->assertEquals('CHF 1.52', $order->getIncludedTaxes()[0]->getPrice());

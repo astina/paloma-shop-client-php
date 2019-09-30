@@ -38,18 +38,16 @@ interface OrderDraftInterface
     function getReductions(): array;
 
     /**
-     * Returns a list of surcharges being added
+     * Returns a list of surcharges (e.g. taxes) being added additionally
      *
      * @return OrderAdjustmentInterface[]
      */
     function getSurcharges(): array;
 
     /**
-     * Returns a list of taxes being added
-     *
-     * @return OrderAdjustmentInterface[]
+     * @return string Net total price for the order as formatted string including currency symbol (e.g. "CHF 12.80")
      */
-    function getTaxes(): array;
+    function getNetTotalPrice(): string;
 
     /**
      * @return string Total price for the order as formatted string including currency symbol (e.g. "CHF 12.80")

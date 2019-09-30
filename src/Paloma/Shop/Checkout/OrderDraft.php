@@ -124,28 +124,22 @@ class OrderDraft implements OrderDraftInterface, MetadataContainingObject
         $adjustments = [];
 
         foreach (($this->data['adjustments'] ?? []) as $adj) {
-            if ($adj['type'] === 'surcharge') {
-                $adjustments[] = new OrderAdjustment($adj);
+            if ($adj['type'] === 'tax' || $adj['type'] === 'surcharge') {
+                if ($adj['type'] === 'surcharge') {
+                    $adjustments[] = new OrderAdjustment($adj);
+                }
             }
         }
 
         return $adjustments;
     }
 
-    /**
-     * @return OrderAdjustmentInterface[]
-     */
-    function getTaxes(): array
+    function getNetTotalPrice(): string
     {
-        $adjustments = [];
+        $data = $this->data['orderPricing'];
+        $data['grossPriceFormatted'] = $data['netPriceFormatted'];
 
-        foreach (($this->data['adjustments'] ?? []) as $adj) {
-            if ($adj['type'] === 'tax') {
-                $adjustments[] = new OrderAdjustment($adj);
-            }
-        }
-
-        return $adjustments;
+        return (new Price($data))->getPrice();
     }
 
     function getTotalPrice(): string
