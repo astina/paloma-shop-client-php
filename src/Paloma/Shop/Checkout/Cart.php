@@ -3,6 +3,7 @@
 namespace Paloma\Shop\Checkout;
 
 use Paloma\Shop\Common\Price;
+use Paloma\Shop\Utils\PriceUtils;
 
 class Cart implements CartInterface
 {
@@ -59,10 +60,16 @@ class Cart implements CartInterface
             return "";
         }
 
-        return (new Price(
-            $this->data['itemsPricing']['currency'],
-            $this->data['itemsPricing']['grossPriceFormatted'])
-        )->getPrice();
+        return PriceUtils::format($this->data['itemsPricing']['currency'], $this->data['itemsPricing']['grossPriceFormatted']);
+    }
+
+    function getNetItemsPrice(): string
+    {
+        if (!isset($this->data['itemsPricing'])) {
+            return "";
+        }
+
+        return PriceUtils::format($this->data['itemsPricing']['currency'], $this->data['itemsPricing']['netPriceFormatted']);
     }
 
     /**
