@@ -4,6 +4,7 @@ namespace Paloma\Shop\Checkout;
 
 use Paloma\Shop\Catalog\Price;
 use Paloma\Shop\Common\MetadataContainingObject;
+use Paloma\Shop\Utils\PriceUtils;
 
 class OrderDraft implements OrderDraftInterface, MetadataContainingObject
 {
@@ -78,17 +79,38 @@ class OrderDraft implements OrderDraftInterface, MetadataContainingObject
 
     function getItemsPrice(): string
     {
-        return (new Price($this->data['itemsPricing']))->getPrice();
+        return PriceUtils::format($this->data['itemsPricing']['currency'], $this->data['itemsPricing']['grossPriceFormatted']);
+    }
+
+    function getNetItemsPrice(): string
+    {
+        return PriceUtils::format($this->data['itemsPricing']['currency'], $this->data['itemsPricing']['netPriceFormatted']);
     }
 
     function getShippingPrice(): ?string
     {
         foreach (($this->data['adjustments'] ?? []) as $adj) {
             if ($adj['type'] === 'shipping') {
-                return (new Price($adj['pricing']))->getPrice();
+                return PriceUtils::format($adj['pricing']['currency'], $adj['pricing']['grossPriceFormatted']);
             }
         }
 
+        return $this->_getFreeShippingPrice();
+    }
+
+    function getNetShippingPrice(): ?string
+    {
+        foreach (($this->data['adjustments'] ?? []) as $adj) {
+            if ($adj['type'] === 'shipping') {
+                return PriceUtils::format($adj['pricing']['currency'], $adj['pricing']['netPriceFormatted']);
+            }
+        }
+
+        return $this->_getFreeShippingPrice();
+    }
+
+    private function _getFreeShippingPrice()
+    {
         // HACK get currency and formatting from total price
 
         $currency = $this->data['orderPricing']['currency'];

@@ -21,11 +21,9 @@ class Price implements PriceInterface
                 $data['currency'],
                 $data['grossPriceFormatted']);
 
-            $this->taxRate = isset($data['taxes'])
-                ? $data['taxes']['vat']['rateFormatted']
-                : null;
+            $this->taxRate = $data['taxes']['vat']['rateFormatted'] ?? null;
+            $this->taxIncluded = $data['taxes']['taxInclusion'] ?? true;
 
-            $this->taxIncluded = true;
             $this->currency = $data['currency'];
 
         // new 'price' object

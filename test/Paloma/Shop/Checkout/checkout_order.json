@@ -34,7 +34,8 @@
               "amount": 14.74,
               "rateFormatted": "8 %",
               "amountFormatted": "14.74"
-            }
+            },
+            "taxInclusion": "inclusive"
           }
         },
         "attributes": {
@@ -132,7 +133,8 @@
             "amount": 14.74,
             "rateFormatted": "8 %",
             "amountFormatted": "14.74"
-          }
+          },
+          "taxInclusion": "inclusive"
         }
       },
       "reservationExpires": 1512384836465

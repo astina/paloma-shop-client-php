@@ -9,6 +9,8 @@ use Paloma\Shop\Catalog\Product;
 use Paloma\Shop\Catalog\ProductInterface;
 use Paloma\Shop\Catalog\ProductVariant;
 use Paloma\Shop\Catalog\ProductVariantInterface;
+use Paloma\Shop\Common\TaxedPrice;
+use Paloma\Shop\Utils\PriceUtils;
 
 class CartItem implements CartItemInterface
 {
@@ -70,7 +72,15 @@ class CartItem implements CartItemInterface
 
     function getUnitPrice(): string
     {
-        return (new Price($this->data['unitPricing']))->getPrice();
+        return PriceUtils::format($this->data['unitPricing']['currency'], $this->data['unitPricing']['grossPriceFormatted']);
+    }
+
+    /**
+     * @return string Net price for one unit as formatted string including currency symbol (e.g. "CHF 12.80")
+     */
+    function getNetUnitPrice(): string
+    {
+        return PriceUtils::format($this->data['unitPricing']['currency'], $this->data['unitPricing']['netPriceFormatted']);
     }
 
     function getOriginalPrice(): ?string
@@ -86,7 +96,15 @@ class CartItem implements CartItemInterface
 
     function getItemPrice(): string
     {
-        return (new Price($this->data['itemPricing']))->getPrice();
+        return PriceUtils::format($this->data['itemPricing']['currency'], $this->data['itemPricing']['grossPriceFormatted']);
+    }
+
+    /**
+     * @return string Net price for this cart item as formatted string including currency symbol (e.g. "CHF 12.80")
+     */
+    function getNetItemPrice(): string
+    {
+        return PriceUtils::format($this->data['itemPricing']['currency'], $this->data['itemPricing']['netPriceFormatted']);
     }
 
     function getAvailableQuantity(): int

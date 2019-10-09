@@ -54,6 +54,11 @@ interface CartItemInterface
     function getUnitPrice(): string;
 
     /**
+     * @return string Net price for one unit as formatted string including currency symbol (e.g. "CHF 12.80")
+     */
+    function getNetUnitPrice(): string;
+
+    /**
      * @return string If the unit price is reduced, this property holds the original unit price.
      */
     function getOriginalPrice(): ?string;
@@ -62,6 +67,11 @@ interface CartItemInterface
      * @return string Price for this cart item as formatted string including currency symbol (e.g. "CHF 12.80")
      */
     function getItemPrice(): string;
+
+    /**
+     * @return string Net price for this cart item as formatted string including currency symbol (e.g. "CHF 12.80")
+     */
+    function getNetItemPrice(): string;
 
     /**
      * @return ProductInterface|null

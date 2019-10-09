@@ -5,6 +5,16 @@ namespace Paloma\Shop\Utils;
 class PriceUtils
 {
     /**
+     * @param string $currency
+     * @param string $amount Formatted amount
+     * @return string Formatted currency with amount (e.g. "CHF 12.95")
+     */
+    public static function format(string $currency, string $amount)
+    {
+        return trim(sprintf('%s %s', $currency, $amount));
+    }
+
+    /**
      * Returns the formatted reduction from $price to $originalPrice (e.g. "-12 %")
      */
     public static function calculateReduction($price, $originalPrice): ?string

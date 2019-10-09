@@ -28,9 +28,19 @@ interface OrderDraftInterface
     function getItemsPrice(): string;
 
     /**
+     * @return string Net price for all items as formatted string including currency symbol (e.g. "CHF 12.80")
+     */
+    function getNetItemsPrice(): string;
+
+    /**
      * @return string Shipping price as formatted string including currency symbol (e.g. "CHF 12.80")
      */
     function getShippingPrice(): ?string;
+
+    /**
+     * @return string Net shipping price as formatted string including currency symbol (e.g. "CHF 12.80")
+     */
+    function getNetShippingPrice(): ?string;
 
     /**
      * @return OrderAdjustmentInterface[]

@@ -2,7 +2,7 @@
 
 namespace Paloma\Shop\Checkout;
 
-use Paloma\Shop\Catalog\Price;
+use Paloma\Shop\Utils\PriceUtils;
 
 class OrderAdjustment implements OrderAdjustmentInterface
 {
@@ -46,7 +46,14 @@ class OrderAdjustment implements OrderAdjustmentInterface
 
     function getPrice(): string
     {
-        // TODO better
-        return (new Price($this->data['pricing']))->getPrice();
+        return PriceUtils::format($this->data['pricing']['currency'], $this->data['pricing']['grossPriceFormatted']);
+    }
+
+    /**
+     * @return string Adjustment net price as formatted string including currency symbol (e.g. "CHF 12.80")
+     */
+    function getNetPrice(): string
+    {
+        return PriceUtils::format($this->data['pricing']['currency'], $this->data['pricing']['netPriceFormatted']);
     }
 }

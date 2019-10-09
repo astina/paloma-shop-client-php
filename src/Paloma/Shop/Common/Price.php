@@ -2,6 +2,8 @@
 
 namespace Paloma\Shop\Common;
 
+use Paloma\Shop\Utils\PriceUtils;
+
 class Price implements PriceInterface
 {
     private $currency;
@@ -16,7 +18,7 @@ class Price implements PriceInterface
 
     function getPrice(): string
     {
-        return trim(sprintf('%s %s', $this->currency, $this->amount));
+        return PriceUtils::format($this->currency, $this->amount);
     }
 
     function getCurrency(): string

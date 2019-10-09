@@ -72,11 +72,36 @@ class Order implements OrderInterface
         return (new Price($this->data['currency'], $this->data['totals']['itemsTotal']))->getPrice();
     }
 
+    function getNetItemsPrice(): string
+    {
+        return (new Price($this->data['currency'], $this->data['totals']['netItemsTotal']))->getPrice();
+    }
+
     function getShippingPrice(): ?string
+    {
+        $adj = $this->getShippingAdjustment();
+        if ($adj) {
+            return (new Price($this->data['currency'], $adj['grossItemTotal']))->getPrice();
+        }
+
+        return null;
+    }
+
+    function getNetShippingPrice(): ?string
+    {
+        $adj = $this->getShippingAdjustment();
+        if ($adj) {
+            return (new Price($this->data['currency'], $adj['netItemTotal']))->getPrice();
+        }
+
+        return null;
+    }
+
+    private function getShippingAdjustment()
     {
         foreach (($this->data['adjustments'] ?? []) as $adj) {
             if ($adj['type'] === 'shipping') {
-                return (new Price($this->data['currency'], $adj['grossItemTotal']))->getPrice();
+                return $adj;
             }
         }
 
