@@ -5,6 +5,7 @@ namespace Paloma\Shop\Customers;
 use Paloma\Shop\Catalog\Image;
 use Paloma\Shop\Catalog\ImageInterface;
 use Paloma\Shop\Common\Price;
+use Paloma\Shop\Utils\PriceUtils;
 
 class OrderItem implements OrderItemInterface
 {
@@ -45,7 +46,7 @@ class OrderItem implements OrderItemInterface
 
     function getUnitPrice(): string
     {
-        return (new Price($this->currency, $this->data['unitPrice']))->getPrice();
+        return PriceUtils::format($this->currency, $this->data['unitPrice']);
     }
 
     function getOriginalPrice(): ?string
@@ -58,6 +59,16 @@ class OrderItem implements OrderItemInterface
 
     function getItemPrice(): string
     {
-        return (new Price($this->currency, $this->data['grossItemTotal']))->getPrice();
+        return PriceUtils::format($this->currency, $this->data['grossItemTotal']);
+    }
+
+    function getNetItemPrice(): string
+    {
+        return PriceUtils::format($this->currency, $this->data['netItemTotal']);
+    }
+
+    function getTaxInclusion(): string
+    {
+        return $this->data['taxInclusion'];
     }
 }

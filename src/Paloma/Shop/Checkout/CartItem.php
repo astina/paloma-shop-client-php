@@ -75,9 +75,6 @@ class CartItem implements CartItemInterface
         return PriceUtils::format($this->data['unitPricing']['currency'], $this->data['unitPricing']['grossPriceFormatted']);
     }
 
-    /**
-     * @return string Net price for one unit as formatted string including currency symbol (e.g. "CHF 12.80")
-     */
     function getNetUnitPrice(): string
     {
         return PriceUtils::format($this->data['unitPricing']['currency'], $this->data['unitPricing']['netPriceFormatted']);
@@ -99,9 +96,6 @@ class CartItem implements CartItemInterface
         return PriceUtils::format($this->data['itemPricing']['currency'], $this->data['itemPricing']['grossPriceFormatted']);
     }
 
-    /**
-     * @return string Net price for this cart item as formatted string including currency symbol (e.g. "CHF 12.80")
-     */
     function getNetItemPrice(): string
     {
         return PriceUtils::format($this->data['itemPricing']['currency'], $this->data['itemPricing']['netPriceFormatted']);
