@@ -9,8 +9,12 @@ class PriceUtils
      * @param string $amount Formatted amount
      * @return string Formatted currency with amount (e.g. "CHF 12.95")
      */
-    public static function format(string $currency, string $amount)
+    public static function format(string $currency, string $amount = null): string
     {
+        if ($amount === null) {
+            return "";
+        }
+
         return trim(sprintf('%s %s', $currency, $amount));
     }
 

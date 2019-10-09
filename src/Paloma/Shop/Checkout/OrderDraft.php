@@ -158,15 +158,12 @@ class OrderDraft implements OrderDraftInterface, MetadataContainingObject
 
     function getNetTotalPrice(): string
     {
-        $data = $this->data['orderPricing'];
-        $data['grossPriceFormatted'] = $data['netPriceFormatted'];
-
-        return (new Price($data))->getPrice();
+        return PriceUtils::format($this->data['orderPricing']['currency'], $this->data['orderPricing']['netPriceFormatted']);
     }
 
     function getTotalPrice(): string
     {
-        return (new Price($this->data['orderPricing']))->getPrice();
+        return PriceUtils::format($this->data['orderPricing']['currency'], $this->data['orderPricing']['grossPriceFormatted']);
     }
 
     /**
