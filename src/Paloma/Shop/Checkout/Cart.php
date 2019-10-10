@@ -183,7 +183,7 @@ class Cart
             return $this->checkoutClient->purchaseOrder($this->getCartId());
         });
 
-        $this->clearCartId();
+        $this->clearCartFromSession();
 
         return $order;
     }
@@ -226,10 +226,9 @@ class Cart
             if ($this->inputOrderId !== null && $cartIds[$this->channel] != $this->inputOrderId) {
                 throw new \LogicException('Attempt to use a cart ' .
                     'with a specific order ID after a different cart was ' .
-                    'already set in the session. This indicates either a new ' .
-                    'usage pattern of the Cart or the need to be able to use ' .
-                    'multiple Carts at the same time. Both would need some ' .
-                    'thinking and redesign.');
+                    'already set in the session. For reasons of sanity an ' .
+                    'existing order ID has first to be cleared from the ' .
+                    'session in order to use a different one.');
             }
         }
 
@@ -247,7 +246,7 @@ class Cart
         });
     }
 
-    private function clearCartId()
+    public function clearCartFromSession()
     {
         $cartIds = $this->session->get(self::$CART_ID_VAR);
 
@@ -257,6 +256,7 @@ class Cart
 
         $this->session->set(self::$CART_ID_VAR, $cartIds);
         $this->order = null;
+        $this->inputOrderId = null;
     }
 
     private function checkedCall(callable $call)
@@ -265,7 +265,7 @@ class Cart
             return $call();
         } catch (ClientException $e) {
             if ($e->getCode() == 404) {
-                $this->clearCartId();
+                $this->clearCartFromSession();
             }
             throw $e;
         }
