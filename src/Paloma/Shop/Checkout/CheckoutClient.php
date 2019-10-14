@@ -3,6 +3,7 @@
 namespace Paloma\Shop\Checkout;
 
 use Paloma\Shop\BaseClient;
+use Paloma\Shop\FileResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -161,5 +162,13 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
     function setComment($orderId, $comment)
     {
         return $this->put($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/comment', null, $comment);
+    }
+
+    /**
+     * @return FileResponse
+     */
+    function exportOrder($orderId)
+    {
+        return $this->get($this->channel . '/' . self::ORDERS_PATH . '/' . $orderId . '/export');
     }
 }

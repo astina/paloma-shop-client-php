@@ -2,6 +2,8 @@
 
 namespace Paloma\Shop\Checkout;
 
+use Paloma\Shop\FileResponse;
+
 interface CheckoutClientInterface
 {
     /**
@@ -53,4 +55,9 @@ interface CheckoutClientInterface
     function setBroker($orderId, $broker);
 
     function setComment($orderId, $comment);
+
+    /**
+     * @return FileResponse
+     */
+    function exportOrder($orderId);
 }
