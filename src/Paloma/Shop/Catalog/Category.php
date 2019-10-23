@@ -40,7 +40,7 @@ class Category implements CategoryInterface
 
     function getMetaDescription(): ?string
     {
-        return $this->data['metaDescription'] ?: $this->getDescription();
+        return $this->data['metaDescription'] ?: strip_tags($this->getDescription());
     }
 
     function getParentCategoryCode(): ?string
