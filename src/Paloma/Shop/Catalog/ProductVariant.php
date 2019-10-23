@@ -131,6 +131,7 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
             'name' => $this->data['name'],
             'price' => $this->getPrice(),
             'originalPrice' => $this->getOriginalPrice(),
+            'reductionPercent' => $this->getReductionPercent(),
             'taxRate' => $this->getTaxRate(),
             'taxIncluded' => $this->isTaxIncluded(),
             'attributes' => array_map(function($elem) {
