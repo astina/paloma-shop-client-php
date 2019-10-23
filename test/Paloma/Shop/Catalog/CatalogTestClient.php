@@ -80,7 +80,7 @@ class CatalogTestClient implements CatalogClientInterface
         return $this->search([]);
     }
 
-    function categories($depth = null, $products = true)
+    function categories($depth = null, $products = true, $includeUnlisted = null)
     {
         if ($this->exception) {
             throw $this->exception;
@@ -89,7 +89,7 @@ class CatalogTestClient implements CatalogClientInterface
         return $this->categories;
     }
 
-    function category($code, $depth = null, $filterAggregates = null)
+    function category($code, $depth = null, $filterAggregates = null, $includeUnlisted = null)
     {
         if ($this->exception) {
             throw $this->exception;

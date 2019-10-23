@@ -2,7 +2,6 @@
 
 namespace Paloma\Shop\Catalog;
 
-use Paloma\Shop\Api\CartIsEmpty;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\CategoryNotFound;
 use Paloma\Shop\Error\InvalidInput;
@@ -76,18 +75,20 @@ interface CatalogInterface
 
     /**
      * @param int $depth Levels of category descendants to be included (default: 0)
+     * @param bool $includeUnlisted Whether to include unlisted categories
      * @return CategoryInterface[]
      * @throws BackendUnavailable
      */
-    function getCategories(int $depth = 0): array;
+    function getCategories(int $depth = 0, bool $includeUnlisted = false): array;
 
     /**
      * @param string $categoryCode Category code
      * @param int $depth Levels of category descendants to be included (default: 0)
      * @param bool $includeFilterAggregates Whether to include aggregated option and attribute values over all category products
+     * @param bool $includeUnlisted Whether to include unlisted categories
      * @return CategoryInterface
      * @throws CategoryNotFound
      * @throws BackendUnavailable
      */
-    function getCategory(string $categoryCode, int $depth = 0, bool $includeFilterAggregates = false): CategoryInterface;
+    function getCategory(string $categoryCode, int $depth = 0, bool $includeFilterAggregates = false, bool $includeUnlisted = false): CategoryInterface;
 }

@@ -57,17 +57,20 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
             $query, $order);
     }
 
-    public function categories($depth = null, $products = true)
+    public function categories($depth = null, $products = true, $includeUnlisted = null)
     {
         $query = ['products' => ($products ? 'true' : 'false')];
         if ($depth) {
             $query['depth'] = $depth;
         }
+        if ($includeUnlisted) {
+            $query['include-unlisted'] = $includeUnlisted;
+        }
 
         return $this->get($this->channel . '/' . $this->locale . '/categories', $query);
     }
 
-    public function category($code, $depth = null, $filterAggregates = null)
+    public function category($code, $depth = null, $filterAggregates = null, $includeUnlisted = null)
     {
         $query = [];
         if ($depth) {
@@ -75,6 +78,9 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         }
         if ($filterAggregates) {
             $query['filter-aggregates'] = $filterAggregates;
+        }
+        if ($includeUnlisted) {
+            $query['include-unlisted'] = $includeUnlisted;
         }
 
         return $this->get($this->channel . '/' . $this->locale . '/categories/' . $code,

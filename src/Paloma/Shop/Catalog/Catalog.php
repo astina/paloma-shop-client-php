@@ -196,14 +196,15 @@ class Catalog implements CatalogInterface
 
     /**
      * @param int $depth
+     * @param bool $includeUnlisted
      * @return Category[]
      * @throws BackendUnavailable
      */
-    function getCategories(int $depth = 0): array
+    function getCategories(int $depth = 0, bool $includeUnlisted = false): array
     {
         try {
 
-            $data = $this->client->catalog()->categories($depth);
+            $data = $this->client->catalog()->categories($depth, false, $includeUnlisted);
 
             return array_map(function($elem) {
                 return new Category($elem);
@@ -214,11 +215,11 @@ class Catalog implements CatalogInterface
         }
     }
 
-    function getCategory(string $categoryCode, int $depth = 0, bool $includeFilterAggregates = false): CategoryInterface
+    function getCategory(string $categoryCode, int $depth = 0, bool $includeFilterAggregates = false, bool $includeUnlisted = false): CategoryInterface
     {
         try {
 
-            $data = $this->client->catalog()->category($categoryCode, $depth, $includeFilterAggregates);
+            $data = $this->client->catalog()->category($categoryCode, $depth, $includeFilterAggregates, $includeUnlisted);
 
             return new Category($data);
 

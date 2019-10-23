@@ -16,9 +16,9 @@ interface CatalogClientInterface
 
     function recommendations($order, $size = null, array $context = null);
 
-    function categories($depth = null, $products = true);
+    function categories($depth = null, $products = true, $includeUnlisted = null);
 
-    function category($code, $depth = null, $filterAggregates = null);
+    function category($code, $depth = null, $filterAggregates = null, $includeUnlisted = null);
 
     function categoryFilters($code);
 
