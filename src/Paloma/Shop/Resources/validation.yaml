@@ -3,16 +3,21 @@ Paloma\Shop\Common\Address:
     title:
       - Length: { max: 10 }
     firstName:
+      - NotBlank: ~
       - Length: { max: 30 }
     lastName:
+      - NotBlank: ~
       - Length: { max: 30 }
     company:
       - Length: { max: 50 }
     street:
+      - NotBlank: ~
       - Length: { max: 50 }
     city:
+      - NotBlank: ~
       - Length: { max: 30 }
     zipCode:
+      - NotBlank: ~
       - Length: { max: 10 }
     country:
       - NotBlank: ~

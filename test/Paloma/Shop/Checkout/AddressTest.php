@@ -13,7 +13,7 @@ class AddressTest extends TestCase
     {
         $validation = $this->validator()->validate(Address::ofData(['title' => 'mr']));
 
-        $this->assertEquals(1, $validation->count());
+        $this->assertEquals(6, $validation->count());
     }
 
     public function testValidateLengths()
@@ -44,8 +44,7 @@ class AddressTest extends TestCase
             'country' => 'CH'
         ]));
 
-        $this->assertEquals(1, $validation->count());
-        $this->assertEquals('emailAddress', $validation->get(0)->getPropertyPath());
+        $this->assertEquals('emailAddress', $validation->get(5)->getPropertyPath());
     }
 
     public function testValidateCountry()
@@ -54,7 +53,7 @@ class AddressTest extends TestCase
             'country' => 'CH'
         ]));
 
-        $this->assertEquals(0, $validation->count());
+        $this->assertEquals(5, $validation->count());
     }
 
     public function testValidateCountryInvalid()
@@ -63,9 +62,8 @@ class AddressTest extends TestCase
             'country' => 'CHE'
         ]));
 
-        $this->assertEquals(1, $validation->count());
-        $this->assertEquals('country', $validation->get(0)->getPropertyPath());
-        $this->assertEquals('This value is not a valid country.', $validation->get(0)->getMessage());
+        $this->assertEquals('country', $validation->get(5)->getPropertyPath());
+        $this->assertEquals('This value is not a valid country.', $validation->get(5)->getMessage());
     }
 
     public function validator(): ValidatorInterface
