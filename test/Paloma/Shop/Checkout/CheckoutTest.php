@@ -164,6 +164,11 @@ class CheckoutTest extends TestCase
     public function testSetAddresses()
     {
         $address = Address::ofData([
+            'firstName' => 'Hans',
+            'lastName' => 'Muster',
+            'street' => 'Musterweg 1',
+            'zipCode' => '8000',
+            'city' => 'Zürich',
             'country' => 'CH',
             'emailAddress' => 'test@astina.io',
         ]);
@@ -195,6 +200,11 @@ class CheckoutTest extends TestCase
         $this->expectException(BackendUnavailable::class);
 
         $address = Address::ofData([
+            'firstName' => 'Hans',
+            'lastName' => 'Muster',
+            'street' => 'Musterweg 1',
+            'zipCode' => '8000',
+            'city' => 'Zürich',
             'country' => 'CH'
         ]);
 
