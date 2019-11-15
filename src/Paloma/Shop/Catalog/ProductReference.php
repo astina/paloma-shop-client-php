@@ -33,7 +33,7 @@ class ProductReference implements ProductReferenceInterface
             : null;
     }
 
-    function getMainCategory(): CategoryReferenceInterface
+    function getMainCategory(): ?CategoryReferenceInterface
     {
         return isset($this->data['mainCategory']) && isset($this->data['mainCategory']['code'])
             ? new CategoryReference($this->data['mainCategory'])
