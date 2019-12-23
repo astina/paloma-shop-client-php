@@ -7,6 +7,8 @@ PHP client library for the Paloma Shop. Facilitates the access to the following 
 - Checkout
 - Customers
 
+**Note**: This is v3 of the Paloma Shop PHP Client. It is not backwards-compatible with v2 and is intended to be used together with the [Paloma Shop Bundle](https://github.com/paloma-middleware/PalomaShopBundle) for Symfony.
+
 ## Usage
 
 ```php
