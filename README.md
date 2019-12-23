@@ -9,30 +9,36 @@ PHP client library for the Paloma Shop. Facilitates the access to the following 
 
 ## Usage
 
-Create Paloma client
 ```php
-$client = Paloma\Shop\Paloma::createClient('https://demo.paloma.one/api/', 'yourAPIKey', 'yourChannel', 'yourLocale'));
-```
 
-Create Paloma service
-```php
-$paloma = new Paloma\Shop\Paloma($client, $userProvider, $validator);
-```
+// Create Paloma client
+$factory = new Paloma\Shop\PalomaClientFactory($options);
 
-Call API, e.g. fetch catalog categories
-```php
-$categories = $paloma->catalog()->getCategories();
-```
+$client = $factory->create([
+    'base_url' => 'https://demo.paloma.one/api/', 
+    'api_key' => 'yourAPIKey',
+    'channel' => 'yourChannel',
+    'locale' => 'yourLocale',
+]);
 
-## Configuration
-Use dedicated `LoggerInterface` instance
-```php
-$client = Paloma\Shop\Paloma::createClient('https://demo.paloma.one/api/', 'yourAPIKey', $myLogger);
-```
+// Create security service
+$security = new MyPalomaSecurity(); // implements \Paloma\Shop\Security\PalomaSecurityInterface
 
-Use profiler to collect data for Symfony Profiler.
-```php
-$client = Paloma\Shop\Paloma::createClient('https://demo.paloma.one/api/', 'yourAPIKey', $myLogger, $myProfiler);
+// Create Paloma catalog
+$catalog = new \Paloma\Shop\Catalog\Catalog($client, new \Paloma\Shop\Common\PricingContextProvider($security));
+
+// Call API, e.g. fetch catalog categories
+$categories = $catalog->getCategories();
+
+// Create Symfony validator
+$validator = new Validator(); // implements Symfony\Component\Validator\Validator\ValidatorInterface
+
+// Create Paloma checkout
+$checkout = new \Paloma\Shop\Checkout\Checkout($client, $security, $validator);
+
+// Add cart item
+$checkout->addCartItem('100-200', 1);
+
 ```
 
 ## Examples
@@ -41,54 +47,54 @@ _Hint_: Find more examples at https://docs.paloma.one/.
 
 Get product for a category, sorted by price:
 ```php
-$page = $paloma->catalog()->search(new SearchRequest(...));
+$page = $catalog->search(new SearchRequest(...));
 ```
 
 Get cart (e.g. to render shopping cart view):
 ```php
-$order = $paloma->checkout()->getCart();
+$order = $checkout->getCart();
 ```
 
 Add product to cart:
 ```php
-$order = $paloma->checkout()->addCartItem('12345', 1);
+$order = $checkout->addCartItem('12345', 1);
 ```
 
 Update cart item quantity:
 ```php
-$paloma->checkout()->updateCartItem('123' /* order item id */, 2 /* quantity */);
+$checkout->updateCartItem('123' /* order item id */, 2 /* quantity */);
 ```
 
 Remove a cart item:
 ```php
-$paloma->checkout()->removeCartItem('123');
+$checkout->removeCartItem('123');
 ```
 
 Get cart items count:
 ```php
 // Number of order items
-$paloma->checkout()->getCart()->itemsCount();
+$checkout->getCart()->itemsCount();
 
 // Number of items times quantities
-$paloma->checkout()->getCart()->unitsCount();
+$checkout->getCart()->unitsCount();
 ```
 
 Set order addresses:
 ```php
 $billingAddress = new Address(...);
 $shippingAddress = new Address(...);
-$paloma->checkout()->setAddresses($billingAddress, $shippingAddress);
+$checkout->setAddresses($billingAddress, $shippingAddress);
 ```
 
 Initialize payment:
 ```php
-$payment = $paloma->checkout()->initializePayment(new PaymentInitParameters(...));
+$payment = $checkout->initializePayment(new PaymentInitParameters(...));
 ```
 
 Use `$payment->getProviderParams()` to create payment URL or to render payment form.
 
 Place the order:
 ```php
-$orderPurchase = $paloma->checkout()->purchase();
+$orderPurchase = $checkout->purchase();
 echo 'Purchased order ' . $orderPurchase->getOrderNumber() . '!';
 ```
