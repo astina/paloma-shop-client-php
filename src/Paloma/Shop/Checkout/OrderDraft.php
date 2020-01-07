@@ -82,27 +82,11 @@ class OrderDraft implements OrderDraftInterface, MetadataContainingObject
         return PriceUtils::format($this->data['itemsPricing']['currency'], $this->data['itemsPricing']['grossPriceFormatted']);
     }
 
-    function getNetItemsPrice(): string
-    {
-        return PriceUtils::format($this->data['itemsPricing']['currency'], $this->data['itemsPricing']['netPriceFormatted']);
-    }
-
     function getShippingPrice(): ?string
     {
         foreach (($this->data['adjustments'] ?? []) as $adj) {
             if ($adj['type'] === 'shipping') {
                 return PriceUtils::format($adj['pricing']['currency'], $adj['pricing']['grossPriceFormatted']);
-            }
-        }
-
-        return $this->_getFreeShippingPrice();
-    }
-
-    function getNetShippingPrice(): ?string
-    {
-        foreach (($this->data['adjustments'] ?? []) as $adj) {
-            if ($adj['type'] === 'shipping') {
-                return PriceUtils::format($adj['pricing']['currency'], $adj['pricing']['netPriceFormatted']);
             }
         }
 
@@ -156,11 +140,6 @@ class OrderDraft implements OrderDraftInterface, MetadataContainingObject
         return $adjustments;
     }
 
-    function getNetTotalPrice(): string
-    {
-        return PriceUtils::format($this->data['orderPricing']['currency'], $this->data['orderPricing']['netPriceFormatted']);
-    }
-
     function getTotalPrice(): string
     {
         return PriceUtils::format($this->data['orderPricing']['currency'], $this->data['orderPricing']['grossPriceFormatted']);
@@ -169,7 +148,7 @@ class OrderDraft implements OrderDraftInterface, MetadataContainingObject
     /**
      * @return OrderAdjustmentInterface[]
      */
-    function getIncludedTaxes(): array
+    function getTaxes(): array
     {
         $adjustments = [];
 
@@ -178,6 +157,11 @@ class OrderDraft implements OrderDraftInterface, MetadataContainingObject
         }
 
         return $adjustments;
+    }
+
+    function isTaxIncluded(): bool
+    {
+        return $this->data['taxIncluded'] ?? true;
     }
 
     /**

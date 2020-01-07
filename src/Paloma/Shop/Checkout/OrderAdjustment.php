@@ -20,7 +20,7 @@ class OrderAdjustment implements OrderAdjustmentInterface
             // TODO better
             'pricing' => [
                 'currency' => $currency,
-                'grossPriceFormatted' => $data['grossItemTotal'],
+                'grossPriceFormatted' => $data['grossItemTotal'] ?? $data['linePrice'],
                 'netPriceFormatted' => $data['netItemTotal'] ?? null,
             ]
         ]);
@@ -47,13 +47,5 @@ class OrderAdjustment implements OrderAdjustmentInterface
     function getPrice(): string
     {
         return PriceUtils::format($this->data['pricing']['currency'], $this->data['pricing']['grossPriceFormatted']);
-    }
-
-    /**
-     * @return string Adjustment net price as formatted string including currency symbol (e.g. "CHF 12.80")
-     */
-    function getNetPrice(): string
-    {
-        return PriceUtils::format($this->data['pricing']['currency'], $this->data['pricing']['netPriceFormatted']);
     }
 }

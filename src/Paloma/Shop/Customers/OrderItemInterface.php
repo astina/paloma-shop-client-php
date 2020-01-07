@@ -45,14 +45,4 @@ interface OrderItemInterface
      * @return string Price for this cart item as formatted string including currency symbol (e.g. "CHF 12.80")
      */
     function getItemPrice(): string;
-
-    /**
-     * @return string Net price for this cart item as formatted string including currency symbol (e.g. "CHF 12.80")
-     */
-    function getNetItemPrice(): string;
-
-    /**
-     * @return string Whether unit price has tax included or not (one of 'inclusive', 'exclusive', 'not_applicable')
-     */
-    function getTaxInclusion(): string;
 }

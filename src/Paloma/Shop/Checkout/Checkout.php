@@ -351,7 +351,9 @@ class Checkout implements CheckoutInterface
     {
         try {
 
-            $data = $this->getCheckoutOrder()->setPaymentMethod($paymentMethod);
+            $data = $this->getCheckoutOrder()->setPaymentMethod([
+                'name' => $paymentMethod,
+            ]);
 
             return new OrderDraft($data);
 

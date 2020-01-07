@@ -13,9 +13,4 @@ interface OrderAdjustmentInterface
      * @return string Adjustment price as formatted string including currency symbol (e.g. "CHF 12.80")
      */
     function getPrice(): string;
-
-    /**
-     * @return string Adjustment net price as formatted string including currency symbol (e.g. "CHF 12.80")
-     */
-    function getNetPrice(): string;
 }

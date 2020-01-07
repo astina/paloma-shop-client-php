@@ -2,7 +2,6 @@
 
 namespace Paloma\Shop\Checkout;
 
-use Paloma\Shop\Common\Price;
 use Paloma\Shop\Utils\PriceUtils;
 
 class Cart implements CartInterface

@@ -13,7 +13,7 @@ class OrderShippingMethod implements OrderShippingMethodInterface
         $this->data = $data;
     }
 
-    function getName(): string
+    function getName(): ?string
     {
         return $this->data['name'];
     }

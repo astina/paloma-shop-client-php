@@ -51,6 +51,10 @@ class OrderItem implements OrderItemInterface
 
     function getOriginalPrice(): ?string
     {
+        if (!isset($this->data['originalPrice']) || strpos($this->data['originalPrice'], '0') === 0) {
+            return null;
+        }
+
         $unitPrice = $this->getUnitPrice();
         $originalPrice = (new Price($this->currency, $this->data['originalPrice']))->getPrice();
 
@@ -59,16 +63,6 @@ class OrderItem implements OrderItemInterface
 
     function getItemPrice(): string
     {
-        return PriceUtils::format($this->currency, $this->data['grossItemTotal']);
-    }
-
-    function getNetItemPrice(): string
-    {
-        return PriceUtils::format($this->currency, $this->data['netItemTotal']);
-    }
-
-    function getTaxInclusion(): string
-    {
-        return $this->data['taxInclusion'];
+        return PriceUtils::format($this->currency, $this->data['linePrice'] ?? $this->data['grossItemTotal']);
     }
 }

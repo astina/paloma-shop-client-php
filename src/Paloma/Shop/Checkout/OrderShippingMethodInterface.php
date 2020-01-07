@@ -9,7 +9,7 @@ interface OrderShippingMethodInterface
     /**
      * @return string Shipping method name
      */
-    function getName(): string;
+    function getName(): ?string;
 
     /**
      * @return DateTime|null Targeted delivery date (optional)

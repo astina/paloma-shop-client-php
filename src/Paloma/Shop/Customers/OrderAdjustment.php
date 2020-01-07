@@ -24,14 +24,6 @@ class OrderAdjustment implements OrderAdjustmentInterface
 
     function getPrice(): string
     {
-        return (new Price($this->currency, $this->data['grossItemTotal']))->getPrice();
-    }
-
-    /**
-     * @return string Adjustment net price as formatted string including currency symbol (e.g. "CHF 12.80")
-     */
-    function getNetPrice(): string
-    {
-        // TODO: Implement getNetPrice() method.
+        return (new Price($this->currency, $this->data['grossItemTotal'] ?? $this->data['linePrice']))->getPrice();
     }
 }

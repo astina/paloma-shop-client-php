@@ -28,19 +28,9 @@ interface OrderDraftInterface
     function getItemsPrice(): string;
 
     /**
-     * @return string Net price for all items as formatted string including currency symbol (e.g. "CHF 12.80")
-     */
-    function getNetItemsPrice(): string;
-
-    /**
      * @return string Shipping price as formatted string including currency symbol (e.g. "CHF 12.80")
      */
     function getShippingPrice(): ?string;
-
-    /**
-     * @return string Net shipping price as formatted string including currency symbol (e.g. "CHF 12.80")
-     */
-    function getNetShippingPrice(): ?string;
 
     /**
      * @return OrderAdjustmentInterface[]
@@ -55,21 +45,21 @@ interface OrderDraftInterface
     function getSurcharges(): array;
 
     /**
-     * @return string Net total price for the order as formatted string including currency symbol (e.g. "CHF 12.80")
-     */
-    function getNetTotalPrice(): string;
-
-    /**
      * @return string Total price for the order as formatted string including currency symbol (e.g. "CHF 12.80")
      */
     function getTotalPrice(): string;
 
     /**
-     * Returns a list of taxes already included in the total price
+     * Returns a list of taxes for the order.
      *
      * @return OrderAdjustmentInterface[]
      */
-    function getIncludedTaxes(): array;
+    function getTaxes(): array;
+
+    /**
+     * @return bool Whether prices have taxes included or not.
+     */
+    function isTaxIncluded(): bool;
 
     /**
      * List of active promotions on this order

@@ -72,26 +72,11 @@ class Order implements OrderInterface
         return (new Price($this->data['currency'], $this->data['totals']['itemsTotal']))->getPrice();
     }
 
-    function getNetItemsPrice(): string
-    {
-        return (new Price($this->data['currency'], $this->data['totals']['netItemsTotal']))->getPrice();
-    }
-
     function getShippingPrice(): ?string
     {
         $adj = $this->getShippingAdjustment();
         if ($adj) {
             return (new Price($this->data['currency'], $adj['grossItemTotal']))->getPrice();
-        }
-
-        return null;
-    }
-
-    function getNetShippingPrice(): ?string
-    {
-        $adj = $this->getShippingAdjustment();
-        if ($adj) {
-            return (new Price($this->data['currency'], $adj['netItemTotal']))->getPrice();
         }
 
         return null;
@@ -140,11 +125,6 @@ class Order implements OrderInterface
         return $adjustments;
     }
 
-    function getNetTotalPrice(): string
-    {
-        return (new Price($this->data['currency'], $this->data['totals']['netOrderTotal']))->getPrice();
-    }
-
     function getTotalPrice(): string
     {
         return (new Price($this->data['currency'], $this->data['totals']['orderTotal']))->getPrice();
@@ -153,19 +133,33 @@ class Order implements OrderInterface
     /**
      * @return OrderAdjustmentInterface[]
      */
-    function getIncludedTaxes(): array
+    function getTaxes(): array
     {
         $adjustments = [];
 
-        foreach (($this->data['totals']['includedTaxes'] ?? []) as $tax) {
+        $taxes = $this->data['totals']['taxes'] ?? $this->data['totals']['includedTaxes'];
+
+        foreach ($taxes as $tax) {
             $adjustments[] = OrderAdjustment::of([
                     'name' => sprintf('%s %s', $tax['rate'], $tax['name']),
-                    'grossItemTotal' => $tax['amount'],
-                    'netItemTotal' => $tax['amount'],
+                    'linePrice' => $tax['amount'],
                 ], $this->data['currency']);
         }
 
         return $adjustments;
+    }
+
+    /**
+     * @deprecated
+     */
+    public function getIncludedTaxes()
+    {
+        return $this->getTaxes();
+    }
+
+    function isTaxIncluded(): bool
+    {
+        return $this->data['taxIncluded'] ?? true;
     }
 
     function getModifications(): array
