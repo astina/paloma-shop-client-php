@@ -3,6 +3,7 @@
 namespace Paloma\Shop\Catalog;
 
 use Paloma\Shop\BaseClient;
+use Paloma\Shop\FileResponse;
 
 class CatalogClient extends BaseClient implements CatalogClientInterface
 {
@@ -85,4 +86,34 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
     {
         return $this->get($this->channel . '/' . $this->locale . '/categories/' . $code . '/filter-aggregates');
     }
+
+    function exportSearch($format, $body, $locale = null)
+    {
+        $query = ['format' => $format];
+        $locale = $locale !== null ? $locale : $this->locale;
+        return $this->post($this->channel . '/' . $locale . '/search/export', $query, $body);
+    }
+
+    function exportProducts($format, $body, $locale = null)
+    {
+        $query = ['format' => $format];
+        $locale = $locale !== null ? $locale : $this->locale;
+        return $this->post($this->channel . '/' . $locale . '/products/export', $query, $body);
+    }
+
+    function exportStatus($processId, $locale = null)
+    {
+        $locale = $locale !== null ? $locale : $this->locale;
+        return $this->get($this->channel . '/' . $locale . '/export/' . $processId);
+    }
+
+    /**
+     * @return FileResponse
+     */
+    function exportDownload($processId, $locale = null)
+    {
+        $locale = $locale !== null ? $locale : $this->locale;
+        return $this->get($this->channel . '/' . $locale . '/export/' . $processId . '/download');
+    }
+
 }
