@@ -446,4 +446,35 @@ class Customers implements CustomersInterface
             throw BackendUnavailable::ofException($se);
         }
     }
+
+    /**
+     * @return CustomerPaymentInstrument[]
+     * @throws BackendUnavailable
+     * @throws NotAuthenticated
+     */
+    function listPaymentInstruments(): array
+    {
+        try {
+
+            $data = $this->client->customers()->getPaymentInstruments($this->getCustomerId());
+
+            return array_map(function($elem) {
+                return new CustomerPaymentInstrument($elem);
+            }, $data);
+
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
+
+    function deletePaymentInstrument($paymentInstrumentId): void
+    {
+        try {
+
+            $this->client->customers()->deletePaymentInstrument($this->getCustomerId(), $paymentInstrumentId);
+
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
 }

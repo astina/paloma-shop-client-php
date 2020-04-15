@@ -206,4 +206,14 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
 
         return $this->get($this->channel . '/' . $this->locale . '/products', $query);
     }
+
+    function getPaymentInstruments($customerId)
+    {
+        return $this->get($this->channel . '/customers/' . $customerId . '/payment-instruments');
+    }
+
+    function deletePaymentInstrument($customerId, $paymentInstrumentId)
+    {
+        return $this->delete($this->channel . '/customers/' . $customerId . '/payment-instruments/' . $paymentInstrumentId);
+    }
 }

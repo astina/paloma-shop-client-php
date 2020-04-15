@@ -561,6 +561,24 @@ class CustomersTest extends TestCase
         $this->assertNull($results->getItems()[0]->getCartItem());
     }
 
+    public function testListPaymentInstruments()
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $paymentInstruments = $this->customers()->listPaymentInstruments();
+
+        $this->assertNotNull($paymentInstruments);
+        $this->assertCount(1, $paymentInstruments);
+        $this->assertFalse($paymentInstruments[0]->isExpired());
+    }
+
+    public function testDeletePaymentInstrument()
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $this->customers()->deletePaymentInstrument('123');
+
+        $this->assertTrue(true); // Make sure we reach this line
+    }
+
     private function validator(): ValidatorInterface
     {
         return Validation::createValidatorBuilder()

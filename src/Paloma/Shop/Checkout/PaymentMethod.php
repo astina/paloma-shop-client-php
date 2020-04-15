@@ -8,19 +8,24 @@ class PaymentMethod implements PaymentMethodInterface
 
     private $selected;
 
+    private $paymentInstruments;
+
     public static function ofDataAndOrder(array $data, array $order): PaymentMethod
     {
         return new PaymentMethod(
             $data,
-            isset($order['paymentMethod']['name'])
-            && $order['paymentMethod']['name'] === $data['name']
+            isset($order['paymentMethod']['name']) && $order['paymentMethod']['name'] === $data['name'],
+            isset($order['paymentMethod']['paymentInstrumentId']) ? $order['paymentMethod']['paymentInstrumentId'] : null
         );
     }
 
-    public function __construct(array $data, bool $selected = false)
+    public function __construct(array $data, bool $selected = false, ?string $selectedPaymentInstrumentId = null)
     {
         $this->data = $data;
         $this->selected = $selected;
+        $this->paymentInstruments = array_map(function($elem) use ($selectedPaymentInstrumentId) {
+            return new PaymentInstrument($elem, $elem['id'] === $selectedPaymentInstrumentId);
+        }, $data['paymentInstruments'] ?? []);
     }
 
     function getName(): string
@@ -43,5 +48,10 @@ class PaymentMethod implements PaymentMethodInterface
     function isSelected(): bool
     {
         return $this->selected;
+    }
+
+    function getPaymentInstruments(): array
+    {
+        return $this->paymentInstruments;
     }
 }

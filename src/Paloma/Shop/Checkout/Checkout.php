@@ -347,12 +347,13 @@ class Checkout implements CheckoutInterface
         }
     }
 
-    function setPaymentMethod(string $paymentMethod): OrderDraftInterface
+    function setPaymentMethod(string $paymentMethod, ?string $paymentInstrument = null): OrderDraftInterface
     {
         try {
 
             $data = $this->getCheckoutOrder()->setPaymentMethod([
                 'name' => $paymentMethod,
+                'paymentInstrumentId' => $paymentInstrument,
             ]);
 
             return new OrderDraft($data);

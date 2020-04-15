@@ -27,4 +27,9 @@ interface PaymentMethodInterface
      * @return bool True, if this payment method is set for the current order
      */
     function isSelected(): bool;
+
+    /**
+     * @return PaymentInstrumentInterface[] E.g. saved credit cards for this payment methods
+     */
+    function getPaymentInstruments(): array;
 }

@@ -57,4 +57,8 @@ interface CustomersClientInterface
     function addressValidate($address);
 
     function getProducts($customerId, $pageNr = null, $pageSize = null);
+
+    function getPaymentInstruments($customerId);
+
+    function deletePaymentInstrument($customerId, $paymentInstrumentId);
 }

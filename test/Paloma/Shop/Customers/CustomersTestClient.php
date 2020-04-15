@@ -232,4 +232,26 @@ class CustomersTestClient implements CustomersClientInterface
     {
         $this->throwException(__FUNCTION__);
     }
+
+    function getPaymentInstruments($customerId)
+    {
+        $this->throwException(__FUNCTION__);
+
+        return [
+            [
+                'id' => 'PI123',
+                'means' => 'visa',
+                'type' => 'Visa',
+                'maskedCardNumber' => '1234xxxxxxxx1234',
+                'expirationYear' => ((int) date('y')) + 2,
+                'expirationMonth' => 12,
+                'expired' => false,
+            ]
+        ];
+    }
+
+    function deletePaymentInstrument($customerId, $paymentInstrumentId)
+    {
+        $this->throwException(__FUNCTION__);
+    }
 }

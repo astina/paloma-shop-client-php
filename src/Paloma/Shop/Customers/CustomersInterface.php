@@ -168,4 +168,22 @@ interface CustomersInterface
      * @throws BackendUnavailable
      */
     function listProducts(int $page = 0, int $size = 20): CustomerProductPageInterface;
+
+    /**
+     * Returns all saved payment instruments for the current customer.
+     *
+     * @return CustomerPaymentInstrumentInterface[]
+     * @throws NotAuthenticated
+     * @throws BackendUnavailable
+     */
+    function listPaymentInstruments(): array;
+
+    /**
+     * Deletes the current customer's payment instrument with the given ID.
+     *
+     * @param $paymentInstrumentId
+     * @throws NotAuthenticated
+     * @throws BackendUnavailable
+     */
+    function deletePaymentInstrument($paymentInstrumentId): void;
 }

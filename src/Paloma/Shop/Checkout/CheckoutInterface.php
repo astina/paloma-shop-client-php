@@ -160,11 +160,12 @@ interface CheckoutInterface
 
     /**
      * @param string $paymentMethod Payment method name
+     * @param string|null $paymentInstrument Payment instrument ID
      * @return OrderDraftInterface
      * @throws UnknownPaymentMethod
      * @throws BackendUnavailable
      */
-    function setPaymentMethod(string $paymentMethod): OrderDraftInterface;
+    function setPaymentMethod(string $paymentMethod, ?string $paymentInstrument = null): OrderDraftInterface;
 
     /**
      * Prepare the current order for purchase.
