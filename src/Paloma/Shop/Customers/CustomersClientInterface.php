@@ -86,4 +86,10 @@ interface CustomersClientInterface
      * @return FileResponse
      */
     function exportWatchlist($userId, $watchlistId);
+
+    function getDeliveries($customerId, $page = null, $size = null, $sort = null);
+
+    function getDelivery($customerId, $deliveryId);
+
+    function getDeliveriesFromOrder($customerId, $orderNumber);
 }

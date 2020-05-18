@@ -264,4 +264,29 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
     {
         return $this->get($this->channel . '/users/' . $userId . '/watchlists/' . $watchlistId . '/export');
     }
+
+    function getDeliveries($customerId, $page = null, $size = null, $sort = null)
+    {
+        $query = [];
+        if ($page !== null) {
+            $query['page'] = $page;
+        }
+        if ($size !== null) {
+            $query['size'] = $size;
+        }
+        if ($sort !== null) {
+            $query['sort'] = $sort;
+        }
+        return $this->get($this->channel . '/customers/' . $customerId . '/deliveries', $query);
+    }
+
+    function getDelivery($customerId, $deliveryId)
+    {
+        return $this->get($this->channel . '/customers/' . $customerId . '/deliveries/' . $deliveryId);
+    }
+
+    function getDeliveriesFromOrder($customerId, $orderNumber)
+    {
+        return $this->get($this->channel . '/customers/' . $customerId . '/orders/' . $orderNumber . '/deliveries');
+    }
 }
