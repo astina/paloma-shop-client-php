@@ -12,6 +12,8 @@ class Price implements PriceInterface
 
     private $currency;
 
+    private $unit = null;
+
     public function __construct(array $data)
     {
         // old 'pricing' object
@@ -26,7 +28,7 @@ class Price implements PriceInterface
 
             $this->currency = $data['currency'];
 
-        // new 'price' object
+            // new 'price' object
         } else if (isset($data['unitPrice'])) {
 
             $this->price = sprintf('%s %s',
@@ -36,6 +38,7 @@ class Price implements PriceInterface
             $this->taxRate = $data['tax'];
             $this->taxIncluded = $data['taxIncluded'];
             $this->currency = $data['currency'];
+            $this->unit = $data['unit'];
 
         } else {
             throw new \InvalidArgumentException('Invalid price data');
@@ -60,5 +63,12 @@ class Price implements PriceInterface
     function getCurrency(): string
     {
         return $this->currency;
+    }
+
+    function getUnit(): ?string
+    {
+        return $this->unit === 'piece'
+            ? null
+            : $this->unit;
     }
 }

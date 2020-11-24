@@ -10,10 +10,13 @@ class Price implements PriceInterface
 
     private $amount;
 
-    public function __construct(string $currency, string $amount)
+    private $unit;
+
+    public function __construct(string $currency, string $amount, ?string $unit = null)
     {
         $this->currency = $currency;
         $this->amount = $amount;
+        $this->unit = $unit;
     }
 
     function getPrice(): string
@@ -24,5 +27,10 @@ class Price implements PriceInterface
     function getCurrency(): string
     {
         return $this->currency;
+    }
+
+    function getUnit(): ?string
+    {
+        return $this->unit;
     }
 }

@@ -59,6 +59,11 @@ interface CartItemInterface
     function getNetUnitPrice(): string;
 
     /**
+     * @return string Price unit (localized)
+     */
+    function getUnit(): ?string;
+
+    /**
      * @return string If the unit price is reduced, this property holds the original unit price.
      */
     function getOriginalPrice(): ?string;

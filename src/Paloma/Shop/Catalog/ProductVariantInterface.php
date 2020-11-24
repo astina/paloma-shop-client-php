@@ -24,6 +24,11 @@ interface ProductVariantInterface
     function getPrice(): string;
 
     /**
+     * @return string Price unit (localized)
+     */
+    function getPriceUnit(): ?string;
+
+    /**
      * @return string If the price is reduced, this property holds the original price.
      */
     function getOriginalPrice(): ?string;

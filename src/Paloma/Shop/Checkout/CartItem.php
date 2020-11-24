@@ -80,6 +80,13 @@ class CartItem implements CartItemInterface
         return PriceUtils::format($this->data['unitPricing']['currency'], $this->data['unitPricing']['netPriceFormatted']);
     }
 
+    function getUnit(): ?string
+    {
+        return $this->data['unit'] === 'piece'
+            ? null
+            : $this->data['unit'];
+    }
+
     function getOriginalPrice(): ?string
     {
         $originalPrice = $this->variant->getOriginalPrice();

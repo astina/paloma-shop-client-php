@@ -41,6 +41,11 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
         return $this->price->getPrice();
     }
 
+    function getPriceUnit(): ?string
+    {
+        return $this->price->getUnit();
+    }
+
     function getOriginalPrice(): ?string
     {
         $originalPrice = isset($this->data['price'])
@@ -134,6 +139,7 @@ class ProductVariant implements ProductVariantInterface, SelfNormalizing
             'sku' => $this->data['sku'],
             'name' => $this->data['name'],
             'price' => $this->getPrice(),
+            'priceUnit' => $this->getPriceUnit(),
             'originalPrice' => $this->getOriginalPrice(),
             'reductionPercent' => $this->getReductionPercent(),
             'taxRate' => $this->getTaxRate(),

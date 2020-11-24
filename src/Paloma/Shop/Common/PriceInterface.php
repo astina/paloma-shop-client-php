@@ -13,4 +13,9 @@ interface PriceInterface
      * @return string Currency symbol
      */
     function getCurrency(): string;
+
+    /**
+     * @return string Price unit (localized)
+     */
+    function getUnit(): ?string;
 }

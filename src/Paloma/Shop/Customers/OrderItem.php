@@ -49,6 +49,13 @@ class OrderItem implements OrderItemInterface
         return PriceUtils::format($this->currency, $this->data['unitPrice']);
     }
 
+    function getUnit(): ?string
+    {
+        return $this->data['unit'] === 'piece'
+            ? null
+            : $this->data['unit'];
+    }
+
     function getOriginalPrice(): ?string
     {
         if (!isset($this->data['originalPrice']) || strpos($this->data['originalPrice'], '0') === 0) {
