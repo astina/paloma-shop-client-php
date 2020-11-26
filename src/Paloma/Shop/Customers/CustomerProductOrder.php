@@ -20,4 +20,14 @@ class CustomerProductOrder implements CustomerProductOrderInterface
     {
         return new \DateTime($this->data['validFrom']);
     }
+
+    function getQuantity(): float
+    {
+        return $this->data['quantity'] ?? 1;
+    }
+
+    function getUnit(): string
+    {
+        return $this->data['unit'] ?? 'piece';
+    }
 }
