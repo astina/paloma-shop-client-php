@@ -6,7 +6,7 @@ use DateTime;
 
 class Category implements CategoryInterface
 {
-    private $data;
+    private array $data;
 
     public function __construct(array $data)
     {
@@ -40,7 +40,7 @@ class Category implements CategoryInterface
 
     function getMetaDescription(): ?string
     {
-        return $this->data['metaDescription'] ?? html_entity_decode(strip_tags($this->getDescription()), null, 'utf-8');
+        return $this->data['metaDescription'] ?? html_entity_decode(strip_tags($this->getDescription()), 0, 'utf-8');
     }
 
     function getParentCategoryCode(): ?string

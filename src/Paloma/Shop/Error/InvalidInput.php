@@ -26,7 +26,7 @@ class InvalidInput extends AbstractPalomaException
         return new InvalidInput($errors);
     }
 
-    public static function ofHttpResponse(ResponseInterface $response)
+    public static function ofHttpResponse(ResponseInterface $response): InvalidInput
     {
         $errors = self::collectErrors($response);
 
@@ -55,7 +55,7 @@ class InvalidInput extends AbstractPalomaException
 
     public function __construct(array $errors = [])
     {
-        parent::__construct('Invalid input', null, null);
+        parent::__construct('Invalid input');
         $this->errors = $errors;
     }
 

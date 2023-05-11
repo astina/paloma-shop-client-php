@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class InvalidCouponCode extends InvalidInput
 {
-    public static function ofHttpResponse(ResponseInterface $response)
+    public static function ofHttpResponse(ResponseInterface $response): InvalidCouponCode
     {
         $errors = self::collectErrors($response);
 

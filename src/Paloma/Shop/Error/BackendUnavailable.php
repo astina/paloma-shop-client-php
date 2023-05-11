@@ -6,9 +6,9 @@ use Exception;
 
 class BackendUnavailable extends AbstractPalomaException
 {
-    public static function ofException(Exception $exception)
+    public static function ofException(Exception $exception): BackendUnavailable
     {
-        return new BackendUnavailable('Backend unavailable', null, $exception);
+        return new BackendUnavailable('Backend unavailable', 0, $exception);
     }
 
     function getHttpStatus(): int

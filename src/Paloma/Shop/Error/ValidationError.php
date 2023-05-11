@@ -4,9 +4,9 @@ namespace Paloma\Shop\Error;
 
 class ValidationError
 {
-    private $property;
+    private string $property;
 
-    private $message;
+    private string $message;
 
     public function __construct(string $property, string $message)
     {
@@ -17,7 +17,7 @@ class ValidationError
     /**
      * @return string
      */
-    public function getProperty()
+    public function getProperty(): string
     {
         return $this->property;
     }
@@ -25,7 +25,7 @@ class ValidationError
     /**
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
