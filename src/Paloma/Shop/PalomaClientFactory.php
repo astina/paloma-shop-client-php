@@ -20,7 +20,7 @@ class PalomaClientFactory
      * - api_key: (req) the Paloma API key
      * - channel: (req) the Paloma channel
      * - locale: (req) the Paloma locale
-     * - session: (opt) a SessionInterface implementation
+     * - request_stack: (opt) a RequestStack implementation
      * - profiler: (opt) a PalomaProfiler instance
      * - logger: (opt) a LoggerInterface implementation
      * - log_format_success: (opt) a MessageFormatter format string

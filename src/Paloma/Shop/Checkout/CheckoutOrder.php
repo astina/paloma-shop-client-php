@@ -6,67 +6,53 @@ use GuzzleHttp\Exception\ClientException;
 use Paloma\Shop\Customers\Customer;
 use Paloma\Shop\Customers\CustomerInterface;
 use Paloma\Shop\Security\UserDetailsInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CheckoutOrder
 {
-    private $channel;
+    private string $channel;
 
-    private $locale;
+    private string $locale;
 
-    /**
-     * @var CheckoutClientInterface
-     */
-    private $checkoutClient;
+    private CheckoutClientInterface $checkoutClient;
 
-    /**
-     * @var SessionInterface
-     */
-    private $session;
+    private RequestStack $requestStack;
 
-    /**
-     * @var CustomerInterface
-     */
-    private $customer;
+    private ?CustomerInterface $customer;
 
-    /**
-     * @var UserDetailsInterface
-     */
-    private $user;
+    private ?UserDetailsInterface $user;
 
-    /**
-     * @var array
-     */
-    private $order;
+    private ?array $order;
 
     /**
      * @param $channel string Each channel keeps its own cart
      * @param $locale string Used to initialize the cart order
      * @param CheckoutClientInterface $checkoutClient
-     * @param CustomerInterface $customer
-     * @param SessionInterface $session
+     * @param RequestStack $requestStack
+     * @param CustomerInterface|null $customer
+     * @param UserDetailsInterface|null $user
      */
-    public function __construct($channel,
-                                $locale,
+    public function __construct(string                  $channel,
+                                string                  $locale,
                                 CheckoutClientInterface $checkoutClient,
-                                SessionInterface $session,
-                                CustomerInterface $customer = null,
-                                UserDetailsInterface $user = null)
+                                RequestStack            $requestStack,
+                                CustomerInterface       $customer = null,
+                                UserDetailsInterface    $user = null)
     {
         $this->channel = $channel;
         $this->locale = $locale;
         $this->checkoutClient = $checkoutClient;
-        $this->session = $session;
+        $this->requestStack = $requestStack;
         $this->customer = $customer;
         $this->user = $user;
     }
 
-    private static $CART_ID_VAR = 'paloma-cart-id';
+    private static string $CART_ID_VAR = 'paloma-cart-id';
 
     public function get()
     {
         return $this->checkedCall(function () {
-            $this->order = $this->order ? $this->order : $this->checkoutClient->getOrder($this->getCartId(), $this->locale);
+            $this->order = $this->order ?: $this->checkoutClient->getOrder($this->getCartId(), $this->locale);
             return $this->order;
         });
     }
@@ -98,7 +84,7 @@ class CheckoutOrder
     /**
      * Returns the number if order items
      */
-    public function itemsCount()
+    public function itemsCount(): int
     {
         $cartId = $this->getCartId(false);
 
@@ -113,7 +99,7 @@ class CheckoutOrder
     /**
      * Returns the number of order items times quantities
      */
-    public function unitsCount()
+    public function unitsCount(): int
     {
         $cartId = $this->getCartId(false);
 
@@ -205,18 +191,20 @@ class CheckoutOrder
         return $order;
     }
 
-    public function existsInSession() {
+    public function existsInSession(): bool
+    {
         return boolval($this->getCartId(false));
     }
 
     private function getCartId($createOrder = true)
     {
         // Do not force a session to be created unless needed
-        if (!$createOrder && !$this->session->isStarted()) {
+        $session = $this->requestStack->getSession();
+        if (!$createOrder && !$session->isStarted()) {
             return null;
         }
 
-        $cartIds = $this->session->get(self::$CART_ID_VAR);
+        $cartIds = $session->get(self::$CART_ID_VAR);
 
         if (!isset($cartIds[$this->channel])) {
 
@@ -229,7 +217,7 @@ class CheckoutOrder
             $cartIds = $cartIds ?: [];
             $cartIds[$this->channel] = $cart['id'];
 
-            $this->session->set(self::$CART_ID_VAR, $cartIds);
+            $session->set(self::$CART_ID_VAR, $cartIds);
         }
 
         return $cartIds[$this->channel];
@@ -255,13 +243,14 @@ class CheckoutOrder
 
     private function clearCartId()
     {
-        $cartIds = $this->session->get(self::$CART_ID_VAR);
+        $session = $this->requestStack->getSession();
+        $cartIds = $session->get(self::$CART_ID_VAR);
 
         if (isset($cartIds[$this->channel])) {
             unset($cartIds[$this->channel]);
         }
 
-        $this->session->set(self::$CART_ID_VAR, $cartIds);
+        $session->set(self::$CART_ID_VAR, $cartIds);
         $this->order = null;
     }
 

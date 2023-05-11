@@ -3,31 +3,12 @@
 namespace Paloma\Shop\Customers;
 
 use Paloma\Shop\BaseClient;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class CustomersClient extends BaseClient implements CustomersClientInterface
 {
-    /**
-     * @var SessionInterface
-     */
-    private $session;
-
-    /**
-     * CustomersClient accepts an array of constructor parameters.
-     *
-     * - session: (opt) a SessionInterface implementation
-     *
-     * And all parameters of BaseClient.
-     *
-     * @param string $baseUrl
-     * @param array $options
-     */
     public function __construct($baseUrl, array $options)
     {
         parent::__construct($baseUrl, $options);
-
-        $this->session = empty($options['session']) ? new Session() : $options['base_url'];
     }
 
     function register($customer)

@@ -5,22 +5,18 @@ namespace Paloma\Shop\Checkout;
 use Paloma\Shop\BaseClient;
 use Paloma\Shop\Customers\CustomerInterface;
 use Paloma\Shop\Security\UserDetailsInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CheckoutClient extends BaseClient implements CheckoutClientInterface
 {
-    /**
-     * @var SessionInterface
-     */
-    private $session;
+    private RequestStack $requestStack;
 
     const ORDERS_PATH = 'orders';
 
     /**
      * CheckoutClient accepts an array of constructor parameters.
      *
-     * - session: (opt) a SessionInterface implementation
+     * - request_stack: (opt) a RequestStack implementation
      *
      * And all parameters of BaseClient.
      *
@@ -31,12 +27,12 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
     {
         parent::__construct($baseUrl, $options);
 
-        $this->session = empty($options['session']) ? new Session() : $options['session'];
+        $this->requestStack = empty($options['request_stack']) ? new RequestStack() : $options['request_stack'];
     }
 
     function checkoutOrder(CustomerInterface $customer = null, UserDetailsInterface $user = null)
     {
-        return new CheckoutOrder($this->channel, $this->locale, $this, $this->session, $customer, $user);
+        return new CheckoutOrder($this->channel, $this->locale, $this, $this->requestStack, $customer, $user);
     }
 
     function createOrder($order)
