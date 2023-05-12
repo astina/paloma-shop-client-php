@@ -5,6 +5,7 @@ namespace Paloma\Shop\Checkout;
 use Exception;
 use Paloma\Shop\Customers\CustomerInterface;
 use Paloma\Shop\Security\UserDetailsInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
@@ -12,7 +13,7 @@ class CheckoutTestClient implements CheckoutClientInterface
 {
     private $order;
 
-    private $session;
+    private $requestStack;
 
     private $exception;
 
@@ -20,13 +21,12 @@ class CheckoutTestClient implements CheckoutClientInterface
 
     public function __construct(array $order = null, Exception $exception = null, array $exceptionForMethods = [])
     {
-        $this->session = new Session(new MockArraySessionStorage());
+        $this->requestStack = new MockRequestStack();
 
         $this->order = $order;
 
         if ($order) {
-            $this->session->start();
-            $this->session->set('paloma-cart-id', ['test' => 'cart1']);
+            $this->requestStack->getSession()->set('paloma-cart-id', ['test' => 'cart1']);
         }
 
         $this->exception = $exception;
@@ -53,7 +53,7 @@ class CheckoutTestClient implements CheckoutClientInterface
     function checkoutOrder(CustomerInterface $customer = null, UserDetailsInterface $user = null)
     {
         $this->throwException(__FUNCTION__);
-        return new CheckoutOrder('test', 'de_CH', $this, $this->session, $customer, $user);
+        return new CheckoutOrder('test', 'de_CH', $this, $this->requestStack, $customer, $user);
     }
 
     function createOrder($order)

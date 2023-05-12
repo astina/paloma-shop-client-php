@@ -22,7 +22,7 @@ class CheckoutOrder
 
     private ?UserDetailsInterface $user;
 
-    private ?array $order;
+    private ?array $order = null;
 
     /**
      * @param $channel string Each channel keeps its own cart
