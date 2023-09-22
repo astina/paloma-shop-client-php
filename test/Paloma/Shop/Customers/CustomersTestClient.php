@@ -254,4 +254,29 @@ class CustomersTestClient implements CustomersClientInterface
     {
         $this->throwException(__FUNCTION__);
     }
+
+    function listUsers($customerId, $locale = null)
+    {
+        $this->throwException(__FUNCTION__);
+    }
+
+    function getUser($customerId, $userId)
+    {
+        $this->throwException(__FUNCTION__);
+    }
+
+    function createUser($customerId, $user)
+    {
+        $this->throwException(__FUNCTION__);
+    }
+
+    function updateUser($customerId, $userId, $user)
+    {
+        $this->throwException(__FUNCTION__);
+    }
+
+    function deleteUser($customerId, $userId)
+    {
+        $this->throwException(__FUNCTION__);
+    }
 }
