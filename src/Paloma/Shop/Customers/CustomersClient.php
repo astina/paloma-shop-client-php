@@ -197,4 +197,29 @@ class CustomersClient extends BaseClient implements CustomersClientInterface
     {
         return $this->delete($this->channel . '/' . $this->locale . '/customers/' . $customerId . '/payment-instruments/' . $paymentInstrumentId);
     }
+
+    function listUsers($customerId, $locale = null)
+    {
+        return $this->get($this->channel . '/customers/' . $customerId . '/users', $locale ?: ['locale' => $locale]);
+    }
+
+    function getUser($customerId, $userId)
+    {
+        return $this->get($this->channel . '/customers/' . $customerId . '/users/' . $userId);
+    }
+
+    function createUser($customerId, $user)
+    {
+        return $this->post($this->channel . '/customers/' . $customerId . '/users', null, $user);
+    }
+
+    function updateUser($customerId, $userId, $user)
+    {
+        return $this->put($this->channel . '/customers/' . $customerId . '/users/' . $userId, null, $user);
+    }
+
+    function deleteUser($customerId, $userId)
+    {
+        return $this->delete($this->channel . '/customers/' . $customerId . '/users/' . $userId);
+    }
 }

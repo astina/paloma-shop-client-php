@@ -61,4 +61,14 @@ interface CustomersClientInterface
     function getPaymentInstruments($customerId);
 
     function deletePaymentInstrument($customerId, $paymentInstrumentId);
+
+    function listUsers($customerId, $locale = null);
+
+    function getUser($customerId, $userId);
+
+    function createUser($customerId, $user);
+
+    function updateUser($customerId, $userId, $user);
+
+    function deleteUser($customerId, $userId);
 }

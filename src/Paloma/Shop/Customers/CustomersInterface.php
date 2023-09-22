@@ -6,6 +6,7 @@ use Paloma\Shop\Common\AddressInterface;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\BadCredentials;
 use Paloma\Shop\Error\CustomerNotFound;
+use Paloma\Shop\Error\CustomerUserNotFound;
 use Paloma\Shop\Error\InvalidConfirmationToken;
 use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\NotAuthenticated;
@@ -186,4 +187,54 @@ interface CustomersInterface
      * @throws BackendUnavailable
      */
     function deletePaymentInstrument($paymentInstrumentId): void;
+
+    /**
+     * @param $locale
+     * @return CustomerUserInterface[]
+     * @throws NotAuthenticated
+     * @throws CustomerNotFound
+     * @throws BackendUnavailable
+     */
+    function listUsers($locale = null): array;
+
+    /**
+     * @param $userId
+     * @return CustomerUserInterface
+     * @throws NotAuthenticated
+     * @throws CustomerNotFound
+     * @throws CustomerUserNotFound
+     * @throws BackendUnavailable
+     */
+    function getUser($userId): CustomerUserInterface;
+
+    /**
+     * @param CustomerUserDraftInterface $userDraft
+     * @return CustomerUserInterface
+     * @throws NotAuthenticated
+     * @throws CustomerNotFound
+     * @throws BackendUnavailable
+     * @throws InvalidInput
+     */
+    function createUser(CustomerUserDraftInterface $userDraft): CustomerUserInterface;
+
+    /**
+     * @param $userId
+     * @param CustomerUserDraftInterface $userDraft
+     * @return CustomerUserInterface
+     * @throws NotAuthenticated
+     * @throws CustomerNotFound
+     * @throws CustomerUserNotFound
+     * @throws BackendUnavailable
+     * @throws InvalidInput
+     */
+    function updateUser($userId, CustomerUserDraftInterface $userDraft): CustomerUserInterface;
+
+    /**
+     * @param $userId
+     * @return void
+     * @throws NotAuthenticated
+     * @throws CustomerNotFound
+     * @throws BackendUnavailable
+     */
+    function deleteUser($userId): void;
 }

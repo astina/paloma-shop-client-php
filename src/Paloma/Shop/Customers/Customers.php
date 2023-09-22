@@ -17,6 +17,7 @@ use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\BadCredentials;
 use Paloma\Shop\Error\CategoryNotFound;
 use Paloma\Shop\Error\CustomerNotFound;
+use Paloma\Shop\Error\CustomerUserNotFound;
 use Paloma\Shop\Error\InvalidConfirmationToken;
 use Paloma\Shop\Error\InvalidInput;
 use Paloma\Shop\Error\NotAuthenticated;
@@ -472,6 +473,113 @@ class Customers implements CustomersInterface
         try {
 
             $this->client->customers()->deletePaymentInstrument($this->getCustomerId(), $paymentInstrumentId);
+
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
+
+    function listUsers($locale = null): array
+    {
+        try {
+
+            $data = $this->client->customers()->listUsers(
+                $this->getCustomerId(),
+                $locale
+            );
+
+            return array_map(function($elem) {
+                return new CustomerUser($elem);
+            }, $data);
+
+        } catch (BadResponseException $bre) {
+            throw new CustomerUserNotFound();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
+
+    function getUser($userId): CustomerUserInterface
+    {
+        try {
+
+            $data = $this->client->customers()->getUser(
+                $this->getCustomerId(),
+                $userId
+            );
+
+            return new CustomerUser($data);
+
+        } catch (BadResponseException $bre) {
+            throw new CustomerUserNotFound();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
+
+    function createUser(CustomerUserDraftInterface $userDraft): CustomerUserInterface
+    {
+        try {
+
+            $data = $this->client->customers()->createUser(
+                $this->getCustomerId(),
+                [
+                    'username' => $userDraft->getUsername(),
+                    'emailAddress' => $userDraft->getEmailAddress(),
+                    'enabled' => $userDraft->isEnabled(),
+                    'firstName' => $userDraft->getFirstName(),
+                    'lastName' => $userDraft->getLastName(),
+                    'locale' => $userDraft->getLocale(),
+                    'sendInvitation' => $userDraft->isSendInvitation(),
+                    'timeZone' => $userDraft->getTimeZone(),
+                ]
+            );
+
+            return new CustomerUser($data);
+
+        } catch (BadResponseException $bre) {
+            throw InvalidInput::ofHttpResponse($bre->getResponse());
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
+
+    function updateUser($userId, CustomerUserDraftInterface $userDraft): CustomerUserInterface
+    {
+        try {
+
+            $data = $this->client->customers()->updateUser(
+                $this->getCustomerId(),
+                $userId,
+                [
+                    'username' => $userDraft->getUsername(),
+                    'emailAddress' => $userDraft->getEmailAddress(),
+                    'enabled' => $userDraft->isEnabled() === null ? null : (!!$userDraft->isEnabled()),
+                    'firstName' => $userDraft->getFirstName(),
+                    'lastName' => $userDraft->getLastName(),
+                    'locale' => $userDraft->getLocale(),
+                    'sendInvitation' => $userDraft->isSendInvitation(),
+                    'timeZone' => $userDraft->getTimeZone(),
+                ]
+            );
+
+            return new CustomerUser($data);
+
+        } catch (BadResponseException $bre) {
+            throw InvalidInput::ofHttpResponse($bre->getResponse());
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+    }
+
+    function deleteUser($userId): void
+    {
+        try {
+
+            $this->client->customers()->deleteUser(
+                $this->getCustomerId(),
+                $userId
+            );
 
         } catch (TransferException $se) {
             throw BackendUnavailable::ofException($se);
