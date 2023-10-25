@@ -19,12 +19,12 @@ class ProductAttribute implements ProductAttributeInterface, SelfNormalizing
         return $this->data['type'];
     }
 
-    function getLabel(): string
+    function getLabel(): ?string
     {
         return $this->data['label'];
     }
 
-    function getValue(): string
+    function getValue(): ?string
     {
         return $this->data['value'];
     }

@@ -6,6 +6,8 @@ use Paloma\Shop\BaseClient;
 
 class CatalogClient extends BaseClient implements CatalogClientInterface
 {
+    private $catalog;
+
     /**
      * CatalogClient accepts an array of constructor parameters.
      *
@@ -19,36 +21,37 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         // Enable caching by default in the catalog endpoint
         $options['use_cache'] = isset($options['use_cache']) ? $options['use_cache'] : true;
         parent::__construct($baseUrl, $options);
+        $this->catalog = isset($options['catalog']) ? $options['catalog'] : null;
     }
 
     public function search($search)
     {
-        return $this->post($this->channel . '/' . $this->locale . '/search', null, $search);
+        return $this->post($this->channel . '/' . $this->locale . '/search', $this->catalogQuery(), $search);
     }
 
     function searchSuggestions($query)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/search/suggestions', ['query' => $query]);
+        return $this->get($this->channel . '/' . $this->locale . '/search/suggestions', ['query' => $query] + $this->catalogQuery());
     }
 
     public function product($itemNumber, array $context = null)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber, $this->createContextQuery($context));
+        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber, $this->createContextQuery($context) + $this->catalogQuery());
     }
 
     function similarProducts($itemNumber, array $context = null)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/similar', $this->createContextQuery($context));
+        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/similar', $this->createContextQuery($context) + $this->catalogQuery());
     }
 
     function recommendedProducts($itemNumber, array $context = null)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/recommended', $this->createContextQuery($context));
+        return $this->get($this->channel . '/' . $this->locale . '/products/' . $itemNumber . '/recommended', $this->createContextQuery($context) + $this->catalogQuery());
     }
 
     function recommendations($order, $size = null, array $context = null)
     {
-        $query = $this->createContextQuery() ?? [];
+        $query = ($this->createContextQuery() ?? []) + $this->catalogQuery();
         if ($size) {
             $query['size'] = $size;
         }
@@ -59,7 +62,7 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
 
     public function categories($depth = null, $products = true, $includeUnlisted = null)
     {
-        $query = ['products' => ($products ? 'true' : 'false')];
+        $query = ['products' => ($products ? 'true' : 'false')] + $this->catalogQuery();
         if ($depth) {
             $query['depth'] = $depth;
         }
@@ -72,7 +75,7 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
 
     public function category($code, $depth = null, $filterAggregates = null, $includeUnlisted = null)
     {
-        $query = [];
+        $query = $this->catalogQuery();
         if ($depth) {
             $query['depth'] = $depth;
         }
@@ -89,16 +92,18 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
 
     public function categoryFilters($code)
     {
-        return $this->get($this->channel . '/' . $this->locale . '/categories/' . $code . '/filter-aggregates');
+        return $this->get($this->channel . '/' . $this->locale . '/categories/' . $code . '/filter-aggregates', $this->catalogQuery());
     }
 
     function listBySkus(array $skus, $omitOtherVariants = false, $includeInactiveProducts = false, array $context = null)
     {
-        return $this->post($this->channel . '/' . $this->locale . '/products/by-sku', $this->createContextQuery($context), [
-            'skus' => $skus,
-            'omitOtherVariants' => $omitOtherVariants,
-            'includeInactiveProducts' => $includeInactiveProducts,
-        ]);
+        return $this->post($this->channel . '/' . $this->locale . '/products/by-sku',
+            $this->createContextQuery($context) + $this->catalogQuery(),
+            [
+                'skus' => $skus,
+                'omitOtherVariants' => $omitOtherVariants,
+                'includeInactiveProducts' => $includeInactiveProducts,
+            ]);
     }
 
     private function createContextQuery(array $context = null)
@@ -122,5 +127,14 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
         }
 
         return $query;
+    }
+
+    public function catalogQuery(): array
+    {
+        if ($this->catalog) {
+            return ['catalog' => $this->catalog];
+        }
+
+        return [];
     }
 }

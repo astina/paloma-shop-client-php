@@ -14,12 +14,12 @@ interface ProductAttributeInterface
     function getType(): string;
 
     /**
-     * @return string Attribute label, to be displayed to the user (e.g. "Manufacturer")
+     * @return string|null Attribute label, to be displayed to the user (e.g. "Manufacturer")
      */
-    function getLabel(): string;
+    function getLabel(): ?string;
 
     /**
-     * @return string Attribute value, to be displayed to the user (e.g. "Apple")
+     * @return string|null Attribute value, to be displayed to the user (e.g. "Apple")
      */
-    function getValue(): string;
+    function getValue(): ?string;
 }
