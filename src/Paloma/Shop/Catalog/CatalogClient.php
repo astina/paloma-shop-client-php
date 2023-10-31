@@ -51,7 +51,7 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
 
     function recommendations($order, $size = null, array $context = null)
     {
-        $query = ($this->createContextQuery() ?? []) + $this->catalogQuery();
+        $query = $this->createContextQuery() + $this->catalogQuery();
         if ($size) {
             $query['size'] = $size;
         }
@@ -109,7 +109,7 @@ class CatalogClient extends BaseClient implements CatalogClientInterface
     private function createContextQuery(array $context = null)
     {
         if (!$context) {
-            return null;
+            return [];
         }
 
         $query = [];
