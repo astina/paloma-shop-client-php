@@ -208,6 +208,15 @@ interface CustomersInterface
     function getUser($userId): CustomerUserInterface;
 
     /**
+     * @return ?CustomerUserInterface
+     * @throws NotAuthenticated
+     * @throws CustomerNotFound
+     * @throws CustomerUserNotFound
+     * @throws BackendUnavailable
+     */
+    function getCurrentUser(): ?CustomerUserInterface;
+
+    /**
      * @param CustomerUserDraftInterface $userDraft
      * @return CustomerUserInterface
      * @throws NotAuthenticated
@@ -219,7 +228,7 @@ interface CustomersInterface
 
     /**
      * @param $userId
-     * @param CustomerUserDraftInterface $userDraft
+     * @param CustomerUserUpdateInterface $userDraft
      * @return CustomerUserInterface
      * @throws NotAuthenticated
      * @throws CustomerNotFound
@@ -227,7 +236,7 @@ interface CustomersInterface
      * @throws BackendUnavailable
      * @throws InvalidInput
      */
-    function updateUser($userId, CustomerUserDraftInterface $userDraft): CustomerUserInterface;
+    function updateUser($userId, CustomerUserUpdateInterface $userDraft): CustomerUserInterface;
 
     /**
      * @param $userId

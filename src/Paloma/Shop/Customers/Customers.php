@@ -7,7 +7,6 @@ use Egulias\EmailValidator\Validation\RFCValidation;
 use Exception;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TransferException;
 use Paloma\Shop\Checkout\Cart;
 use Paloma\Shop\Checkout\CheckoutOrder;
@@ -15,7 +14,6 @@ use Paloma\Shop\Common\Address;
 use Paloma\Shop\Common\AddressInterface;
 use Paloma\Shop\Error\BackendUnavailable;
 use Paloma\Shop\Error\BadCredentials;
-use Paloma\Shop\Error\CategoryNotFound;
 use Paloma\Shop\Error\CustomerNotFound;
 use Paloma\Shop\Error\CustomerUserNotFound;
 use Paloma\Shop\Error\InvalidConfirmationToken;
@@ -24,9 +22,9 @@ use Paloma\Shop\Error\NotAuthenticated;
 use Paloma\Shop\Error\OrderNotFound;
 use Paloma\Shop\PalomaClientInterface;
 use Paloma\Shop\PalomaConfigInterface;
+use Paloma\Shop\Security\PalomaSecurityInterface;
 use Paloma\Shop\Security\UserDetails;
 use Paloma\Shop\Security\UserDetailsInterface;
-use Paloma\Shop\Security\PalomaSecurityInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class Customers implements CustomersInterface
@@ -499,6 +497,30 @@ class Customers implements CustomersInterface
         }
     }
 
+    function getCurrentUser($locale = null): ?CustomerUserInterface
+    {
+        try {
+            $data = $this->client->customers()->listUsers(
+                $this->getCustomerId(),
+                $locale
+            );
+
+            $users = array_filter(array_map(function($elem) {
+                return new CustomerUser($elem);
+            }, $data), function($user) {
+                return $user->getId() == $this->security->getUser()->getUserId();
+            });
+
+            return count($users) > 0 ? array_values($users)[0] : null;
+
+        } catch (BadResponseException $bre) {
+            throw new CustomerUserNotFound();
+        } catch (TransferException $se) {
+            throw BackendUnavailable::ofException($se);
+        }
+
+    }
+
     function getUser($userId): CustomerUserInterface
     {
         try {
@@ -544,7 +566,7 @@ class Customers implements CustomersInterface
         }
     }
 
-    function updateUser($userId, CustomerUserDraftInterface $userDraft): CustomerUserInterface
+    function updateUser($userId, CustomerUserUpdateInterface $userDraft): CustomerUserInterface
     {
         try {
 
