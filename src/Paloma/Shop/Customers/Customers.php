@@ -133,7 +133,7 @@ class Customers implements CustomersInterface
         }
     }
 
-    function updateCustomer(CustomerUpdateInterface $update): CustomerInterface
+    function updateCustomer(CustomerUpdateInterface $update, string $customerId = null): CustomerInterface
     {
         $validation = $this->validator->validate($update);
         if ($validation->count() > 0) {
@@ -142,7 +142,7 @@ class Customers implements CustomersInterface
 
         try {
 
-            $data = $this->client->customers()->updateCustomer($this->getCustomerId(), [
+            $data = $this->client->customers()->updateCustomer($customerId ? $customerId : $this->getCustomerId(), [
                 'emailAddress' => $update->getEmailAddress(),
                 'confirmationBaseUrl' => $this->config->getRegistrationConfirmationBaseUrl(),
                 'firstName' => $update->getFirstName(),

@@ -37,12 +37,13 @@ interface CustomersInterface
      * Update basic customer data for the current customer
      *
      * @param CustomerUpdateInterface $update
+     * @param string $customerId
      * @return CustomerInterface
      * @throws NotAuthenticated
      * @throws InvalidInput
      * @throws BackendUnavailable
      */
-    function updateCustomer(CustomerUpdateInterface $update): CustomerInterface;
+    function updateCustomer(CustomerUpdateInterface $update, string $customerId): CustomerInterface;
 
     /**
      * Update preferred address for contact, billing or shipping.
