@@ -13,6 +13,8 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
 
     const ORDERS_PATH = 'orders';
 
+    private $catalog;
+
     /**
      * CheckoutClient accepts an array of constructor parameters.
      *
@@ -28,6 +30,8 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
         parent::__construct($baseUrl, $options);
 
         $this->requestStack = empty($options['request_stack']) ? new RequestStack() : $options['request_stack'];
+
+        $this->catalog = isset($options['catalog']) ? $options['catalog'] : null;
     }
 
     function checkoutOrder(CustomerInterface $customer = null, UserDetailsInterface $user = null)
@@ -39,6 +43,10 @@ class CheckoutClient extends BaseClient implements CheckoutClientInterface
     {
         $order = $order ?: [];
         $order['locale'] = isset($order['locale']) ? $order['locale'] : $this->locale;
+
+        if (isset($order['customer'])) {
+            $order['customer']['catalog'] = isset($order['customer']['catalog']) ? $order['customer']['catalog'] : $this->catalog;
+        }
 
         return $this->post($this->channel . '/' . self::ORDERS_PATH, ['_meta' => 'validation'], $order);
     }
