@@ -15,14 +15,12 @@ class FilterValue implements FilterValueInterface, SelfNormalizing
 
     function getValue(): string
     {
-        return $this->data['value'];
+        return $this->data['valueCode'] ?? $this->data['value'];
     }
 
     function getLabel(): string
     {
-        return isset($this->data['label'])
-            ? $this->data['label']
-            : $this->data['value'];
+        return $this->data['label'] ?? $this->data['value'];
     }
 
     function getCount(): int
@@ -30,12 +28,18 @@ class FilterValue implements FilterValueInterface, SelfNormalizing
         return (int) $this->data['count'];
     }
 
+    function getTotal(): int
+    {
+        return (int) $this->data['total'];
+    }
+
     public function _normalize(): array
     {
         return [
-            'value' => $this->data['value'],
+            'value' => $this->getValue(),
             'label' => $this->getLabel(),
             'count' => $this->getCount(),
+            'total' => $this->getTotal(),
         ];
     }
 }
