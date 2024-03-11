@@ -6,8 +6,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 interface MetadataContainingObject
 {
-    /**
-     * @SerializedName("_validation")
-     */
+    #[SerializedName("_validation")]
     function getMetaValidation();
 }

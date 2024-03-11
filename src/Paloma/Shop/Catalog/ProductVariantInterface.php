@@ -2,6 +2,9 @@
 
 namespace Paloma\Shop\Catalog;
 
+use Symfony\Component\Serializer\Annotation\Context;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+
 /**
  * A product can have multiple variants. A variant can have its own attributes, price and images.
  * If applicable, each variant has a list of options which define the variant (e.g. "size" or "color").
@@ -51,11 +54,17 @@ interface ProductVariantInterface
     /**
      * @return array Map of options defining this variant (e.g. color=blue, size=M)
      */
+    #[Context(
+        normalizationContext: [AbstractObjectNormalizer::PRESERVE_EMPTY_OBJECTS]
+    )]
     function getOptions(): array;
 
     /**
      * @return array Map of attributes specific to this variant
      */
+    #[Context(
+        normalizationContext: [AbstractObjectNormalizer::PRESERVE_EMPTY_OBJECTS]
+    )]
     function getAttributes(): array;
 
     /**
